@@ -1,0 +1,16 @@
+/* converters.css: the few extras the converter pages need on top of tool.css. */
+.drop[aria-busy="true"] { border-style: solid; border-color: var(--sky); }
+.drop .formats { max-width: 46ch; }
+.opts .hint { font: 500 12px/1.4 var(--mono); color: var(--mist); text-transform: none; letter-spacing: 0; }
+.panel .row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+.panel .row .check { display: flex; gap: 8px; align-items: center; font: 500 14px/1.2 var(--sans); color: var(--paper); }
+.log { margin: 10px 0 0; max-height: 140px; overflow: auto; font: 500 12px/1.5 var(--mono); color: var(--mist); white-space: pre-wrap; }
+.log:empty { display: none; }
+.card .tag { justify-self: start; padding: 3px 8px; border-radius: 99px; background: rgba(84, 197, 222, .12); color: var(--sky); font: 600 11px/1.2 var(--mono); letter-spacing: .04em; }
+.card .tag.warn { background: rgba(223, 71, 104, .14); color: var(--bloom); }
+.strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: 4px; margin-top: 6px; }
+.strip img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 4px; background: #050a22; }
+.results .card.wide { grid-column: 1 / -1; grid-template-columns: minmax(0, 340px) 1fr; }
+@media (max-width: 600px) { .results .card.wide { grid-template-columns: 1fr; } }
+.btn[hidden] { display: none; }
+.results .card.wide .meta { align-content: start; }

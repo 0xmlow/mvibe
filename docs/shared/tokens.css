@@ -1,0 +1,28 @@
+/* mvibe design tokens. Every colour is measured from MLow's art
+ * (fLOWers, Transdimensional Trippers, Impermanent Loss, NEW YORKERS) with
+ * premium-site-design/palette_from_images.py on docs/assets/art, 2026-10-15.
+ * Grounds are the dominant low chroma tones; accents are the vivid ones. */
+:root {
+  --night: #01061b;      /* ground, deepest blue black in the Trippers */
+  --ink: #0b133d;        /* card, the indigo under every fLOWers night piece */
+  --dusk: #1a1430;       /* raised card, violet shadow */
+  --rule: #2a3b4c;       /* dividers */
+  --mist: #5c6a83;       /* muted text */
+  --paper: #eef1f7;      /* body text on dark */
+  --bloom: #df4768;      /* primary accent, the drip pink */
+  --magenta: #c62062;    /* pressed pink */
+  --sky: #54c5de;        /* secondary accent, the iris cyan */
+  --cobalt: #1d629f;     /* the eye's blue */
+  --violet: #581b9f;     /* Impermanent Loss violet */
+  --peach: #e59a7c;      /* warm highlight, used once per view at most */
+  --sand: #d7c195;       /* labels on paper */
+
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, Menlo, monospace;
+
+  --radius: 18px;
+  --radius-sm: 10px;
+  --shadow: 0 18px 50px -18px rgba(1, 6, 27, 0.85), 0 2px 0 rgba(255, 255, 255, 0.04) inset;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Movie to Images | mvibe</title>
+<meta name="description" content="Pull full resolution PNG frames out of a video, a few per second, in one ZIP. Runs in your browser. Nothing is uploaded.">
+<meta name="mvibe-tool" content="movie-to-images">
+<meta name="mvibe-tool-name" content="Movie to Images">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Movie to Images, a tool by MLow">
+<meta property="og:description" content="Full resolution PNG frames from any video your browser can play, in one ZIP. Nothing is uploaded.">
+<meta property="og:url" content="https://0xmlow.github.io/mvibe/tools/movie-to-images/">
+<meta property="og:image" content="https://0xmlow.github.io/mvibe/assets/brand/eye.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../../assets/brand/eye.png">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/tool.css">
+<link rel="stylesheet" href="../_lib/converters.css">
+<script src="../../shared/mvibe.js"></script>
+<script src="../../shared/chrome.js" defer></script>
+</head>
+<body>
+<main class="wrap">
+  <header class="tool-hero">
+    <span class="eyebrow">Converter · Frames</span>
+    <h1>Movie to <em>Images</em></h1>
+    <p>Drop a video. Get its frames as full resolution PNG files, two every second, in one ZIP.</p>
+    <span class="privacy">Runs in your browser. Your files never upload.</span>
+  </header>
+
+  <label class="drop">
+    <img class="eye" src="../../assets/brand/eye.png" alt="">
+    <strong>Drop videos here</strong>
+    <small class="formats">or tap to pick them. MP4, MOV, WebM, M4V. Still images are skipped.</small>
+    <input type="file" multiple accept="video/*,.mov,.mp4,.m4v,.webm,.mkv">
+  </label>
+
+  <section class="panel">
+    <div class="opts">
+      <label>Frames per second
+        <input type="number" id="fps" value="2" min="0.05" max="60" step="any" inputmode="decimal">
+      </label>
+      <span class="hint">2 means one frame every half second.</span>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <label class="check"><input type="checkbox" id="auto" checked> Download each ZIP when it is ready</label>
+      <button class="btn ghost" id="all" type="button" hidden>Download all</button>
+    </div>
+    <div class="bar"><i></i></div>
+    <div class="status">Waiting for videos.</div>
+  </section>
+
+  <section class="results" aria-live="polite"></section>
+
+  <p class="note">
+    <b>What happens to your video.</b> Your browser plays the video and the tool grabs a frame at each step in time, at the video's full size, with no scaling.
+    Phone videos come out upright because the browser applies the rotation stored in the file.
+    The frames are saved as lossless PNG, named after the video and numbered from 0001, inside a folder in one ZIP called "name frames.zip".
+    Your browser decodes the video, so iPhone MOV files (HEVC) open in Safari and in Chrome on a Mac, but often not in Firefox or on Windows. Long videos at a high rate make big ZIPs.
+    <br><br>A tool by MLow. <a href="https://github.com/0xmlow/mvibe/tree/main/tools/droplets">Source on GitHub</a>.
+  </p>
+</main>
+
+<script type="module">
+import { setupDrop, progress, card, refreshAll, autoPref, fmtBytes, $ } from "../_lib/ui.js";
+import { openVideo, seekFrame, VideoError } from "../_lib/video.js";
+import { ZipWriter } from "../_lib/zip.js";
+
+const auto = autoPref();
+const STILL = /\.(png|jpe?g|heic|heif|bmp|tiff?|webp|gif|avif)$/i;
+const used = new Set();
+const unique = (stem) => { let n = `${stem} frames.zip`, i = 1; while (used.has(n)) n = `${stem} frames ${i++}.zip`; used.add(n); return n; };
+
+async function extract(file, fps, onP) {
+  const V = await openVideo(file);
+  try {
+    const { video, width: W, height: H, duration } = V;
+    const stem = file.name.replace(/\.[^.]+$/, "");
+    const n = Math.max(1, Math.ceil(duration * fps - 1e-6));
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const ctx = c.getContext("2d");
+    const zip = new ZipWriter();
+    const folder = `${stem} frames/`;
+    const thumbs = [];
+    let bytes = 0;
+    for (let i = 0; i < n; i++) {
+      await seekFrame(video, Math.min(i / fps, Math.max(0, duration - 0.001)));
+      ctx.drawImage(video, 0, 0, W, H);
+      window.MVIBE.mark(ctx, W, H);
+      const blob = await new Promise((r) => c.toBlob(r, "image/png"));
+      if (!blob) throw new Error(`The frame is too large for this browser's canvas (${W}x${H}).`);
+      const png = window.MVIBE.tagPNG(new Uint8Array(await blob.arrayBuffer()));
+      zip.add(`${folder}${stem}_${String(i + 1).padStart(4, "0")}.png`, png);
+      bytes += png.length;
+      if (thumbs.length < 24) {
+        const s = Math.min(1, (thumbs.length ? 160 : 520) / Math.max(W, H));
+        const t = document.createElement("canvas"); t.width = Math.round(W * s); t.height = Math.round(H * s);
+        t.getContext("2d").drawImage(c, 0, 0, t.width, t.height);
+        thumbs.push(URL.createObjectURL(await new Promise((r) => t.toBlob(r, "image/jpeg", 0.8))));
+      }
+      onP((i + 1) / n, `frame ${i + 1} of ${n}`);
+    }
+    const blob = zip.finish(`made with mvibe by MLow. ${window.MVIBE.site} ${window.MVIBE.sig}`);
+    return { blob, name: unique(stem), count: n, W, H, thumbs, bytes };
+  } finally { V.close(); }
+}
+
+setupDrop(async (files) => {
+  const list = files.filter((f) => !STILL.test(f.name) && !/^image\//.test(f.type));
+  const skipped = files.length - list.length;
+  if (!list.length) { progress(0, "No videos in that drop."); return; }
+  const fps = Math.min(60, Math.max(0.05, parseFloat($("#fps").value) || 2));
+  let ok = 0, bad = 0;
+  for (let i = 0; i < list.length; i++) {
+    const f = list[i];
+    try {
+      const r = await extract(f, fps, (p, t) => progress((i + p) / list.length, `${f.name}: ${t}`));
+      const strip = document.createElement("div"); strip.className = "strip";
+      r.thumbs.slice(1).forEach((u) => { const im = document.createElement("img"); im.src = u; im.alt = ""; strip.appendChild(im); });
+      const el = card({ thumb: r.thumbs[0], title: r.name, lines: [`${r.count} PNG frame${r.count === 1 ? "" : "s"} at ${r.W} x ${r.H}`, `${fps} per second, ${fmtBytes(r.blob.size)} ZIP`], blob: r.blob, filename: r.name, extra: strip });
+      el.classList.add("wide");
+      if (auto()) await window.MVIBE.download(r.blob, r.name);
+      ok++;
+    } catch (e) {
+      (e instanceof VideoError ? console.warn : console.error)(e);
+      card({ title: f.name, error: e instanceof VideoError ? e.message : `Could not read frames. ${e && e.message ? e.message : e}` });
+      bad++;
+    }
+    refreshAll();
+  }
+  progress(1, `${ok} ZIP${ok === 1 ? "" : "s"} made${bad ? `, ${bad} failed` : ""}${skipped ? `, ${skipped} still image${skipped === 1 ? "" : "s"} skipped` : ""}.`);
+});
+</script>
+</body>
+</html>

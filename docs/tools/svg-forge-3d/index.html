@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- mvibe:head -->
+<meta name="mvibe-tool" content="svg-forge-3d">
+<meta name="mvibe-tool-name" content="SVG Forge 3D">
+<meta name="mvibe-depth" content="../../">
+<meta name="mvibe-pill" content="bottom-left">
+<meta name="description" content="Turn SVG art into 3D. Export GLB, STL and PNG in your browser. An MLow tool.">
+<meta property="og:title" content="SVG Forge 3D by MLow">
+<meta property="og:description" content="Turn SVG art into 3D. Export GLB, STL and PNG in your browser. An MLow tool.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../../assets/brand/eye.png">
+<script src="../../shared/mvibe.js"></script>
+<script src="../../shared/chrome.js" defer></script>
+<!-- /mvibe:head -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>SVG Forge 3D by MLow</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 36 36"><path d="M18 2 32 10v16L18 34 4 26V10Z"/><path d="m18 8 8.5 5v10L18 28l-8.5-5V13Z"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">SVG Forge <span>3D</span></div>
+          <div class="brand-subtitle">Vector depth studio</div>
+        </div>
+      </div>
+
+      <div class="history-actions" aria-label="History">
+        <button class="icon-button" id="undoButton" title="Undo (⌘Z)" aria-label="Undo">
+          <svg viewBox="0 0 24 24"><path d="M9 7 4 12l5 5"/><path d="M5 12h8a6 6 0 0 1 6 6"/></svg>
+        </button>
+        <button class="icon-button" id="redoButton" title="Redo (⇧⌘Z)" aria-label="Redo">
+          <svg viewBox="0 0 24 24"><path d="m15 7 5 5-5 5"/><path d="M19 12h-8a6 6 0 0 0-6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="top-actions">
+        <button class="ghost-button" id="randomizeButton">
+          <svg viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="m4 20 7-7"/><path d="m16 8 5-5"/><path d="M4 4l16 16"/><path d="M16 20h5v-5"/></svg>
+          Surprise me
+        </button>
+        <button class="primary-button" id="exportButton">
+          <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
+          Export
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="left-rail">
+        <nav class="tool-tabs" aria-label="Source type">
+          <button class="tool-tab active" data-tab="shapes">
+            <svg viewBox="0 0 24 24"><path d="M12 3 3 20h18Z"/></svg>
+            <span>Shapes</span>
+          </button>
+          <button class="tool-tab" data-tab="code">
+            <svg viewBox="0 0 24 24"><path d="m8 5-5 7 5 7"/><path d="m16 5 5 7-5 7"/><path d="m14 3-4 18"/></svg>
+            <span>SVG code</span>
+          </button>
+          <button class="tool-tab" data-tab="import">
+            <svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></svg>
+            <span>Import</span>
+          </button>
+        </nav>
+
+        <section class="source-panel">
+          <div class="panel-view active" id="shapesPanel">
+            <div class="section-eyebrow">Starter shapes</div>
+            <div class="shape-grid" id="shapeGrid">
+              <button class="shape-card active" data-shape="spark" title="Spark">
+                <svg viewBox="0 0 100 100"><path d="M56 4 14 56h30l-6 40 48-58H55Z"/></svg>
+              </button>
+              <button class="shape-card" data-shape="star" title="Star">
+                <svg viewBox="0 0 100 100"><path d="m50 5 13 28 31 4-23 21 6 31-27-15-27 15 6-31L6 37l31-4Z"/></svg>
+              </button>
+              <button class="shape-card" data-shape="heart" title="Heart">
+                <svg viewBox="0 0 100 100"><path d="M50 88S10 64 10 34c0-25 31-31 40-9 9-22 40-16 40 9 0 30-40 54-40 54Z"/></svg>
+              </button>
+              <button class="shape-card" data-shape="play" title="Play">
+                <svg viewBox="0 0 100 100"><path d="M22 10 88 50 22 90Z"/></svg>
+              </button>
+              <button class="shape-card" data-shape="cube" title="Cube">
+                <svg viewBox="0 0 100 100"><path d="m50 5 40 22v46L50 95 10 73V27Zm0 9L21 30l29 16 29-16Zm-32 23v31l28 16V53Zm64 0L54 53v31l28-16Z" fill-rule="evenodd"/></svg>
+              </button>
+              <button class="shape-card" data-shape="flower" title="Flower">
+                <svg viewBox="0 0 100 100"><path d="M50 42C24 16 50-6 60 28 72-2 97 17 69 40c35-2 34 30 2 24 20 27-8 43-22 13-14 30-43 14-22-13-33 6-34-26 1-24C0 17 26-2 39 28 49-6 76 16 50 42Z"/></svg>
+              </button>
+              <button class="shape-card" data-shape="bolt" title="Bolt">
+                <svg viewBox="0 0 100 100"><path d="M58 3 14 57h31L39 97l47-58H55Z"/></svg>
+              </button>
+              <button class="shape-card" data-shape="badge" title="Badge">
+                <svg viewBox="0 0 100 100"><path d="m50 4 12 12 17-1 5 17 12 12-8 15 2 17-17 6-11 13-16-8-17 4-8-15L6 67l5-17-7-15 14-10 7-16 17 3Z"/></svg>
+              </button>
+              <button class="shape-card" data-shape="ring" title="Ring">
+                <svg viewBox="0 0 100 100"><path d="M50 5a45 45 0 1 0 0 90 45 45 0 0 0 0-90Zm0 22a23 23 0 1 1 0 46 23 23 0 0 1 0-46Z" fill-rule="evenodd"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-view" id="codePanel">
+            <label class="field-label" for="inlineSvgInput">SVG markup</label>
+            <textarea id="inlineSvgInput" rows="9" spellcheck="false" placeholder="&lt;svg viewBox=&quot;0 0 100 100&quot;&gt;&#10;  &lt;path d=&quot;…&quot; fill=&quot;#7b61ff&quot;/&gt;&#10;&lt;/svg&gt;"></textarea>
+            <button class="primary-button wide" id="applyInlineSvg">Build 3D mesh</button>
+            <p class="helper-copy">For best results, convert text to outlines first. Filled paths, holes, curves, transforms, and strokes are supported.</p>
+          </div>
+
+          <div class="panel-view" id="importPanel">
+            <input type="file" id="fileInput" accept=".svg,image/svg+xml" hidden>
+            <button class="drop-zone" id="dropZone">
+              <svg viewBox="0 0 24 24"><path d="M12 15V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></svg>
+              <strong>Choose an SVG</strong>
+              <span>or drop one anywhere</span>
+            </button>
+            <div class="or-divider"><span>or</span></div>
+            <button class="secondary-button wide" id="pasteSvgButton">Paste SVG code</button>
+            <p class="helper-copy">Imported artwork is simplified to a single-color vector so it extrudes cleanly. Your original file is never changed.</p>
+          </div>
+        </section>
+
+        <section class="preset-section">
+          <div class="section-header">
+            <div class="section-eyebrow">Style recipes</div>
+            <span>One click</span>
+          </div>
+          <div class="preset-list" id="presetList">
+            <button class="preset-card" data-preset="candy">
+              <i style="--a:#ff4f9a;--b:#6b1cff"></i><span><strong>Candy shop</strong><small>Soft · glossy</small></span>
+            </button>
+            <button class="preset-card" data-preset="ocean">
+              <i style="--a:#43e7ff;--b:#0064ff"></i><span><strong>Deep ocean</strong><small>Cool · crisp</small></span>
+            </button>
+            <button class="preset-card" data-preset="citrus">
+              <i style="--a:#f8ff53;--b:#ff6b00"></i><span><strong>Citrus punch</strong><small>Bright · bold</small></span>
+            </button>
+            <button class="preset-card" data-preset="graphite">
+              <i style="--a:#dce2ee;--b:#222939"></i><span><strong>Graphite</strong><small>Clean · editorial</small></span>
+            </button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="stage-shell">
+        <div class="stage-toolbar">
+          <div class="stage-status">
+            <span class="live-dot"></span>
+            <strong id="sourceName">Spark</strong>
+            <span class="divider"></span>
+            <span id="layerStatus">Building solid mesh…</span>
+          </div>
+          <div class="view-actions">
+            <button class="icon-button" id="zoomOutButton" title="Zoom out" aria-label="Zoom out">
+              <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
+            </button>
+            <button class="zoom-readout" id="fitButton" title="Fit to canvas"><span id="zoomLabel">100%</span></button>
+            <button class="icon-button" id="zoomInButton" title="Zoom in" aria-label="Zoom in">
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></svg>
+            </button>
+            <span class="toolbar-separator"></span>
+            <button class="icon-button active" id="gridButton" title="Toggle grid" aria-label="Toggle grid">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4Z"/><path d="M4 10h16M10 4v16"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="stage-wrap grid-visible" id="stageWrap">
+          <canvas id="preview" role="img" aria-label="Interactive 3D GLB preview"></canvas>
+          <div class="orbit-hint" id="orbitHint">
+            <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 8.5 6"/><path d="M17 3h4v4"/></svg>
+            Drag to orbit · Scroll to zoom
+          </div>
+        </div>
+
+        <div class="bottom-bar">
+          <div class="background-picker">
+            <span>Canvas</span>
+            <button class="bg-swatch active" data-bg="dark" style="--swatch:#151823" aria-label="Dark canvas"></button>
+            <button class="bg-swatch" data-bg="light" style="--swatch:#eef1f7" aria-label="Light canvas"></button>
+            <button class="bg-swatch checker" data-bg="transparent" aria-label="Transparent canvas"></button>
+          </div>
+          <div class="tip"><kbd>⌘</kbd><kbd>E</kbd> quick export</div>
+        </div>
+      </section>
+
+      <aside class="inspector">
+        <div class="inspector-title">
+          <div>
+            <span>Mesh settings</span>
+            <h2>Build a real 3D model</h2>
+          </div>
+          <button class="icon-button" id="resetButton" title="Reset style" aria-label="Reset style">
+            <svg viewBox="0 0 24 24"><path d="M4 11a8 8 0 1 1 2 6"/><path d="M4 5v6h6"/></svg>
+          </button>
+        </div>
+
+        <div class="inspector-scroll">
+          <section class="control-section open">
+            <button class="section-toggle">
+              <span><svg viewBox="0 0 24 24"><path d="M5 3h14v18H5Z"/><path d="M9 7h6"/></svg>Material</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg>
+            </button>
+            <div class="section-content">
+              <div class="color-row">
+                <label><span>Color</span><span class="color-control"><input type="color" id="frontColor" value="#7b61ff"><b id="frontColorText">#7B61FF</b></span></label>
+                <label><span>Material</span><select id="materialPreset">
+                  <option value="default">Default</option>
+                  <option value="plastic" selected>Plastic</option>
+                  <option value="metal">Metal</option>
+                  <option value="glass">Glass</option>
+                  <option value="rubber">Rubber</option>
+                  <option value="chrome">Chrome</option>
+                  <option value="gold">Gold</option>
+                  <option value="clay">Clay</option>
+                  <option value="emissive">Emissive</option>
+                  <option value="holographic">Holographic</option>
+                </select></label>
+              </div>
+              <label class="switch-row">
+                <span><strong>Preserve SVG colors</strong><small>Keep individual path fills in the GLB</small></span>
+                <input type="checkbox" id="preserveColors" checked><i></i>
+              </label>
+              <div class="control-row">
+                <label for="metalness">Metalness</label>
+                <input type="range" id="metalness" min="0" max="1" step=".01" value="0">
+                <output id="metalnessOutput">Auto</output>
+              </div>
+              <div class="control-row">
+                <label for="roughness">Roughness</label>
+                <input type="range" id="roughness" min="0" max="1" step=".01" value=".28">
+                <output id="roughnessOutput">Auto</output>
+              </div>
+              <div class="control-row">
+                <label for="opacity">Opacity</label>
+                <input type="range" id="opacity" min=".05" max="1" step=".01" value="1">
+                <output id="opacityOutput">100%</output>
+              </div>
+              <label class="switch-row">
+                <span><strong>Wireframe</strong><small>Inspect the generated triangles</small></span>
+                <input type="checkbox" id="wireframe"><i></i>
+              </label>
+            </div>
+          </section>
+
+          <section class="control-section open">
+            <button class="section-toggle">
+              <span><svg viewBox="0 0 24 24"><path d="M5 19 19 5"/><path d="M11 5h8v8"/></svg>Extrusion</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg>
+            </button>
+            <div class="section-content">
+              <div class="control-row">
+                <label for="depth">Depth</label>
+                <input type="range" id="depth" min=".1" max="5" step=".1" value="1.2">
+                <output id="depthOutput">1.2×</output>
+              </div>
+              <div class="control-row">
+                <label for="bevel">Bevel</label>
+                <input type="range" id="bevel" min="0" max="1" step=".05" value=".45">
+                <output id="bevelOutput">45%</output>
+              </div>
+              <div class="control-row">
+                <label for="quality">Curve detail</label>
+                <input type="range" id="quality" min="4" max="64" step="2" value="24">
+                <output id="qualityOutput">24</output>
+              </div>
+            </div>
+          </section>
+
+          <section class="control-section open">
+            <button class="section-toggle">
+              <span><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><path d="m8 7 4-4 4 4M17 8l4 4-4 4"/></svg>Perspective</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg>
+            </button>
+            <div class="section-content">
+              <div class="control-row">
+                <label for="rotationX">Rotate X</label>
+                <input type="range" id="rotationX" min="-180" max="180" step="1" value="-8">
+                <output id="rotationXOutput">−8°</output>
+              </div>
+              <div class="control-row">
+                <label for="rotationY">Rotate Y</label>
+                <input type="range" id="rotationY" min="-180" max="180" step="1" value="-14">
+                <output id="rotationYOutput">−14°</output>
+              </div>
+              <div class="control-row">
+                <label for="fov">Camera FOV</label>
+                <input type="range" id="fov" min="20" max="75" step="1" value="42">
+                <output id="fovOutput">42°</output>
+              </div>
+            </div>
+          </section>
+
+          <section class="control-section open">
+            <button class="section-toggle">
+              <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>Light & shadow</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></svg>
+            </button>
+            <div class="section-content">
+              <div class="control-row">
+                <label for="lightX">Light X</label>
+                <input type="range" id="lightX" min="-10" max="10" step=".5" value="4">
+                <output id="lightXOutput">4</output>
+              </div>
+              <div class="control-row">
+                <label for="lightY">Light Y</label>
+                <input type="range" id="lightY" min="-10" max="10" step=".5" value="6">
+                <output id="lightYOutput">6</output>
+              </div>
+              <div class="control-row">
+                <label for="lightZ">Light Z</label>
+                <input type="range" id="lightZ" min="-10" max="12" step=".5" value="7">
+                <output id="lightZOutput">7</output>
+              </div>
+              <div class="control-row">
+                <label for="lightIntensity">Key power</label>
+                <input type="range" id="lightIntensity" min="0" max="6" step=".1" value="2.2">
+                <output id="lightIntensityOutput">2.2</output>
+              </div>
+              <div class="control-row">
+                <label for="ambientIntensity">Ambient</label>
+                <input type="range" id="ambientIntensity" min="0" max="3" step=".05" value=".75">
+                <output id="ambientIntensityOutput">0.75</output>
+              </div>
+              <label class="switch-row">
+                <span><strong>Cast shadows</strong><small>Preview only; mesh stays clean</small></span>
+                <input type="checkbox" id="shadows" checked><i></i>
+              </label>
+            </div>
+          </section>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="pasteModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pasteModalTitle">
+      <div class="modal-header">
+        <div><span class="section-eyebrow">Custom artwork</span><h2 id="pasteModalTitle">Paste SVG code</h2></div>
+        <button class="icon-button" data-close-modal aria-label="Close"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </div>
+      <textarea id="svgCodeInput" rows="13" spellcheck="false" placeholder="<svg viewBox=&quot;0 0 100 100&quot;>…</svg>"></textarea>
+      <div class="modal-actions">
+        <span id="pasteError"></span>
+        <button class="ghost-button" data-close-modal>Cancel</button>
+        <button class="primary-button" id="applySvgCode">Use this SVG</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="exportModal" hidden>
+    <div class="modal export-modal" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+      <div class="modal-header">
+        <div><span class="section-eyebrow">Ready to use</span><h2 id="exportModalTitle">Export your artwork</h2></div>
+        <button class="icon-button" data-close-modal aria-label="Close"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </div>
+      <div class="export-grid">
+        <button class="export-card" id="exportGlbButton">
+          <i class="format-icon">GLB</i>
+          <span><strong>3D GLB model</strong><small>Solid mesh · colors · PBR material</small></span>
+          <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+        <button class="export-card" id="exportStlButton">
+          <i class="format-icon png">STL</i>
+          <span><strong>3D-printable STL</strong><small>Geometry only · universal slicer support</small></span>
+          <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+        <button class="export-card" id="exportPngButton">
+          <i class="format-icon code">PNG</i>
+          <span><strong>Preview image</strong><small>High-resolution render of the current view</small></span>
+          <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+      <p class="export-note"><svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3 8 8 9 5-1 8-4 8-9V7Z"/><path d="m9 12 2 2 4-4"/></svg> GLB export contains real triangles, normals, colors, and material data.</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"><span></span></div>
+  <script src="three-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

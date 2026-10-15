@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MP4 to GIF (max 50MB) | mvibe</title>
+<meta name="description" content="Turn videos into GIFs that fit under a size limit, 50 MB by default, keeping as much quality as possible. Runs in your browser. Nothing is uploaded.">
+<meta name="mvibe-tool" content="mp4-to-gif-50mb">
+<meta name="mvibe-tool-name" content="MP4 to GIF (max 50MB)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MP4 to GIF (max 50MB), a tool by MLow">
+<meta property="og:description" content="Videos to GIFs that fit under a size limit, with the most quality that fits. Runs in your browser. Nothing is uploaded.">
+<meta property="og:url" content="https://0xmlow.github.io/mvibe/tools/mp4-to-gif-50mb/">
+<meta property="og:image" content="https://0xmlow.github.io/mvibe/assets/brand/eye.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../../assets/brand/eye.png">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/tool.css">
+<link rel="stylesheet" href="../_lib/converters.css">
+<script src="../../shared/mvibe.js"></script>
+<script src="../../shared/chrome.js" defer></script>
+</head>
+<body>
+<main class="wrap">
+  <header class="tool-hero">
+    <span class="eyebrow">Converter · Motion</span>
+    <h1>MP4 to GIF <em>max 50MB</em></h1>
+    <p>Drop a video and get the best GIF that fits under the limit. Drop a few images instead and they become one slideshow that fits too.</p>
+    <span class="privacy">Runs in your browser. Your files never upload.</span>
+  </header>
+
+  <label class="drop">
+    <img class="eye" src="../../assets/brand/eye.png" alt="">
+    <strong>Drop videos or images here</strong>
+    <small class="formats">or tap to pick them. MP4, MOV, WebM, M4V. Images: PNG, JPG, HEIC, WebP.</small>
+    <input type="file" multiple accept="video/*,image/*,.mov,.mp4,.m4v,.webm,.mkv,.heic,.heif">
+  </label>
+
+  <section class="panel">
+    <div class="opts">
+      <label>Size limit (MB)
+        <input type="number" id="maxmb" value="50" min="0.05" step="any" inputmode="decimal">
+      </label>
+      <span class="hint">Decimal megabytes. Each GIF aims 3% under it to be safe.</span>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <label class="check"><input type="checkbox" id="auto" checked> Download each GIF when it is ready</label>
+      <button class="btn ghost" id="all" type="button" hidden>Download all</button>
+    </div>
+    <div class="bar"><i></i></div>
+    <div class="status">Waiting for files.</div>
+    <pre class="log"></pre>
+  </section>
+
+  <section class="results" aria-live="polite"></section>
+
+  <p class="note">
+    <b>How it fits.</b> The tool first tries the max quality GIF. If that is too big it steps down a ladder, keeping full size as long as it can:
+    error diffusion dither, then ordered dither, then fewer colours (256 down to 96) and fewer frames (20 fps down to 11).
+    If it is still too big, it shrinks the picture in steps from 85% down to 22% until it fits. The log shows each try.
+    Every GIF has a palette built from the whole clip and stores only the part of each frame that changed. Images become one slideshow, 0.6 seconds each, upright, cropped to the first image's shape.
+    Your browser decodes the video, so iPhone MOV files (HEVC) open in Safari and in Chrome on a Mac, but often not in Firefox or on Windows.
+    <br><br>A tool by MLow. <a href="https://github.com/0xmlow/mvibe/tree/main/tools/droplets">Source on GitHub</a>.
+  </p>
+</main>
+<script type="module" src="../_lib/gif-page.js"></script>
+</body>
+</html>

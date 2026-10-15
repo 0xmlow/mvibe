@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Art Sheets · mvibe</title>
+<meta name="description" content="Repaint any image as a cell painting and get an editable Excel workbook, a true vector SVG and a PNG. Runs in your browser. A tool by MLow.">
+<meta name="mvibe-tool" content="art-sheets">
+<meta name="mvibe-tool-name" content="Art Sheets">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="mvibe">
+<meta property="og:title" content="Art Sheets by MLow">
+<meta property="og:description" content="Paint with spreadsheet cells. Turn an image into broad colour regions, cell brushwork and drawn contours, then keep it as Excel, SVG and PNG.">
+<meta property="og:url" content="https://0xmlow.github.io/mvibe/tools/art-sheets/">
+<meta property="og:image" content="https://0xmlow.github.io/mvibe/assets/brand/eye.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../../assets/brand/eye.png">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/tool.css">
+<script src="../../shared/mvibe.js"></script>
+<script src="../../shared/chrome.js" defer></script>
+<style>
+  fieldset.opts { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .opts .hint { flex-basis: 100%; margin: 0; font: 500 12px/1.4 var(--mono); color: var(--mist); }
+  .shelf { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chip { display: flex; align-items: center; max-width: 100%; border-radius: 999px; border: 1px solid var(--rule); background: var(--night); }
+  .chip.on { border-color: var(--bloom); box-shadow: 0 0 0 3px rgba(223, 71, 104, .15); }
+  .chip button { background: none; border: 0; color: var(--paper); cursor: pointer; font: 500 13px/1 var(--sans); }
+  .chip .pick { display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 4px; min-width: 0; }
+  .chip .pick span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 22ch; }
+  .chip img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex: none; }
+  .chip .x { padding: 6px 12px 6px 6px; color: var(--mist); font-size: 18px; }
+  .chip .x:hover { color: var(--bloom); }
+  .tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 20px; background: var(--night); border: 1px solid var(--rule); width: fit-content; max-width: 100%; }
+  .tabs button { border: 0; border-radius: 999px; padding: 8px 14px; background: none; color: #aeb7d0; cursor: pointer; font: 600 13px/1 var(--sans); }
+  .tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); box-shadow: inset 0 0 0 1px rgba(84, 197, 222, .4); }
+  .stage { position: relative; margin-top: 12px; border-radius: var(--radius-sm); background: #050a22; display: grid; place-items: center; min-height: 220px; overflow: hidden; }
+  .stage canvas, .stage img { display: block; max-width: 100%; max-height: 70vh; width: auto; height: auto; }
+  .stage [hidden] { display: none; }
+  .stage canvas { image-rendering: pixelated; width: 100%; height: auto; object-fit: contain; }
+  .stage.busy::after { content: ""; position: absolute; inset: 0; background: rgba(1, 6, 27, .45); }
+  .desc { margin: 10px 0 0; font: 500 13px/1.4 var(--mono); color: #aeb7d0; }
+  .sub { margin: 6px 0 0; font-size: 13px; color: var(--mist); }
+  .dl { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .btn.small { padding: 8px 12px; font-size: 13px; }
+  .btn.small small { font: 500 11px/1 var(--mono); opacity: .7; }
+  .card .thumb { image-rendering: pixelated; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="tool-hero">
+    <span class="eyebrow">A tool by MLow</span>
+    <h1>Art <em>Sheets</em></h1>
+    <p>Paint with spreadsheet cells. Drop in an image and it is repainted as a cell painting: broad colour regions, directional brushwork and a few drawn contours. Keep it as an Excel workbook, a vector SVG and a PNG.</p>
+    <span class="privacy">Runs in your browser. Your images never leave this device.</span>
+  </header>
+
+  <label class="drop" id="drop">
+    <img class="eye" src="../../assets/brand/eye.png" alt="">
+    <strong>Drop images here</strong>
+    <small>or click to choose. PNG, JPEG, WebP, GIF, AVIF. Add as many as you like.</small>
+    <input id="file" type="file" accept="image/*" multiple aria-label="Choose images">
+  </label>
+
+  <section class="panel">
+    <fieldset class="opts" id="opts">
+      <label>Cell detail
+        <select id="detail">
+          <option value="160">160 · Broad cells</option>
+          <option value="256" selected>256 · Studio</option>
+          <option value="384">384 · Fine cells</option>
+          <option value="512">512 · Intricate</option>
+        </select>
+      </label>
+      <label>Pigments
+        <input id="colors" type="number" min="8" max="48" step="1" value="24">
+      </label>
+      <label>Brushwork
+        <select id="brush">
+          <option value="1">Fine</option>
+          <option value="2" selected>Bold</option>
+          <option value="3">Broad</option>
+        </select>
+      </label>
+      <label>PNG size
+        <select id="scale">
+          <option value="1">1 px per cell</option>
+          <option value="2">2 px per cell</option>
+          <option value="4" selected>4 px per cell</option>
+        </select>
+      </label>
+      <label>Transparent areas
+        <select id="matte">
+          <option value="black" selected>Ink black</option>
+          <option value="white">Paper white</option>
+        </select>
+      </label>
+      <p class="hint">Cell detail is the number of cells along the long edge. <span id="scaleHint"></span></p>
+    </fieldset>
+  </section>
+
+  <section class="panel" id="preview" hidden>
+    <div class="shelf" id="shelf"></div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Painting stage">
+      <button type="button" role="tab" data-view="Reference" aria-selected="false">Reference</button>
+      <button type="button" role="tab" data-view="Underpainting" aria-selected="false">Underpainting</button>
+      <button type="button" role="tab" data-view="Brushwork" aria-selected="false">Brushwork</button>
+      <button type="button" role="tab" data-view="Painting" aria-selected="true">Painting</button>
+    </div>
+    <div class="stage" id="stage">
+      <img id="ref" alt="The reference image" hidden>
+      <canvas id="canvas" aria-label="Cell painting preview"></canvas>
+    </div>
+    <p class="desc" id="desc"></p>
+    <p class="sub">Each stage is its own editable sheet in the workbook.</p>
+  </section>
+
+  <div class="btns">
+    <button class="btn" id="make" type="button" disabled>Make files</button>
+    <button class="btn ghost" id="zip" type="button" disabled>Download all as ZIP</button>
+    <button class="btn ghost" id="clear" type="button" disabled>Clear</button>
+  </div>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="status" id="status" aria-live="polite">Add an image to begin.</div>
+
+  <section class="results" id="results" aria-label="Your files"></section>
+
+  <p class="note">
+    <b>Three files per image.</b> The <b>XLSX</b> is a real Excel workbook where every cell is a painted spreadsheet cell. It has three sheets: Painting, Underpainting and Brushwork. Edit any cell colour by hand. It opens in Excel, Numbers, Google Sheets and LibreOffice. In Numbers, set zoom to 25% to see more of it.
+    The <b>SVG</b> is true vector cell geometry, sharp at any size. The <b>PNG</b> is ready to share or print, at 1, 2 or 4 pixels per cell.
+    The ZIP holds a folder per image with all three.
+    This is the browser version of MLow's Mac app. <a href="https://github.com/0xmlow/mvibe/tree/main/tools/art-sheets">See the source</a>.
+  </p>
+</main>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

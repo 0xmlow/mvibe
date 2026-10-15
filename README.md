@@ -3,6 +3,21 @@
 MLow's vibe-coded tools for making art. Every tool here was built by talking to an AI
 and is kept as source, so each one can be rebuilt, changed or forked.
 
+**Use them in your browser, nothing to install: https://0xmlow.github.io/mvibe/**
+
+## The site
+
+`docs/` is the GitHub Pages site: the home page with MLow's art and a page for every tool.
+Everything runs client side and files are never uploaded.
+
+- `docs/shared/mvibe.js` is loaded first on every page. It signs every export with a small
+  maker's mark and counts page views and exports when GoatCounter is configured
+  (`GOATCOUNTER` at the top of the file; no cookies, no personal data).
+- `scripts/build-site-tools.sh` rebuilds the pages for MOSH LAB, SVG Forge 3D, Spinlab,
+  Spinlab V2 and ~M.Texture~ from `tools/`. The converters and Art Sheets are written
+  directly in `docs/tools/`.
+- `node scripts/serve.js` previews the site at http://localhost:8820/.
+
 | Tool | What it does | Kind | Folder |
 | --- | --- | --- | --- |
 | **MOSH LAB** | Glitch instrument: 60 stackable WebGL effects, 48 presets, seeded randomness, loop-perfect GIF, MP4 and WebM export | Electron app + web page | [`tools/mosh-lab`](tools/mosh-lab) |

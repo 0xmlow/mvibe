@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MP4 to GIF | mvibe</title>
+<meta name="description" content="Turn videos into high quality GIFs, or a stack of images into one animated slideshow GIF. Runs in your browser. Nothing is uploaded.">
+<meta name="mvibe-tool" content="mp4-to-gif">
+<meta name="mvibe-tool-name" content="MP4 to GIF">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MP4 to GIF, a tool by MLow">
+<meta property="og:description" content="Videos to max quality GIFs. Images to one slideshow GIF. Runs in your browser. Nothing is uploaded.">
+<meta property="og:url" content="https://0xmlow.github.io/mvibe/tools/mp4-to-gif/">
+<meta property="og:image" content="https://0xmlow.github.io/mvibe/assets/brand/eye.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../../assets/brand/eye.png">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/tool.css">
+<link rel="stylesheet" href="../_lib/converters.css">
+<script src="../../shared/mvibe.js"></script>
+<script src="../../shared/chrome.js" defer></script>
+</head>
+<body>
+<main class="wrap">
+  <header class="tool-hero">
+    <span class="eyebrow">Converter · Motion</span>
+    <h1>MP4 to <em>GIF</em></h1>
+    <p>Drop a video and get a max quality GIF at full size. Drop a few images instead and they become one animated slideshow.</p>
+    <span class="privacy">Runs in your browser. Your files never upload.</span>
+  </header>
+
+  <label class="drop">
+    <img class="eye" src="../../assets/brand/eye.png" alt="">
+    <strong>Drop videos or images here</strong>
+    <small class="formats">or tap to pick them. MP4, MOV, WebM, M4V. Images: PNG, JPG, HEIC, WebP.</small>
+    <input type="file" multiple accept="video/*,image/*,.mov,.mp4,.m4v,.webm,.mkv,.heic,.heif">
+  </label>
+
+  <section class="panel">
+    <div class="row">
+      <label class="check"><input type="checkbox" id="auto" checked> Download each GIF when it is ready</label>
+      <button class="btn ghost" id="all" type="button" hidden>Download all</button>
+    </div>
+    <div class="bar"><i></i></div>
+    <div class="status">Waiting for files.</div>
+  </section>
+
+  <section class="results" aria-live="polite"></section>
+
+  <p class="note">
+    <b>What happens to your files.</b> Each video becomes its own GIF at its full size and 20 frames per second, with one 256 colour palette built from the whole clip and Sierra Lite dithering.
+    Only the part of each frame that changed is stored again, which keeps files smaller without losing anything.
+    Images become one GIF in name order, 0.6 seconds each, cropped to fill the first image's shape (longest side up to 2560 px), with a little extra colour and contrast and a palette of their own per frame.
+    Photos are turned upright first. Your browser decodes the video, so iPhone MOV files (HEVC) open in Safari and in Chrome on a Mac, but often not in Firefox or on Windows. Big videos make big GIFs. Need a size limit? Use <a href="../mp4-to-gif-50mb/">MP4 to GIF (max 50MB)</a>.
+    <br><br>A tool by MLow. <a href="https://github.com/0xmlow/mvibe/tree/main/tools/droplets">Source on GitHub</a>.
+  </p>
+</main>
+<script type="module" src="../_lib/gif-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HEIC to PNG | mvibe</title>
+<meta name="description" content="Turn iPhone HEIC and HEIF photos into upright, full resolution PNG files. Runs in your browser. Nothing is uploaded.">
+<meta name="mvibe-tool" content="heic-to-png">
+<meta name="mvibe-tool-name" content="HEIC to PNG">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HEIC to PNG, a tool by MLow">
+<meta property="og:description" content="iPhone photos to upright, full resolution PNG. Runs in your browser. Nothing is uploaded.">
+<meta property="og:url" content="https://0xmlow.github.io/mvibe/tools/heic-to-png/">
+<meta property="og:image" content="https://0xmlow.github.io/mvibe/assets/brand/eye.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../../assets/brand/eye.png">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/tool.css">
+<link rel="stylesheet" href="../_lib/converters.css">
+<script src="../../shared/mvibe.js"></script>
+<script src="../../shared/chrome.js" defer></script>
+</head>
+<body>
+<main class="wrap">
+  <header class="tool-hero">
+    <span class="eyebrow">Converter · Photos</span>
+    <h1>HEIC to <em>PNG</em></h1>
+    <p>Drop iPhone photos. Each one comes back as an upright, full resolution PNG with the same name.</p>
+    <span class="privacy">Runs in your browser. Your files never upload.</span>
+  </header>
+
+  <label class="drop">
+    <img class="eye" src="../../assets/brand/eye.png" alt="">
+    <strong>Drop HEIC photos here</strong>
+    <small class="formats">or tap to pick them. HEIC and HEIF. Other files are skipped.</small>
+    <input type="file" multiple accept=".heic,.heif,.hif,image/heic,image/heif">
+  </label>
+
+  <section class="panel">
+    <div class="row">
+      <label class="check"><input type="checkbox" id="auto" checked> Download each PNG when it is ready</label>
+      <button class="btn ghost" id="all" type="button" hidden>Download all</button>
+    </div>
+    <div class="bar"><i></i></div>
+    <div class="status">Waiting for photos.</div>
+  </section>
+
+  <section class="results" aria-live="polite"></section>
+
+  <p class="note">
+    <b>What happens to your photo.</b> Safari reads HEIC itself. Other browsers load libheif, a WebAssembly HEIC decoder, the first time you drop a photo (about 3 MB, once).
+    The picture is turned upright from the rotation stored in the file, kept at its full size, and saved as a lossless PNG.
+    The desktop version of this tool used macOS Quick Look for the same reason: the usual command line decoders ignore the rotation flag, so portrait shots came out sideways.
+    Very large photos, such as 48 MP shots, can pass the canvas size limit of Safari on iPhone.
+    <br><br>A tool by MLow. <a href="https://github.com/0xmlow/mvibe/tree/main/tools/droplets">Source on GitHub</a>.
+  </p>
+</main>
+
+<script type="module">
+import { setupDrop, progress, card, refreshAll, autoPref, fmtBytes } from "../_lib/ui.js";
+import { decodeHeic, bitmapToPng, thumbURL } from "../_lib/images.js";
+
+const auto = autoPref();
+const used = new Set();
+const uniqueName = (stem) => { let n = `${stem}.png`, i = 1; while (used.has(n)) n = `${stem}-${i++}.png`; used.add(n); return n; };
+
+setupDrop(async (files) => {
+  const list = files.filter((f) => /\.(heic|heif|hif)$/i.test(f.name) || /hei[cf]/i.test(f.type));
+  const skipped = files.length - list.length;
+  if (!list.length) { progress(0, "No HEIC or HEIF files in that drop."); return; }
+  let ok = 0, bad = 0;
+  for (let i = 0; i < list.length; i++) {
+    const f = list[i];
+    progress(i / list.length, `Decoding ${f.name} (${i + 1} of ${list.length})`);
+    try {
+      const { bitmap, path } = await decodeHeic(f);
+      progress((i + 0.6) / list.length, `Writing PNG for ${f.name}`);
+      const png = await bitmapToPng(bitmap);
+      const name = uniqueName(f.name.replace(/\.[^.]+$/, ""));
+      const thumb = await thumbURL(bitmap, bitmap.width, bitmap.height);
+      card({ thumb, title: name, lines: [`${bitmap.width} x ${bitmap.height}`, `about ${fmtBytes(png.size)}`, `decoded by ${path === "browser" ? "the browser" : "libheif (WebAssembly)"}`], blob: png, filename: name });
+      bitmap.close && bitmap.close();
+      if (auto()) await window.MVIBE.download(png, name);
+      ok++;
+    } catch (e) {
+      console.error(e);
+      card({ title: f.name, error: `Could not convert. ${e && e.message ? e.message : e}` });
+      bad++;
+    }
+    refreshAll();
+  }
+  progress(1, `${ok} PNG${ok === 1 ? "" : "s"} made${bad ? `, ${bad} failed` : ""}${skipped ? `, ${skipped} other file${skipped === 1 ? "" : "s"} skipped` : ""}.`);
+});
+</script>
+</body>
+</html>

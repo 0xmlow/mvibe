@@ -1,0 +1,240 @@
+[
+ {
+  "file": "flowers-01.webp",
+  "collection": "flowers",
+  "w": 1400,
+  "h": 958,
+  "bg": "#4a80a2"
+ },
+ {
+  "file": "flowers-02.webp",
+  "collection": "flowers",
+  "w": 1400,
+  "h": 958,
+  "bg": "#5d6080"
+ },
+ {
+  "file": "flowers-03.webp",
+  "collection": "flowers",
+  "w": 1400,
+  "h": 958,
+  "bg": "#35224b"
+ },
+ {
+  "file": "flowers-04.webp",
+  "collection": "flowers",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#9a7d70"
+ },
+ {
+  "file": "flowers-05.webp",
+  "collection": "flowers",
+  "w": 1400,
+  "h": 958,
+  "bg": "#9d6d66"
+ },
+ {
+  "file": "flowers-06.webp",
+  "collection": "flowers",
+  "w": 1400,
+  "h": 958,
+  "bg": "#3a1844"
+ },
+ {
+  "file": "flowers-07.webp",
+  "collection": "flowers",
+  "w": 1400,
+  "h": 781,
+  "bg": "#868391"
+ },
+ {
+  "file": "flowers-08.webp",
+  "collection": "flowers",
+  "w": 1400,
+  "h": 781,
+  "bg": "#5c4268"
+ },
+ {
+  "file": "trippers-01.webp",
+  "collection": "trippers",
+  "w": 1400,
+  "h": 939,
+  "bg": "#697ca1"
+ },
+ {
+  "file": "trippers-02.webp",
+  "collection": "trippers",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#4d4a4f"
+ },
+ {
+  "file": "trippers-03.webp",
+  "collection": "trippers",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#434863"
+ },
+ {
+  "file": "trippers-04.webp",
+  "collection": "trippers",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#414e66"
+ },
+ {
+  "file": "trippers-05.webp",
+  "collection": "trippers",
+  "w": 1376,
+  "h": 768,
+  "bg": "#396385"
+ },
+ {
+  "file": "trippers-06.webp",
+  "collection": "trippers",
+  "w": 1376,
+  "h": 768,
+  "bg": "#3c4981"
+ },
+ {
+  "file": "trippers-07.webp",
+  "collection": "trippers",
+  "w": 1376,
+  "h": 768,
+  "bg": "#342c65"
+ },
+ {
+  "file": "trippers-08.webp",
+  "collection": "trippers",
+  "w": 1232,
+  "h": 928,
+  "bg": "#394650"
+ },
+ {
+  "file": "trippers-09.webp",
+  "collection": "trippers",
+  "w": 1089,
+  "h": 1400,
+  "bg": "#2a2d4a"
+ },
+ {
+  "file": "trippers-10.webp",
+  "collection": "trippers",
+  "w": 1232,
+  "h": 928,
+  "bg": "#4d4c7c"
+ },
+ {
+  "file": "impermanent-loss-01.webp",
+  "collection": "impermanent-loss",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#7c4f97"
+ },
+ {
+  "file": "impermanent-loss-02.webp",
+  "collection": "impermanent-loss",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#4f3863"
+ },
+ {
+  "file": "impermanent-loss-03.webp",
+  "collection": "impermanent-loss",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#473f61"
+ },
+ {
+  "file": "impermanent-loss-04.webp",
+  "collection": "impermanent-loss",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#3e237a"
+ },
+ {
+  "file": "impermanent-loss-05.webp",
+  "collection": "impermanent-loss",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#523560"
+ },
+ {
+  "file": "impermanent-loss-06.webp",
+  "collection": "impermanent-loss",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#5e3560"
+ },
+ {
+  "file": "impermanent-loss-07.webp",
+  "collection": "impermanent-loss",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#56446e"
+ },
+ {
+  "file": "impermanent-loss-08.webp",
+  "collection": "impermanent-loss",
+  "w": 1400,
+  "h": 1055,
+  "bg": "#454560"
+ },
+ {
+  "file": "new-yorkers-01.webp",
+  "collection": "new-yorkers",
+  "w": 1400,
+  "h": 933,
+  "bg": "#766869"
+ },
+ {
+  "file": "new-yorkers-02.webp",
+  "collection": "new-yorkers",
+  "w": 1248,
+  "h": 832,
+  "bg": "#443a40"
+ },
+ {
+  "file": "new-yorkers-03.webp",
+  "collection": "new-yorkers",
+  "w": 1248,
+  "h": 832,
+  "bg": "#513638"
+ },
+ {
+  "file": "new-yorkers-04.webp",
+  "collection": "new-yorkers",
+  "w": 1376,
+  "h": 768,
+  "bg": "#6e6056"
+ },
+ {
+  "file": "new-yorkers-05.webp",
+  "collection": "new-yorkers",
+  "w": 1400,
+  "h": 933,
+  "bg": "#534d53"
+ },
+ {
+  "file": "new-yorkers-06.webp",
+  "collection": "new-yorkers",
+  "w": 1376,
+  "h": 768,
+  "bg": "#6a7b7e"
+ },
+ {
+  "file": "new-yorkers-07.webp",
+  "collection": "new-yorkers",
+  "w": 1400,
+  "h": 788,
+  "bg": "#737373"
+ },
+ {
+  "file": "new-yorkers-08.webp",
+  "collection": "new-yorkers",
+  "w": 1400,
+  "h": 788,
+  "bg": "#804a3f"
+ }
+]

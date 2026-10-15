@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mvibe · Tools by MLow</title>
+<meta name="description" content="Free art tools by MLow, the NYC artist. Glitch, extrude, spin, wrap, repaint and convert, all in your browser. Nothing to install, nothing uploaded.">
+<meta name="mvibe-tool" content="home">
+<meta name="mvibe-tool-name" content="mvibe">
+<meta property="og:title" content="mvibe · Tools by MLow">
+<meta property="og:description" content="Free art tools by MLow. They run in your browser. Nothing to install, nothing uploaded.">
+<meta property="og:image" content="https://0xmlow.github.io/mvibe/assets/og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@degens">
+<meta name="theme-color" content="#01061b">
+<link rel="icon" href="assets/brand/eye.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="shared/tokens.css">
+<link rel="stylesheet" href="assets/site.css">
+<script src="shared/mvibe.js"></script>
+<script src="assets/site.js" defer></script>
+</head>
+<body>
+
+<header class="nav" id="top">
+  <a class="brand" href="#top" aria-label="mvibe home"><img src="assets/brand/eye.png" alt=""><span>mvibe</span></a>
+  <nav aria-label="Sections">
+    <a href="#tools">Tools</a><a href="#art">Art</a><a href="#about">About</a>
+    <a class="gh" href="https://github.com/0xmlow/mvibe" rel="noopener">GitHub</a>
+  </nav>
+</header>
+
+<section class="hero" aria-label="Intro">
+  <div class="hero-art" id="heroArt" aria-hidden="true"></div>
+  <div class="hero-veil" aria-hidden="true"></div>
+  <div class="hero-copy">
+    <img class="logo" src="assets/brand/logo-white.png" alt="MLOW" width="600" height="139">
+    <h1>Tools I made<br>for making <em>art.</em></h1>
+    <p>Glitch it, extrude it, spin it, wrap it, repaint it, convert it. Eleven tools I vibe coded for my own studio, free in your browser. Nothing to install. Your files never leave your device.</p>
+    <div class="cta">
+      <a class="btn" href="#tools">Open the toolbox</a>
+      <a class="btn ghost" href="#art">See the art</a>
+    </div>
+  </div>
+  <div class="hero-caption" id="heroCaption" aria-live="polite"></div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+<section class="section" id="tools" aria-labelledby="tools-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">The toolbox</span>
+      <h2 id="tools-h">Pick a tool. Drop a file. <em>Make something.</em></h2>
+      <p>Every tool here started as a thing I needed at 3 a.m. and asked an AI to build. Now they run on this page.</p>
+    </div>
+    <div class="filters" role="tablist" aria-label="Filter tools" id="toolFilters"></div>
+    <div class="tools" id="toolGrid"></div>
+  </div>
+</section>
+
+<section class="section art" id="art" aria-labelledby="art-h">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">The art</span>
+      <h2 id="art-h">What the tools are <em>for.</em></h2>
+      <p>A few pieces from four bodies of work. Tap any piece to see it large.</p>
+    </div>
+    <div class="filters" role="tablist" aria-label="Filter art" id="artFilters"></div>
+    <div class="gallery" id="gallery"></div>
+    <div class="cta center"><button class="btn ghost" id="shuffle" type="button">Shuffle the wall</button></div>
+  </div>
+</section>
+
+<section class="section about" id="about" aria-labelledby="about-h">
+  <div class="wrap about-grid">
+    <div class="about-art" id="aboutArt" aria-hidden="true"></div>
+    <div class="about-copy">
+      <span class="eyebrow">About</span>
+      <h2 id="about-h">I'm <em>MLow.</em></h2>
+      <p class="lead">I'm Michael Low, an artist in New York. I make AI art, NFT collections on Ethereum and physical metal and giclee prints.</p>
+      <p>My flowers started as symbols of hope after surviving cancer. They grew into a whole universe: about 1,800 drippy collage fLOWers, surreal Transdimensional Trippers, the electric abstractions of Impermanent Loss, and NEW YORKERS, a character world of the city I love. With painter Andrés Del Vecchio I co-created THE SOFT CONSPIRACY.</p>
+      <p>My work has ridden on more than 5,000 NYC taxis with Somo and Art Crush Gallery. I'm an Adobe Firefly Creative Partner Ambassador and work with FLORA, Dreamina and Wide World AI. NYU BA, magna cum laude, and NYU Wagner MPA.</p>
+      <ul class="stats">
+        <li><b data-count="5000">5,000+</b><span>NYC taxis</span></li>
+        <li><b data-count="1800">~1,800</b><span>fLOWers</span></li>
+        <li><b data-count="11">11</b><span>free tools</span></li>
+      </ul>
+      <div class="links">
+        <a class="btn" href="https://mlow.nyc" rel="noopener">Prints at mlow.nyc</a>
+        <a class="btn ghost" href="https://mlow.xyz" rel="noopener">Portfolio</a>
+        <a class="btn ghost" href="https://x.com/degens" rel="noopener">@degens on X</a>
+        <a class="btn ghost" href="https://thesoftconspiracy.com" rel="noopener">The Soft Conspiracy</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap foot-grid">
+    <div>
+      <img src="assets/brand/logo-white.png" alt="MLOW" class="foot-logo" width="600" height="139">
+      <p>mvibe is free. Everything runs in your browser and your files are never uploaded. Files you export carry a small maker's mark from MLow.</p>
+    </div>
+    <div>
+      <p class="small">Source for every tool is on <a href="https://github.com/0xmlow/mvibe" rel="noopener">GitHub</a>. Visits and exports are counted anonymously, with no cookies and no personal data.</p>
+      <p class="small">Art © MLow. Made in New York.</p>
+    </div>
+  </div>
+</footer>
+
+<dialog class="lightbox" id="lightbox" aria-label="Artwork">
+  <button class="lb-close" type="button" aria-label="Close">×</button>
+  <button class="lb-nav prev" type="button" aria-label="Previous">‹</button>
+  <img alt="" id="lbImg">
+  <button class="lb-nav next" type="button" aria-label="Next">›</button>
+  <p class="lb-cap" id="lbCap"></p>
+</dialog>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAW + HEIC to PNG | mvibe</title>
+<meta name="description" content="Turn camera RAW files (NEF, CR2, CR3, ARW, RAF, RW2, ORF, DNG, PEF, SRW) and iPhone HEIC photos into upright, full resolution PNG files. Runs in your browser.">
+<meta name="mvibe-tool" content="raw-heic-to-png">
+<meta name="mvibe-tool-name" content="RAW + HEIC to PNG">
+<meta property="og:type" content="website">
+<meta property="og:title" content="RAW + HEIC to PNG, a tool by MLow">
+<meta property="og:description" content="Camera RAW and iPhone photos to upright, full resolution PNG. Runs in your browser. Nothing is uploaded.">
+<meta property="og:url" content="https://0xmlow.github.io/mvibe/tools/raw-heic-to-png/">
+<meta property="og:image" content="https://0xmlow.github.io/mvibe/assets/brand/eye.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../../assets/brand/eye.png">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/tool.css">
+<link rel="stylesheet" href="../_lib/converters.css">
+<script src="../../shared/mvibe.js"></script>
+<script src="../../shared/chrome.js" defer></script>
+</head>
+<body>
+<main class="wrap">
+  <header class="tool-hero">
+    <span class="eyebrow">Converter · Photos</span>
+    <h1>RAW + HEIC to <em>PNG</em></h1>
+    <p>Drop camera RAW files or iPhone photos. Each one comes back as an upright, full resolution PNG with the same name.</p>
+    <span class="privacy">Runs in your browser. Your files never upload.</span>
+  </header>
+
+  <label class="drop">
+    <img class="eye" src="../../assets/brand/eye.png" alt="">
+    <strong>Drop RAW or HEIC photos here</strong>
+    <small class="formats">or tap to pick them. NEF, CR2, CR3, ARW, RAF, RW2, ORF, DNG, PEF, SRW, HEIC. Other files are skipped.</small>
+    <input type="file" multiple accept=".heic,.heif,.hif,.nef,.nrw,.cr2,.cr3,.crw,.arw,.sr2,.srf,.raf,.rw2,.orf,.dng,.pef,.srw,.raw,.3fr,.dcr,.erf,.mrw,.x3f,.rwl,.iiq,image/heic,image/heif">
+  </label>
+
+  <section class="panel">
+    <div class="row">
+      <label class="check"><input type="checkbox" id="auto" checked> Download each PNG when it is ready</label>
+      <button class="btn ghost" id="all" type="button" hidden>Download all</button>
+    </div>
+    <div class="bar"><i></i></div>
+    <div class="status">Waiting for photos.</div>
+  </section>
+
+  <section class="results" aria-live="polite"></section>
+
+  <p class="note">
+    <b>What happens to your photo.</b> RAW files go through LibRaw, the open source RAW engine, compiled to WebAssembly (about 1.5 MB, loaded the first time you drop a RAW).
+    It demosaics the sensor data with the white balance and colour matrix your camera recorded, turns the picture upright, and gives an 8 bit sRGB PNG at full sensor size.
+    If LibRaw cannot read a file, the tool uses the largest JPEG preview the camera stored inside the RAW and says so on the result. HEIC works as in HEIC to PNG: Safari reads it itself, other browsers load libheif.
+    The desktop version used macOS Quick Look, because it applies the rotation and the system RAW colour pipeline where command line decoders do not. Colours from LibRaw can differ a little from Apple Photos.
+    <br><br>A tool by MLow. <a href="https://github.com/0xmlow/mvibe/tree/main/tools/droplets">Source on GitHub</a>.
+  </p>
+</main>
+
+<script type="module">
+import { setupDrop, progress, card, refreshAll, autoPref, fmtBytes } from "../_lib/ui.js";
+import { decodeHeic, bitmapToPng, thumbURL } from "../_lib/images.js";
+import { decodeRaw, RAW_EXT } from "../_lib/raw.js";
+
+const HEIC = /\.(heic|heif|hif)$/i;
+const auto = autoPref();
+const used = new Set();
+const uniqueName = (stem) => { let n = `${stem}.png`, i = 1; while (used.has(n)) n = `${stem}-${i++}.png`; used.add(n); return n; };
+const PATH = { browser: "decoded by the browser", libheif: "decoded by libheif (WebAssembly)", LibRaw: "LibRaw demosaic", "embedded preview": "embedded camera preview (LibRaw could not read it)" };
+
+setupDrop(async (files) => {
+  const list = files.filter((f) => HEIC.test(f.name) || RAW_EXT.test(f.name) || /hei[cf]/i.test(f.type));
+  const skipped = files.length - list.length;
+  if (!list.length) { progress(0, "No RAW or HEIC files in that drop."); return; }
+  let ok = 0, bad = 0;
+  for (let i = 0; i < list.length; i++) {
+    const f = list[i];
+    const isRaw = RAW_EXT.test(f.name);
+    progress(i / list.length, `${isRaw ? "Developing" : "Decoding"} ${f.name} (${i + 1} of ${list.length})`);
+    try {
+      const { bitmap, path } = isRaw ? await decodeRaw(f) : await decodeHeic(f);
+      progress((i + 0.6) / list.length, `Writing PNG for ${f.name}`);
+      const png = await bitmapToPng(bitmap);
+      const name = uniqueName(f.name.replace(/\.[^.]+$/, ""));
+      const thumb = await thumbURL(bitmap, bitmap.width, bitmap.height);
+      const tag = document.createElement("span");
+      tag.className = "tag" + (path === "embedded preview" ? " warn" : "");
+      tag.textContent = PATH[path] || path;
+      card({ thumb, title: name, lines: [`${bitmap.width} x ${bitmap.height}`, `about ${fmtBytes(png.size)}`], blob: png, filename: name, extra: tag });
+      bitmap.close && bitmap.close();
+      if (auto()) await window.MVIBE.download(png, name);
+      ok++;
+    } catch (e) {
+      console.error(e);
+      card({ title: f.name, error: `Could not convert. ${e && e.message ? e.message : e}` });
+      bad++;
+    }
+    refreshAll();
+  }
+  progress(1, `${ok} PNG${ok === 1 ? "" : "s"} made${bad ? `, ${bad} failed` : ""}${skipped ? `, ${skipped} other file${skipped === 1 ? "" : "s"} skipped` : ""}.`);
+});
+</script>
+</body>
+</html>
