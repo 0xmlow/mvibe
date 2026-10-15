@@ -1,0 +1,6 @@
+{ "outDir": "fitcheck",
+  "defaults": { "width": 560, "height": 560, "frames": 20, "fps": 16, "maxSize": 360, "scene": "Gallery" },
+  "jobs": [
+    { "out": "suit-overhead.gif", "move": "overhead", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_advanced-crew-escape-suit__wrapped-in__evolution.glb" },
+    { "out": "suit-hero.gif",     "move": "hero",     "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_advanced-crew-escape-suit__wrapped-in__evolution.glb" }
+  ] }

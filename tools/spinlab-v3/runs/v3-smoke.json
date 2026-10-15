@@ -1,0 +1,7 @@
+{ "outDir": "v3-smoke-out",
+  "defaults": { "width": 640, "height": 640, "frames": 40, "fps": 16, "maxSize": 420, "scene": "auto" },
+  "jobs": [
+    { "out": "m-orbit.gif",    "move": "orbit",    "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_apollo-lunar-module__wrapped-in__for-my-girl.glb" },
+    { "out": "m-overhead.gif", "move": "overhead", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_apollo-lunar-module__wrapped-in__for-my-girl.glb" },
+    { "out": "m-hero.gif",     "move": "hero",     "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_apollo-lunar-module__wrapped-in__for-my-girl.glb" }
+  ] }

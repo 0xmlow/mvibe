@@ -1,0 +1,3 @@
+{ "outDir": "v3-smoke-out",
+  "defaults": { "width": 480, "height": 480, "frames": 16, "fps": 16, "maxSize": 320, "scene": "Orbit" },
+  "jobs": [ { "out": "one-hero.gif", "move": "hero", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_apollo-lunar-module__wrapped-in__for-my-girl.glb" } ] }

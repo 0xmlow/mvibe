@@ -1,0 +1,635 @@
+{
+  "outDir": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-promo-gifs/batch-100-v2",
+  "defaults": {
+    "width": 720,
+    "height": 720,
+    "frames": 72,
+    "fps": 18,
+    "turns": 1,
+    "bobCycles": 1,
+    "maxSize": 480,
+    "colors": 128,
+    "startAngle": 0.55,
+    "fill": 1.0,
+    "elevation": 0.2,
+    "settleMs": 950
+  },
+  "jobs": [
+    {
+      "id": "WRAPPED-2-001",
+      "out": "wrapped-2-001__1999-rq36-asteroid.gif",
+      "scene": "Infinity",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/1999-rq36-asteroid__wrapped-in__garden-daylight.glb"
+    },
+    {
+      "id": "WRAPPED-2-117",
+      "out": "wrapped-2-117__linn-crater.gif",
+      "scene": "Bauhaus",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/linne-crater__wrapped-in__the-poetry-broadside.glb"
+    },
+    {
+      "id": "WRAPPED-2-056",
+      "out": "wrapped-2-056__dawn.gif",
+      "scene": "Orbit",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/dawn__wrapped-in__tokenized-garbage-no-32.glb"
+    },
+    {
+      "id": "WRAPPED-2-057",
+      "out": "wrapped-2-057__deep-impact-epoxi.gif",
+      "scene": "Neon",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/deep-impact__wrapped-in__tokenized-garbage-no-33.glb"
+    },
+    {
+      "id": "WRAPPED-1-001",
+      "out": "wrapped-1-001__advanced-crew-escape-suit.gif",
+      "scene": "Gallery",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_advanced-crew-escape-suit__wrapped-in__evolution.glb"
+    },
+    {
+      "id": "WRAPPED-1-004",
+      "out": "wrapped-1-004__apollo-soyuz.gif",
+      "scene": "Santorini",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_apollo-soyuz__wrapped-in__valentines.glb"
+    },
+    {
+      "id": "WRAPPED-2-185",
+      "out": "wrapped-2-185__chandelier-01.gif",
+      "scene": "Parisian",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_Chandelier_01__wrapped-in__the-airshaft-four-minutes-of-sun.glb"
+    },
+    {
+      "id": "WRAPPED-2-186",
+      "out": "wrapped-2-186__ceiling-fan.gif",
+      "scene": "Florence",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_ceiling_fan__wrapped-in__the-bathroom-mirror-wrote.glb"
+    },
+    {
+      "id": "WRAPPED-1-096",
+      "out": "wrapped-1-096__barber-shop-chair-01.gif",
+      "scene": "Miami",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_BarberShopChair_01__wrapped-in__for-my-girl.glb"
+    },
+    {
+      "id": "WRAPPED-1-100",
+      "out": "wrapped-1-100__rockingchair-01.gif",
+      "scene": "Desert",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_Rockingchair_01__wrapped-in__alice.glb"
+    },
+    {
+      "id": "WRAPPED-2-152",
+      "out": "wrapped-2-152__acropora-cervicornis.gif",
+      "scene": "Bauhaus",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhinv_acropora-cervicornis__wrapped-in__tokenized-garbage-no-04.glb"
+    },
+    {
+      "id": "WRAPPED-2-153",
+      "out": "wrapped-2-153__alouatta-palliata.gif",
+      "scene": "Chrome",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_alouatta-palliata__wrapped-in__tokenized-garbage-no-19.glb"
+    },
+    {
+      "id": "WRAPPED-1-201",
+      "out": "wrapped-1-201__armchair-with-slip-seat.gif",
+      "scene": "Gallery",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_chndm_armchair-with-slip-seat__wrapped-in__alice.glb"
+    },
+    {
+      "id": "WRAPPED-1-202",
+      "out": "wrapped-1-202__ewer.gif",
+      "scene": "Santorini",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_chndm_ewer__wrapped-in__alice.glb"
+    },
+    {
+      "id": "WRAPPED-2-235",
+      "out": "wrapped-2-235__glycon.gif",
+      "scene": "Parisian",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_glycon__wrapped-in__the-cash-register-rounded-down.glb"
+    },
+    {
+      "id": "WRAPPED-2-201",
+      "out": "wrapped-2-201__aphrodite.gif",
+      "scene": "Infinity",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_aphrodite__wrapped-in__through-the-looking-glass.glb"
+    },
+    {
+      "id": "WRAPPED-2-200",
+      "out": "wrapped-2-200__actaeon.gif",
+      "scene": "Aurora",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_actaeon__wrapped-in__mlow-flowers-1647.glb"
+    },
+    {
+      "id": "WRAPPED-2-002",
+      "out": "wrapped-2-002__70-meter-dish.gif",
+      "scene": "Desert",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/70-meter-dish__wrapped-in__garden-vault.glb"
+    },
+    {
+      "id": "WRAPPED-2-131",
+      "out": "wrapped-2-131__mars-victoria-crater.gif",
+      "scene": "Bauhaus",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/mars-trek-victoria-crater__wrapped-in__the-slice-counter-sang.glb"
+    },
+    {
+      "id": "WRAPPED-2-063",
+      "out": "wrapped-2-063__dragonfly.gif",
+      "scene": "Gallery",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/dragonfly__wrapped-in__tokenized-garbage-no-39.glb"
+    },
+    {
+      "id": "WRAPPED-2-058",
+      "out": "wrapped-2-058__deep-space-1.gif",
+      "scene": "Santorini",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/deep-space-1__wrapped-in__tokenized-garbage-no-34.glb"
+    },
+    {
+      "id": "WRAPPED-1-002",
+      "out": "wrapped-1-002__advanced-technology-large-aperture-s.gif",
+      "scene": "Orbit",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_advanced-technology-large-aperture-space-telescope-atlast__wrapped-in__looking-glass.glb"
+    },
+    {
+      "id": "WRAPPED-1-005",
+      "out": "wrapped-1-005__asteroid-216-kleopatra.gif",
+      "scene": "Ryokan",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_asteroid-216-kleopatra__wrapped-in__fluidity.glb"
+    },
+    {
+      "id": "WRAPPED-2-191",
+      "out": "wrapped-2-191__mousetrap.gif",
+      "scene": "Parisian",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_mousetrap__wrapped-in__the-bull-turned-around.glb"
+    },
+    {
+      "id": "WRAPPED-2-187",
+      "out": "wrapped-2-187__cigarette-case.gif",
+      "scene": "Ryokan",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_cigarette_case__wrapped-in__the-street-sweeper-s-route.glb"
+    },
+    {
+      "id": "WRAPPED-1-097",
+      "out": "wrapped-1-097__camera-01.gif",
+      "scene": "Neon",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_Camera_01__wrapped-in__evolution.glb"
+    },
+    {
+      "id": "WRAPPED-1-101",
+      "out": "wrapped-1-101__school-desk-01.gif",
+      "scene": "Florence",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_SchoolDesk_01__wrapped-in__valentines.glb"
+    },
+    {
+      "id": "WRAPPED-2-154",
+      "out": "wrapped-2-154__babyrousa-celebensis.gif",
+      "scene": "Infinity",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_babyrousa-celebensis__wrapped-in__tokenized-garbage-no-05.glb"
+    },
+    {
+      "id": "WRAPPED-2-155",
+      "out": "wrapped-2-155__elephas-maximus.gif",
+      "scene": "Desert",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_elephas-maximus__wrapped-in__tokenized-garbage-no-28.glb"
+    },
+    {
+      "id": "WRAPPED-1-226",
+      "out": "wrapped-1-226__costume-boots-for-the-wizard-in-the-.gif",
+      "scene": "Orbit",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_nmaahc_costume-boots-for-the-wizard-in-the-wiz-on-broadway-worn-by-__wrapped-in__flora.glb"
+    },
+    {
+      "id": "WRAPPED-1-203",
+      "out": "wrapped-1-203__kylix.gif",
+      "scene": "Ryokan",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_chndm_kylix__wrapped-in__valentines.glb"
+    },
+    {
+      "id": "WRAPPED-2-268",
+      "out": "wrapped-2-268__pan-and-bacchus-restored.gif",
+      "scene": "Miami",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_pan-and-bacchus-restored__wrapped-in__the-gumball-machine-counts.glb"
+    },
+    {
+      "id": "WRAPPED-2-202",
+      "out": "wrapped-2-202__athena.gif",
+      "scene": "Arcade",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_athena__wrapped-in__mlow-flowers-173.glb"
+    },
+    {
+      "id": "WRAPPED-2-003",
+      "out": "wrapped-2-003__active-cavity-irradiance-monitor-sat.gif",
+      "scene": "Neon",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/active-cavity-irradiance-monitor-satellite-acrimsat-a__wrapped-in__garden-electric-field.glb"
+    },
+    {
+      "id": "WRAPPED-2-105",
+      "out": "wrapped-2-105__interstellar-boundary-explorer-ibex.gif",
+      "scene": "Bauhaus",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/interstellar-boundary-explorer-ibex__wrapped-in__the-bodega-lotto-screen.glb"
+    },
+    {
+      "id": "WRAPPED-2-137",
+      "out": "wrapped-2-137__moon-copernicus-crater.gif",
+      "scene": "Gallery",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/moon-copernicus-crater__wrapped-in__the-stickball-broom.glb"
+    },
+    {
+      "id": "WRAPPED-2-064",
+      "out": "wrapped-2-064__earth-observing-1-eo-1.gif",
+      "scene": "Trophy",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/earth-observing-1-eo-1__wrapped-in__tokenized-garbage-no-40.glb"
+    },
+    {
+      "id": "WRAPPED-2-059",
+      "out": "wrapped-2-059__deep-space-network-34-meter.gif",
+      "scene": "Santorini",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/deep-space-network-34-meter__wrapped-in__tokenized-garbage-no-35.glb"
+    },
+    {
+      "id": "WRAPPED-1-006",
+      "out": "wrapped-1-006__asteroid-4486-mithra.gif",
+      "scene": "Infinity",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_asteroid-4486-mithra__wrapped-in__melting.glb"
+    },
+    {
+      "id": "WRAPPED-1-007",
+      "out": "wrapped-1-007__asteroid-6489-golevka.gif",
+      "scene": "Parisian",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_asteroid-6489-golevka__wrapped-in__still-waters.glb"
+    },
+    {
+      "id": "WRAPPED-2-193",
+      "out": "wrapped-2-193__vintage-lighter.gif",
+      "scene": "Florence",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_vintage_lighter__wrapped-in__the-elevator-to-the-ninetieth.glb"
+    },
+    {
+      "id": "WRAPPED-2-188",
+      "out": "wrapped-2-188__circuit-board.gif",
+      "scene": "Desert",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_circuit_board__wrapped-in__the-stock-photo-came-alive.glb"
+    },
+    {
+      "id": "WRAPPED-1-098",
+      "out": "wrapped-1-098__gothic-bed-01.gif",
+      "scene": "Ryokan",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_GothicBed_01__wrapped-in__valentines.glb"
+    },
+    {
+      "id": "WRAPPED-2-158",
+      "out": "wrapped-2-158__hapalemur-griseus-griseus.gif",
+      "scene": "Chrome",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_hapalemur-griseus-griseus__wrapped-in__tokenized-garbage-no-25.glb"
+    },
+    {
+      "id": "WRAPPED-2-156",
+      "out": "wrapped-2-156__eulemur-rufus.gif",
+      "scene": "Orbit",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_eulemur-rufus__wrapped-in__tokenized-garbage-no-11.glb"
+    },
+    {
+      "id": "WRAPPED-1-229",
+      "out": "wrapped-1-229__egg-carton-from-muslim-farms.gif",
+      "scene": "Aurora",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_nmaahc_egg-carton-from-muslim-farms__wrapped-in__golden-hour.glb"
+    },
+    {
+      "id": "WRAPPED-1-204",
+      "out": "wrapped-1-204__panel-for-a-cabinet-door.gif",
+      "scene": "Bauhaus",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_chndm_panel-for-a-cabinet-door__wrapped-in__valentines.glb"
+    },
+    {
+      "id": "WRAPPED-2-277",
+      "out": "wrapped-2-277__relief-with-bulls-legs.gif",
+      "scene": "Gallery",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_relief-with-bulls-legs__wrapped-in__the-fryer-made-a-decision.glb"
+    },
+    {
+      "id": "WRAPPED-2-210",
+      "out": "wrapped-2-210__bressant.gif",
+      "scene": "Space Station",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_bressant__wrapped-in__golden-hour-never-left.glb"
+    },
+    {
+      "id": "WRAPPED-2-004",
+      "out": "wrapped-2-004__active-cavity-irradiance-monitor-sat.gif",
+      "scene": "Trophy",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/active-cavity-irradiance-monitor-satellite-acrimsat-b__wrapped-in__garden-mint-bed.glb"
+    },
+    {
+      "id": "WRAPPED-2-108",
+      "out": "wrapped-2-108__james-webb-space-telescope.gif",
+      "scene": "Santorini",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/james-webb-space-telescope__wrapped-in__the-marathon-mile-marker.glb"
+    },
+    {
+      "id": "WRAPPED-2-197",
+      "out": "wrapped-2-197__pistol-grip-tool.gif",
+      "scene": "Parisian",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/pistol-grip-tool__wrapped-in__the-prompt-nobody-typed.glb"
+    },
+    {
+      "id": "WRAPPED-2-066",
+      "out": "wrapped-2-066__eclipse-2017.gif",
+      "scene": "Florence",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/eclipse-2017__wrapped-in__tokenized-garbage-no-42.glb"
+    },
+    {
+      "id": "WRAPPED-2-060",
+      "out": "wrapped-2-060__deep-space-network-70-meter.gif",
+      "scene": "Infinity",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/deep-space-network-70-meter__wrapped-in__tokenized-garbage-no-36.glb"
+    },
+    {
+      "id": "WRAPPED-1-008",
+      "out": "wrapped-1-008__asteroid-8567-1996-hw1.gif",
+      "scene": "Neon",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_asteroid-8567-1996-hw1__wrapped-in__melting.glb"
+    },
+    {
+      "id": "WRAPPED-2-189",
+      "out": "wrapped-2-189__classic-laptop.gif",
+      "scene": "Miami",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_classic_laptop__wrapped-in__the-rent-check-cleared.glb"
+    },
+    {
+      "id": "WRAPPED-1-099",
+      "out": "wrapped-1-099__megaphone-01.gif",
+      "scene": "Bauhaus",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_Megaphone_01__wrapped-in__flora.glb"
+    },
+    {
+      "id": "WRAPPED-1-106",
+      "out": "wrapped-1-106__antique-ceramic-vase-01.gif",
+      "scene": "Chrome",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_antique_ceramic_vase_01__wrapped-in__m-lily.glb"
+    },
+    {
+      "id": "WRAPPED-2-160",
+      "out": "wrapped-2-160__hylobates-agilis.gif",
+      "scene": "Chrome",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_hylobates-agilis__wrapped-in__tokenized-garbage-no-14.glb"
+    },
+    {
+      "id": "WRAPPED-2-159",
+      "out": "wrapped-2-159__hoolock-hoolock-hoolock.gif",
+      "scene": "Neon",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_hoolock-hoolock-hoolock__wrapped-in__tokenized-garbage-no-16.glb"
+    },
+    {
+      "id": "WRAPPED-1-235",
+      "out": "wrapped-1-235__pair-of-blue-sneakers-worn-by-wellin.gif",
+      "scene": "Gallery",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_nmaahc_pair-of-blue-sneakers-worn-by-wellington-webb-while-campaign__wrapped-in__evolution.glb"
+    },
+    {
+      "id": "WRAPPED-2-279",
+      "out": "wrapped-2-279__roasting-of-the-boar.gif",
+      "scene": "Desert",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_roasting-of-the-boar__wrapped-in__the-slice-counter-sang.glb"
+    },
+    {
+      "id": "WRAPPED-2-214",
+      "out": "wrapped-2-214__chiragra-spider-conch.gif",
+      "scene": "Aurora",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_chiragra-spider-conch__wrapped-in__cloud-9.glb"
+    },
+    {
+      "id": "WRAPPED-2-204",
+      "out": "wrapped-2-204__bird.gif",
+      "scene": "Parisian",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_bird__wrapped-in__mlow-flowers-1586.glb"
+    },
+    {
+      "id": "WRAPPED-2-005",
+      "out": "wrapped-2-005__advanced-composition-explorer.gif",
+      "scene": "Ryokan",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/advanced-composition-explorer__wrapped-in__garden-night-garden.glb"
+    },
+    {
+      "id": "WRAPPED-2-109",
+      "out": "wrapped-2-109__jason-1.gif",
+      "scene": "Florence",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/jason-1__wrapped-in__the-parade-of-the-machines.glb"
+    },
+    {
+      "id": "WRAPPED-2-067",
+      "out": "wrapped-2-067__eta-carinae-homunculus-nebula-high-m.gif",
+      "scene": "Space Station",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/eta-carinae-homunculus-nebula-high-mass-loss-rate__wrapped-in__tokenized-garbage-no-43.glb"
+    },
+    {
+      "id": "WRAPPED-2-061",
+      "out": "wrapped-2-061__deformation-ecosystem-structure-and-.gif",
+      "scene": "Desert",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/deformation-ecosystem-structure-and-dynamics-of-ice-desdyni__wrapped-in__tokenized-garbage-no-37.glb"
+    },
+    {
+      "id": "WRAPPED-1-013",
+      "out": "wrapped-1-013__cassini-huygens-a.gif",
+      "scene": "Ryokan",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_cassini-huygens-a__wrapped-in__fluidity.glb"
+    },
+    {
+      "id": "WRAPPED-2-190",
+      "out": "wrapped-2-190__lightbulb-01.gif",
+      "scene": "Infinity",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_lightbulb_01__wrapped-in__the-steam-pipe-under-broadway.glb"
+    },
+    {
+      "id": "WRAPPED-1-102",
+      "out": "wrapped-1-102__television-01.gif",
+      "scene": "Miami",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_Television_01__wrapped-in__fluidity.glb"
+    },
+    {
+      "id": "WRAPPED-1-111",
+      "out": "wrapped-1-111__boombox.gif",
+      "scene": "Orbit",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_boombox__wrapped-in__flora.glb"
+    },
+    {
+      "id": "WRAPPED-2-163",
+      "out": "wrapped-2-163__hylobates-lar-entelloides.gif",
+      "scene": "Bauhaus",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_hylobates-lar-entelloides__wrapped-in__tokenized-garbage-no-29.glb"
+    },
+    {
+      "id": "WRAPPED-2-161",
+      "out": "wrapped-2-161__hylobates-albibarbis.gif",
+      "scene": "Gallery",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_hylobates-albibarbis__wrapped-in__tokenized-garbage-no-08.glb"
+    },
+    {
+      "id": "WRAPPED-1-240",
+      "out": "wrapped-1-240__red-starfleet-uniform-worn-by-nichel.gif",
+      "scene": "Space Station",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_nmaahc_red-starfleet-uniform-worn-by-nichelle-nichols-as-lt-uhura-o__wrapped-in__golden-hour.glb"
+    },
+    {
+      "id": "WRAPPED-2-217",
+      "out": "wrapped-2-217__column-04.gif",
+      "scene": "Neon",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_column-04__wrapped-in__still-waters-run-pink.glb"
+    },
+    {
+      "id": "WRAPPED-2-205",
+      "out": "wrapped-2-205__blue-sea-star.gif",
+      "scene": "Parisian",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/tds_blue-sea-star__wrapped-in__fluidity.glb"
+    },
+    {
+      "id": "WRAPPED-2-006",
+      "out": "wrapped-2-006__aeronomy-of-ice-in-the-mesosphere.gif",
+      "scene": "Arcade",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/aeronomy-of-ice-in-the-mesosphere__wrapped-in__garden-cloud-bed.glb"
+    },
+    {
+      "id": "WRAPPED-2-110",
+      "out": "wrapped-2-110__jason-continuity-of-service-sentinel.gif",
+      "scene": "Florence",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/jason-continuity-of-service-sentinel-6__wrapped-in__the-bootleg-tee-press.glb"
+    },
+    {
+      "id": "WRAPPED-2-068",
+      "out": "wrapped-2-068__eta-carinae-homunculus-nebula-low-ma.gif",
+      "scene": "Trophy",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/eta-carinae-homunculus-nebula-low-mass-loss-rate__wrapped-in__tokenized-garbage-no-44.glb"
+    },
+    {
+      "id": "WRAPPED-1-011",
+      "out": "wrapped-1-011__base-station.gif",
+      "scene": "Orbit",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_base-station__wrapped-in__evolution.glb"
+    },
+    {
+      "id": "WRAPPED-1-019",
+      "out": "wrapped-1-019__cluster.gif",
+      "scene": "Desert",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_cluster__wrapped-in__fluidity.glb"
+    },
+    {
+      "id": "WRAPPED-1-105",
+      "out": "wrapped-1-105__alarm-clock-01.gif",
+      "scene": "Bauhaus",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_alarm_clock_01__wrapped-in__looking-glass.glb"
+    },
+    {
+      "id": "WRAPPED-1-112",
+      "out": "wrapped-1-112__brass-goblets.gif",
+      "scene": "Gallery",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_brass_goblets__wrapped-in__flora.glb"
+    },
+    {
+      "id": "WRAPPED-2-168",
+      "out": "wrapped-2-168__macaca-nemestrina.gif",
+      "scene": "Santorini",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_macaca-nemestrina__wrapped-in__jonah-vs-whale.glb"
+    },
+    {
+      "id": "WRAPPED-2-162",
+      "out": "wrapped-2-162__hylobates-klossii.gif",
+      "scene": "Parisian",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nmnhmammals_hylobates-klossii__wrapped-in__tokenized-garbage-no-22.glb"
+    },
+    {
+      "id": "WRAPPED-1-242",
+      "out": "wrapped-1-242__ringside-bell-from-dundee-s-5th-st-g.gif",
+      "scene": "Chrome",
+      "move": "hero",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_nmaahc_ringside-bell-from-dundee-s-5th-st-gym__wrapped-in__golden-hour.glb"
+    },
+    {
+      "id": "WRAPPED-1-208",
+      "out": "wrapped-1-208__bell-x-1.gif",
+      "scene": "Arcade",
+      "move": "overhead",
+      "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/si_nasm_bell-x-1__wrapped-in__cloud-9.glb"
+    }
+  ]
+}

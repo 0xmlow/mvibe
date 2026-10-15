@@ -1,0 +1,76 @@
+{
+  "name": "spinlab-v3",
+  "version": "0.2.0",
+  "private": true,
+  "main": "electron/main.cjs",
+  "description": "Spinlab V3. A desktop GLB hype GIF studio with closed loops, auto-framing, three camera moves and a headless batch renderer.",
+  "author": "Spinlab",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
+    "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
+    "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
+    "test": "npm run build && node --test tests/rendered-html.test.mjs",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "db:generate": "drizzle-kit generate",
+    "desktop:dev": "vite --config desktop.vite.config.ts",
+    "desktop:open": "SPINLAB_DEV_URL=http://localhost:4173 electron electron/main.cjs",
+    "desktop:build": "vite build --config desktop.vite.config.ts",
+    "desktop:package": "npm run desktop:build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac dir",
+    "batch": "electron electron/batch.cjs"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.45.2",
+    "gifenc": "^1.0.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.37.1",
+    "@eslint/js": "9.39.4",
+    "@next/eslint-plugin-next": "16.2.6",
+    "@tailwindcss/postcss": "4.2.1",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "^0.185.4",
+    "@vitejs/plugin-react": "6.0.2",
+    "@vitejs/plugin-rsc": "0.5.26",
+    "drizzle-kit": "0.31.10",
+    "electron": "^43.4.1",
+    "electron-builder": "^26.15.3",
+    "eslint": "9.39.4",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "16.4.0",
+    "react-server-dom-webpack": "19.2.6",
+    "tailwindcss": "4.2.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.59.3",
+    "vinext": "1.0.0-beta.2",
+    "vite": "8.0.13",
+    "wrangler": "4.92.0"
+  },
+  "type": "module",
+  "build": {
+    "appId": "studio.spinlab.desktop.v3",
+    "productName": "Spinlab V3",
+    "directories": {
+      "output": "release-v3"
+    },
+    "files": [
+      "desktop-dist/**/*",
+      "electron/main.cjs",
+      "electron/batch.cjs",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "target": "dir"
+    }
+  }
+}

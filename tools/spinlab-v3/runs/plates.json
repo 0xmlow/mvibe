@@ -1,0 +1,7 @@
+{ "outDir": "/tmp/plates-out", "width": 760, "height": 950,
+  "jobs": [
+    { "out": "ref-apollo.png",  "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_apollo-lunar-module__wrapped-in__for-my-girl.glb" },
+    { "out": "landsat-8__wrapped-in__the-vitrine-fogged-a-message.png", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/landsat-8__wrapped-in__the-vitrine-fogged-a-message.glb" },
+    { "out": "nasa_advanced-technology-large-aperture-space-telescope-atlast__wrapped-in__looking-glass.png", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_advanced-technology-large-aperture-space-telescope-atlast__wrapped-in__looking-glass.glb" },
+    { "out": "nasa_tropical-rainfall-measuring-mission-trmm__wrapped-in__for-my-girl.png", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_tropical-rainfall-measuring-mission-trmm__wrapped-in__for-my-girl.glb" }
+  ] }

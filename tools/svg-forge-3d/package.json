@@ -1,0 +1,16 @@
+{
+  "name": "svg-forge-3d-desktop",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bundle": "esbuild Web/engine-entry.js --bundle --format=iife --global-name=SVGForgeEngine --platform=browser --target=safari16 --minify --outfile=Web/three-engine.js"
+  },
+  "dependencies": {
+    "three": "0.183.2"
+  },
+  "devDependencies": {
+    "@xmldom/xmldom": "0.9.10",
+    "esbuild": "0.25.12"
+  }
+}
