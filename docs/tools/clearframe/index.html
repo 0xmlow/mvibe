@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clearframe | mvibe</title>
+<meta name="description" content="A finishing studio for images, video, GIFs and text. Patch out a logo, strip the metadata, add film grain, dither it 16 ways, export a clean new file. Runs in your browser. Nothing is uploaded.">
+<meta name="mvibe-tool" content="clearframe">
+<meta name="mvibe-tool-name" content="Clearframe">
+<meta name="mvibe-visible" content="self">
+<meta name="mvibe-pill" content="bottom-left">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Clearframe, a tool by MLow">
+<meta property="og:description" content="Images, video, GIFs and text, finished in your browser: repair, grain, 16 dithers, clean metadata. Nothing is uploaded.">
+<meta property="og:url" content="https://0xmlow.github.io/mvibe/tools/clearframe/">
+<meta property="og:image" content="https://0xmlow.github.io/mvibe/tools/clearframe/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="../../shared/tokens.css">
+<link rel="stylesheet" href="../../shared/tool.css">
+<link rel="stylesheet" href="style.css">
+<script src="../../shared/mvibe.js"></script>
+<script src="../../shared/chrome.js" defer></script>
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<main class="wrap cf">
+  <header class="tool-hero cf-hero">
+    <img class="cf-icon" src="icon.png" alt="" width="84" height="84">
+    <div>
+      <span class="eyebrow">Finishing studio · Image · Video · GIF · Text</span>
+      <h1>Clear<em>frame</em></h1>
+      <p>Bring a batch of stills, clips and GIFs. Patch out a logo or a timestamp from your own work, add film grain, run it through 16 dithers, and export clean new files with the metadata gone. The originals are never touched.</p>
+      <span class="privacy">Runs in your browser. Your files never upload.</span>
+    </div>
+  </header>
+
+  <nav class="cf-tabs" role="tablist" aria-label="Workspace">
+    <button role="tab" aria-selected="true" data-tab="media" id="tab-media">Media</button>
+    <button role="tab" aria-selected="false" data-tab="text" id="tab-text">Text desk</button>
+  </nav>
+
+  <!-- ================= MEDIA ================= -->
+  <section class="studio" id="pane-media" role="tabpanel" aria-labelledby="tab-media">
+    <aside class="queue">
+      <div class="queue-head"><b>Queue</b><span id="qcount">0</span></div>
+      <label class="add btn ghost">
+        Add files
+        <input id="pick" type="file" multiple accept="image/*,video/*,.heic,.heif,.hif,.tif,.tiff,.mov,.mkv,.m4v,.webm,.avif,.apng,.txt,.md">
+      </label>
+      <ol id="list" aria-label="Files in the queue"></ol>
+      <button class="btn ghost small" id="remove" type="button" disabled>Remove selected</button>
+    </aside>
+
+    <section class="stage">
+      <div class="stage-top">
+        <div class="stage-name"><b id="selName">Nothing selected</b><span id="selMeta"></span></div>
+        <div class="seg" role="group" aria-label="Compare">
+          <button type="button" id="showOrig" aria-pressed="false">Original</button>
+          <button type="button" id="showFin" aria-pressed="true">Finished</button>
+        </div>
+      </div>
+      <div class="canvas-wrap" id="canvasWrap">
+        <label class="drop big" id="drop">
+          <img class="eye" src="icon.png" alt="">
+          <strong>Drop images, videos and GIFs</strong>
+          <small class="formats">JPG, PNG, HEIC, WebP, AVIF, TIFF, BMP, GIF, animated WebP, APNG, MP4, MOV, M4V, WebM. Text files go to the text desk.</small>
+          <input type="file" multiple accept="image/*,video/*,.heic,.heif,.hif,.tif,.tiff,.mov,.mkv,.m4v,.webm,.avif,.apng,.txt,.md">
+        </label>
+        <canvas id="view" hidden></canvas>
+        <div class="mask-draft" id="draft" hidden></div>
+        <div class="masks" id="maskLayer"></div>
+        <div class="busy" id="busy" hidden><i></i><span>Rendering…</span></div>
+      </div>
+      <div class="timeline" id="timeline" hidden>
+        <span>Frame at</span>
+        <input type="range" id="time" min="0" max="1" step="0.01" value="0" aria-label="Preview time">
+        <output id="timeOut">0.0s</output>
+        <button class="btn ghost small" type="button" id="motion">Motion preview</button>
+      </div>
+      <video id="motionPlayer" controls playsinline hidden></video>
+      <div class="mask-tools">
+        <button class="btn ghost small" type="button" id="maskMode" aria-pressed="false">Repair mask</button>
+        <button class="btn ghost small" type="button" id="maskClear" disabled>Clear masks</button>
+        <button class="btn ghost small" type="button" id="maskAll" disabled>Apply masks to batch</button>
+        <span class="hint" id="maskHint">Turn on Repair mask, then drag a box over a logo or a mark. Each box rebuilds those pixels from the area around it.</span>
+      </div>
+    </section>
+
+    <aside class="inspector" aria-label="Finishing settings">
+      <div class="group">
+        <label class="lab" for="recipe">Finishing recipe</label>
+        <div class="row">
+          <select id="recipe"></select>
+          <button class="icon-btn" type="button" id="saveRecipe" title="Save these settings as a recipe" aria-label="Save recipe">＋</button>
+          <button class="icon-btn" type="button" id="delRecipe" title="Delete this saved recipe" aria-label="Delete recipe" hidden>－</button>
+        </div>
+      </div>
+
+      <details class="group" open>
+        <summary>Size</summary>
+        <label class="lab" for="maxEdge">Long edge</label>
+        <select id="maxEdge">
+          <option value="0">Original size</option><option value="3840">3840 px</option><option value="2560">2560 px</option>
+          <option value="1920">1920 px</option><option value="1280">1280 px</option><option value="1080">1080 px</option>
+          <option value="960">960 px</option><option value="720">720 px</option><option value="480">480 px</option>
+        </select>
+        <small class="hint">Never upscales.</small>
+      </details>
+
+      <details class="group" open>
+        <summary>Grain</summary>
+        <label class="lab" for="noise">Strength <output id="noiseOut">0%</output></label>
+        <input type="range" id="noise" min="0" max="40" step="1" value="0">
+        <label class="check"><input type="checkbox" id="animatedNoise" checked> New grain every frame</label>
+        <label class="check"><input type="checkbox" id="colorNoise"> Colour grain</label>
+        <label class="check"><input type="checkbox" id="uniformNoise"> Uniform (instead of Gaussian)</label>
+        <label class="lab" for="seed">Seed</label>
+        <div class="row"><input type="number" id="seed" min="0" max="2147483647" value="42"><button class="icon-btn" type="button" id="dice" title="New seed" aria-label="New seed">⚄</button></div>
+        <small class="hint">3 to 8% is a subtle film texture.</small>
+      </details>
+
+      <details class="group" open>
+        <summary>Dither lab</summary>
+        <label class="lab" for="dither">Algorithm</label>
+        <select id="dither"></select>
+        <label class="lab" for="palette">Palette</label>
+        <select id="palette"></select>
+        <label class="lab" for="spread">Ordered spread <output id="spreadOut">64</output></label>
+        <input type="range" id="spread" min="8" max="160" step="1" value="64">
+        <small class="hint" id="ditherHint"></small>
+      </details>
+
+      <details class="group" open>
+        <summary>Output</summary>
+        <label class="lab" for="format">Format</label>
+        <select id="format">
+          <option value="auto">Auto (PNG, GIF or MP4)</option><option value="png">PNG</option><option value="jpg">JPG</option>
+          <option value="webp">WebP</option><option value="gif">GIF</option><option value="mp4">MP4</option>
+        </select>
+        <div class="motion-only">
+          <label class="lab" for="fps">Video and GIF frame rate</label>
+          <select id="fps"><option>10</option><option>12</option><option>15</option><option>20</option><option>24</option><option selected>30</option><option>50</option><option>60</option></select>
+          <label class="lab" for="quality">MP4 quality</label>
+          <select id="quality"><option value="high">High</option><option value="medium">Medium</option><option value="small">Small file</option></select>
+          <label class="check"><input type="checkbox" id="mute"> Mute audio</label>
+          <div class="row two">
+            <label class="lab">Start (s)<input type="number" id="start" min="0" step="0.1" value="0"></label>
+            <label class="lab">Length (s)<input type="number" id="duration" min="0" step="0.1" value="0"></label>
+          </div>
+          <small class="hint">Length 0 means to the end.</small>
+        </div>
+        <label class="check"><input type="checkbox" id="zip"> Batch as one ZIP</label>
+      </details>
+
+      <div class="actions">
+        <button class="btn ghost" type="button" id="preview" disabled>Preview finish</button>
+        <button class="btn" type="button" id="exportOne" disabled>Export selected</button>
+        <button class="btn" type="button" id="exportAll" disabled>Export batch</button>
+        <button class="btn ghost" type="button" id="cancel" hidden>Cancel</button>
+      </div>
+    </aside>
+
+    <div class="statusbar">
+      <div class="bar"><i></i></div>
+      <div class="status" id="status" aria-live="polite">Ready when you are.</div>
+    </div>
+  </section>
+
+  <!-- ================= TEXT ================= -->
+  <section class="textdesk" id="pane-text" role="tabpanel" aria-labelledby="tab-text" hidden>
+    <div class="td-col">
+      <div class="td-head"><b>Your text</b><span id="inCount">0 words</span></div>
+      <textarea id="tin" spellcheck="true" placeholder="Paste text here, or import .txt files."></textarea>
+      <div class="row">
+        <label class="check"><input type="checkbox" id="simplify" checked> Plain wording (in order to → to, utilize → use…)</label>
+        <label class="check"><input type="checkbox" id="punct" checked> Invisible characters and trailing spaces</label>
+      </div>
+      <div class="row">
+        <button class="btn" type="button" id="clean">Clean text</button>
+        <label class="btn ghost">Import .txt<input type="file" id="tpick" accept=".txt,.md,text/plain" multiple hidden></label>
+      </div>
+    </div>
+    <div class="td-col">
+      <div class="td-head"><b>Result</b><span id="outCount">0 words</span></div>
+      <textarea id="tout" spellcheck="true" placeholder="The cleaned text appears here. You can edit it."></textarea>
+      <ul class="edits" id="edits"></ul>
+      <div class="row">
+        <button class="btn ghost" type="button" id="copy" disabled>Copy</button>
+        <button class="btn ghost" type="button" id="saveTxt" disabled>Save .txt</button>
+        <button class="btn ghost" type="button" id="undo" disabled>Undo</button>
+      </div>
+      <small class="hint">Conservative, rule based substitutions only. It does not rewrite meaning, and it does not judge authorship.</small>
+    </div>
+  </section>
+
+  <section class="note-grid">
+    <p class="note"><b>What changes.</b> Every export is a new file named <code>name-finished</code>. Stills come out as PNG, animations as GIF and video as MP4 (H.264 with AAC audio) unless you pick a format. Re-encoding in the browser drops all embedded metadata: EXIF, GPS, camera and software tags, XMP and C2PA manifests. Clearframe adds back only a small mvibe eye and a one line “Made with Clearframe” note, like every mvibe tool.</p>
+    <p class="note"><b>Repair, grain and dither.</b> Repair boxes rebuild pixels from the ring around them, the same idea as FFmpeg's delogo filter: great on skies, walls and gradients, softer on busy detail, and it does not track moving objects. Grain is seeded, so the same seed always gives the same texture. The 16 dithers are a port of the desktop app's engine with fixed palettes, so colours hold still across an animation.</p>
+    <p class="note"><b>Limits.</b> Video is read frame by frame at the frame rate you pick, which is exact but takes a while on long clips; trim first. MP4 needs WebCodecs (Chrome, Edge, Safari 17+). HDR clips come out as standard range. GIF has no partial transparency. Very large stills can hit the browser's canvas limit (about 16k px on a side, less on phones).</p>
+    <p class="note"><b>Desktop app.</b> Clearframe is also a native macOS app with an FFmpeg engine, HDR tone mapping and camera RAW import. The source is in <a href="https://github.com/0xmlow/mvibe/tree/main/tools/clearframe">tools/clearframe</a>.</p>
+  </section>
+</main>
+</body>
+</html>
