@@ -1,0 +1,10 @@
+{ "outDir": "v4-smoke-out",
+  "defaults": { "width": 640, "height": 640, "frames": 72, "fps": 18, "maxSize": 480, "scene": "auto" },
+  "jobs": [
+    { "out": "asteroid__hero.gif", "move": "hero", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/1999-rq36-asteroid__wrapped-in__garden-daylight.glb" },
+    { "out": "suit__orbit-florence.gif", "move": "orbit", "scene": "Florence", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb" },
+    { "out": "whale__hero-cathedral.gif", "move": "hero", "scene": "Cathedral", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb" },
+    { "out": "hubble__overhead.gif", "move": "overhead", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_hubble-25th-anniversary-model__wrapped-in__looking-glass.glb" },
+    { "out": "mms__hero-underwater.gif", "move": "hero", "scene": "Underwater", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/magnetospheric-multiscale-mms-b__wrapped-in__the-ring-light-told-the-truth.glb" },
+    { "out": "desdyni__orbit-nobrand.gif", "move": "orbit", "brand": false, "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/deformation-ecosystem-structure-and-dynamics-of-ice-desdyni__wrapped-in__tokenized-garbage-no-37.glb" }
+  ] }

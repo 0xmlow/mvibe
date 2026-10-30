@@ -1,0 +1,5 @@
+{ "outDir": "v5-recheck2-out", "defaults": { "width": 640, "height": 640, "frames": 16, "fps": 12, "maxSize": 480 },
+  "jobs": [
+  { "out": "mms-b__chrome__orbit.gif", "move": "orbit", "scene": "Chrome", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/magnetospheric-multiscale-mms-b__wrapped-in__the-ring-light-told-the-truth.glb" },
+  { "out": "hubble__natatorium__orbit.gif", "move": "orbit", "scene": "Natatorium", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_hubble-25th-anniversary-model__wrapped-in__looking-glass.glb" }
+ ] }

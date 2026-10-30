@@ -1,0 +1,162 @@
+{
+  "Chrome": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 5.295
+  },
+  "Neon": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 1.09
+  },
+  "Trophy": {
+    "luma": 72,
+    "target": 72,
+    "exposure": 0.615
+  },
+  "Orbit": {
+    "luma": 32,
+    "target": 34,
+    "exposure": 8.905
+  },
+  "Gallery": {
+    "luma": 164,
+    "target": 168,
+    "exposure": 0.818
+  },
+  "Cathedral": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 3.253
+  },
+  "Ryokan": {
+    "luma": 124,
+    "target": 120,
+    "exposure": 1.096
+  },
+  "Desert": {
+    "luma": 164,
+    "target": 168,
+    "exposure": 2.305
+  },
+  "Underwater": {
+    "luma": 72,
+    "target": 72,
+    "exposure": 0.393
+  },
+  "Arcade": {
+    "luma": 57,
+    "target": 60,
+    "exposure": 5.701
+  },
+  "Aurora": {
+    "luma": 75,
+    "target": 72,
+    "exposure": 2.483
+  },
+  "Moroccan": {
+    "luma": 73,
+    "target": 72,
+    "exposure": 2.906
+  },
+  "Garden": {
+    "luma": 148,
+    "target": 145,
+    "exposure": 1.099
+  },
+  "Bauhaus": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 0.682
+  },
+  "Castle": {
+    "luma": 73,
+    "target": 72,
+    "exposure": 0.732
+  },
+  "Opera": {
+    "luma": 68,
+    "target": 72,
+    "exposure": 0.666
+  },
+  "Santorini": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 0.929
+  },
+  "Parisian": {
+    "luma": 170,
+    "target": 168,
+    "exposure": 0.926
+  },
+  "Forest": {
+    "luma": 74,
+    "target": 72,
+    "exposure": 0.442
+  },
+  "Miami": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 0.677
+  },
+  "Space Station": {
+    "luma": 57,
+    "target": 58,
+    "exposure": 3.043
+  },
+  "Infinity": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 0.281
+  },
+  "Thai Palace": {
+    "luma": 69,
+    "target": 72,
+    "exposure": 0.759
+  },
+  "Florence": {
+    "luma": 164,
+    "target": 168,
+    "exposure": 1
+  },
+  "Guggenheim": {
+    "luma": 171,
+    "target": 168,
+    "exposure": 0.874
+  },
+  "Palm House": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 1.271
+  },
+  "Library": {
+    "luma": 69,
+    "target": 72,
+    "exposure": 1.487
+  },
+  "City Hall": {
+    "luma": 135,
+    "target": 132,
+    "exposure": 1.488
+  },
+  "Disco": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 0.475
+  },
+  "Brutalist": {
+    "luma": 141,
+    "target": 138,
+    "exposure": 2.148
+  },
+  "Ice Cave": {
+    "luma": 118,
+    "target": 120,
+    "exposure": 0.455
+  },
+  "Hammam": {
+    "luma": 164,
+    "target": 168,
+    "exposure": 1.135
+  }
+}

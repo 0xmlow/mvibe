@@ -1,0 +1,44 @@
+Photographed PBR texture sets from Poly Haven, CC0 (public domain, no attribution required).
+Each id is its source page: https://polyhaven.com/a/<id>. Shipped at 1024 (colour, OpenGL normal) and 512 (roughness).
+Patina (FLORA) sets for zellige, lacquer stencil, arcade carpet and log walls are planned after the Nov 1 reset.
+
+SOURCES.txt
+bark_willow
+beige_wall_001
+blue_plaster_wall
+brown_leather
+brushed_concrete
+brushed_concrete_03
+castle_brick_07
+checkered_pavement_tiles
+coast_sand_01
+cobblestone_floor_03
+concrete_block_wall
+dark_planks
+dark_wooden_planks
+forest_leaves_02
+granite_tile
+gravel_floor
+herringbone_parquet
+herringbone_pavement_02
+hinoki_planks
+large_floor_tiles_02
+leafy_grass
+marble_01
+marble_mosaic_tiles
+marble_tiles
+metal_plate
+mossy_rock
+old_wood_floor
+rectangular_parquet
+red_sandstone_wall
+slate_floor
+snow_02
+stone_wall
+tatami_mat
+terracotta_floor_tiles
+terrazzo_tiles
+velour_velvet
+white_stucco
+white_stucco_02
+wood_planks

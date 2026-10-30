@@ -1,0 +1,39 @@
+{
+ "outDir": "v41-smoke-out",
+ "defaults": {
+  "width": 640,
+  "height": 640,
+  "frames": 72,
+  "fps": 18,
+  "maxSize": 480
+ },
+ "jobs": [
+  {
+   "out": "suit__chrome__plinth-eggs.gif",
+   "move": "hero",
+   "scene": "Chrome",
+   "photos": [
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-14-skeleton-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-09-concourse-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-27-scoreboard.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-20-meridian-obelisk.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-17-water-tower-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-02-analemmatic-sundial.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-04-split-flap-board.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-24-foucault-pendulum.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-07-blossom-binary.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-25-candle-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-05-flip-monument.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-11-hourglass.jpg"
+   ],
+   "eggMode": "plinth",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb"
+  },
+  {
+   "out": "whale__disco.gif",
+   "move": "orbit",
+   "scene": "Disco",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb"
+  }
+ ]
+}

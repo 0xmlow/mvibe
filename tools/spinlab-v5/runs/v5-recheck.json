@@ -1,0 +1,8 @@
+{ "outDir": "v5-recheck-out", "defaults": { "width": 640, "height": 640, "frames": 24, "fps": 12, "maxSize": 480 },
+  "jobs": [
+  { "out": "mms__grand-central__hero.gif", "move": "hero", "scene": "Grand Central", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/magnetospheric-multiscale-mms-a__wrapped-in__the-bell-of-the-ferry.glb" },
+  { "out": "mms-b__chrome__orbit.gif", "move": "orbit", "scene": "Chrome", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/magnetospheric-multiscale-mms-b__wrapped-in__the-ring-light-told-the-truth.glb" },
+  { "out": "icesat__library__low.gif", "move": "low", "scene": "Library", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ice-clouds-and-land-elevation-satellite-2-icesat-2-a__wrapped-in__jonah-vs-whale.glb" },
+  { "out": "hubble__natatorium__orbit.gif", "move": "orbit", "scene": "Natatorium", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_hubble-25th-anniversary-model__wrapped-in__looking-glass.glb" },
+  { "out": "suit__natatorium__hero.gif", "move": "hero", "scene": "Natatorium", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb" }
+ ] }

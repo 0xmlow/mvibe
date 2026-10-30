@@ -6,7 +6,7 @@ tools/. Each patch asserts that its anchor exists, so a change in a tool's sourc
 fails the build loudly instead of shipping a half-patched page.
 
   head    FILE  inject the mvibe <head> block (idempotent)
-  spinlab DIR   patch a scratch copy of Spinlab V2 or V3 before the vite build
+  spinlab DIR   patch a scratch copy of Spinlab V2, V3 or V5 before the vite build
   mtexture DIR  patch the docs copy of ~M.Texture~ (upload label + demo button)
 """
 import argparse
@@ -109,6 +109,42 @@ function mvibeStream(source: HTMLCanvasElement): MediaStream {
 }
 '''
 
+# V5 renders video frame by frame and asks the track for each frame. The wrapper draws
+# the WebGL frame onto a 2D canvas, marks it, then forwards the request.
+SPINLAB_HELPERS_V5 = r'''
+
+// ---- mvibe web build (added by scripts/site-tools-patch.py, not in the desktop app) ----
+type MvibeApi = { mark: (ctx: CanvasRenderingContext2D, width: number, height: number) => void };
+const MVIBE_DEMO = "../../assets/demo/mlow-helmet.glb";
+function mvibeApi(): MvibeApi | undefined {
+  return (window as unknown as { MVIBE?: MvibeApi }).MVIBE;
+}
+// The small eye goes into every GIF frame before it is quantised.
+function mvibeMark(ctx: CanvasRenderingContext2D, width: number, height: number) {
+  mvibeApi()?.mark(ctx, width, height);
+}
+// Video: a 2D canvas stands in for the WebGL one. Each requestFrame copies the frame
+// over, adds the eye, then hands it to the recorder.
+function mvibeStream(source: HTMLCanvasElement): MediaStream {
+  const api = mvibeApi();
+  if (!api) return source.captureStream(0);
+  const out = document.createElement("canvas");
+  out.width = source.width;
+  out.height = source.height;
+  const ctx = out.getContext("2d");
+  if (!ctx) return source.captureStream(0);
+  const stream = out.captureStream(0);
+  const track = stream.getVideoTracks()[0] as MediaStreamTrack & { requestFrame?: () => void };
+  const native = track.requestFrame?.bind(track);
+  track.requestFrame = () => {
+    ctx.drawImage(source, 0, 0, out.width, out.height);
+    api.mark(ctx, out.width, out.height);
+    native?.();
+  };
+  return stream;
+}
+'''
+
 SPINLAB_DEMO_EFFECT = r'''
   // mvibe web build: open a small demo model so the page is alive on first load.
   useEffect(() => {
@@ -137,9 +173,13 @@ def cmd_spinlab(a):
                      'const rootPath = "./";', sp)
     s = replace_once(s, "ctx.drawImage(canvas, 0, 0, width, height);",
                      "ctx.drawImage(canvas, 0, 0, width, height);\n      mvibeMark(ctx, width, height);", sp)
-    s = replace_once(s, "const stream = canvas.captureStream(60);", "const stream = mvibeStream(canvas);", sp)
-    s = replace_once(s, "    recorder.stop();\n",
-                     "    recorder.stop();\n    stream.getTracks().forEach((track) => track.stop());\n", sp)
+    v5 = "canvas.captureStream(0)" in s
+    if v5:
+        s = replace_once(s, "const stream = canvas.captureStream(0);", "const stream = mvibeStream(canvas);", sp)
+    else:
+        s = replace_once(s, "const stream = canvas.captureStream(60);", "const stream = mvibeStream(canvas);", sp)
+        s = replace_once(s, "    recorder.stop();\n",
+                         "    recorder.stop();\n    stream.getTracks().forEach((track) => track.stop());\n", sp)
     s, n = re.subn(r"· DESKTOP</em>", "· WEB</em>", s)
     if n != 1:
         fail(f"{sp}: brand label not found")
@@ -151,7 +191,7 @@ def cmd_spinlab(a):
     if not close:
         fail(f"{sp}: end of loadFiles not found")
     s = s[: close.end()] + SPINLAB_DEMO_EFFECT + s[close.end():]
-    s = s.rstrip("\n") + "\n" + SPINLAB_HELPERS
+    s = s.rstrip("\n") + "\n" + (SPINLAB_HELPERS_V5 if v5 else SPINLAB_HELPERS)
     sp.write_text(s)
 
     ip = d / "desktop/index.html"

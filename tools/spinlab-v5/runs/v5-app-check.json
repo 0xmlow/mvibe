@@ -1,0 +1,2 @@
+{ "outDir": "v5-app-check-out", "defaults": { "width": 640, "height": 640, "frames": 12, "fps": 12, "maxSize": 360 },
+  "jobs": [ { "out": "whale__casino__crane.gif", "move": "crane", "scene": "Casino", "poster": 1, "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb" } ] }

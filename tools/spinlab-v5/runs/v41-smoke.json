@@ -1,0 +1,114 @@
+{
+ "outDir": "v41-smoke-out",
+ "defaults": {
+  "width": 640,
+  "height": 640,
+  "frames": 72,
+  "fps": 18,
+  "maxSize": 480
+ },
+ "jobs": [
+  {
+   "out": "whale__library__30eggs.gif",
+   "move": "orbit",
+   "scene": "Library",
+   "photos": [
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-14-skeleton-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-09-concourse-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-27-scoreboard.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-20-meridian-obelisk.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-17-water-tower-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-02-analemmatic-sundial.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-04-split-flap-board.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-24-foucault-pendulum.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-07-blossom-binary.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-25-candle-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-05-flip-monument.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-11-hourglass.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-28-pumpjack.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-15-astronomical-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-12-word-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-26-station-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-21-wall-dial.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-16-motel-sign.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-19-noon-cannon.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-10-water-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-03-armillary-sphere.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-23-bow-dial.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-13-kinetic-pin-field.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-08-solar-henge.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-22-nocturnal.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/meme-museum/probe/14ddcce0-7091-4331-aa17-3e6fc3bbe277.png",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light/.agent/mv-skel-blos.png",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/meme-museum/probe/d46485dd-d835-4c0f-8302-0b8b73afe003.png",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/meme-museum/probe/4c89059e-d403-4a5c-9951-2fecfe1ccc43.png",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/meme-museum/probe/435d3eb5-7d81-4c72-a0cc-deea435203ae_front.png"
+   ],
+   "eggMode": "both",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb"
+  },
+  {
+   "out": "suit__chrome__plinth-eggs.gif",
+   "move": "hero",
+   "scene": "Chrome",
+   "photos": [
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-14-skeleton-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-09-concourse-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-27-scoreboard.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-20-meridian-obelisk.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-17-water-tower-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-02-analemmatic-sundial.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-04-split-flap-board.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-24-foucault-pendulum.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-07-blossom-binary.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-25-candle-clock.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-05-flip-monument.jpg",
+    "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-11-hourglass.jpg"
+   ],
+   "eggMode": "plinth",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb"
+  },
+  {
+   "out": "asteroid__guggenheim.gif",
+   "move": "hero",
+   "scene": "Guggenheim",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/1999-rq36-asteroid__wrapped-in__garden-daylight.glb"
+  },
+  {
+   "out": "hubble__cityhall.gif",
+   "move": "orbit",
+   "scene": "City Hall",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_hubble-25th-anniversary-model__wrapped-in__looking-glass.glb"
+  },
+  {
+   "out": "whale__disco.gif",
+   "move": "orbit",
+   "scene": "Disco",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb"
+  },
+  {
+   "out": "suit__hammam.gif",
+   "move": "orbit",
+   "scene": "Hammam",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb"
+  },
+  {
+   "out": "asteroid__palmhouse.gif",
+   "move": "orbit",
+   "scene": "Palm House",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/1999-rq36-asteroid__wrapped-in__garden-daylight.glb"
+  },
+  {
+   "out": "whale__icecave.gif",
+   "move": "hero",
+   "scene": "Ice Cave",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb"
+  },
+  {
+   "out": "suit__brutalist.gif",
+   "move": "orbit",
+   "scene": "Brutalist",
+   "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb"
+  }
+ ]
+}

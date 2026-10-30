@@ -1,0 +1,212 @@
+{
+  "Chrome": {
+    "luma": 71,
+    "target": 72,
+    "exposure": 5.706
+  },
+  "Neon": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 1.285
+  },
+  "Trophy": {
+    "luma": 73,
+    "target": 72,
+    "exposure": 0.668
+  },
+  "Orbit": {
+    "luma": 32,
+    "target": 34,
+    "exposure": 6.158
+  },
+  "Gallery": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 1.712
+  },
+  "Cathedral": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 2.857
+  },
+  "Ryokan": {
+    "luma": 117,
+    "target": 120,
+    "exposure": 1.771
+  },
+  "Desert": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 4.946
+  },
+  "Underwater": {
+    "luma": 75,
+    "target": 72,
+    "exposure": 0.399
+  },
+  "Arcade": {
+    "luma": 59,
+    "target": 60,
+    "exposure": 4.329
+  },
+  "Aurora": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 2.181
+  },
+  "Moroccan": {
+    "luma": 70,
+    "target": 72,
+    "exposure": 2.607
+  },
+  "Garden": {
+    "luma": 143,
+    "target": 145,
+    "exposure": 1.86
+  },
+  "Bauhaus": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 1.357
+  },
+  "Castle": {
+    "luma": 75,
+    "target": 72,
+    "exposure": 0.819
+  },
+  "Opera": {
+    "luma": 76,
+    "target": 72,
+    "exposure": 0.818
+  },
+  "Santorini": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 2.069
+  },
+  "Parisian": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 1.815
+  },
+  "Forest": {
+    "luma": 75,
+    "target": 72,
+    "exposure": 0.465
+  },
+  "Miami": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 1.384
+  },
+  "Space Station": {
+    "luma": 57,
+    "target": 58,
+    "exposure": 3.111
+  },
+  "Infinity": {
+    "luma": 74,
+    "target": 72,
+    "exposure": 0.364
+  },
+  "Thai Palace": {
+    "luma": 74,
+    "target": 72,
+    "exposure": 0.909
+  },
+  "Florence": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 2.072
+  },
+  "Guggenheim": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 1.678
+  },
+  "Palm House": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 2.883
+  },
+  "Library": {
+    "luma": 71,
+    "target": 72,
+    "exposure": 1.601
+  },
+  "City Hall": {
+    "luma": 130,
+    "target": 132,
+    "exposure": 2.259
+  },
+  "Disco": {
+    "luma": 75,
+    "target": 72,
+    "exposure": 0.692
+  },
+  "Brutalist": {
+    "luma": 135,
+    "target": 138,
+    "exposure": 3.16
+  },
+  "Ice Cave": {
+    "luma": 123,
+    "target": 120,
+    "exposure": 0.639
+  },
+  "Hammam": {
+    "luma": 165,
+    "target": 168,
+    "exposure": 2.603
+  },
+  "Grand Central": {
+    "luma": 131,
+    "target": 132,
+    "exposure": 1
+  },
+  "Tokyo Alley": {
+    "luma": 57,
+    "target": 58,
+    "exposure": 1.796
+  },
+  "Rooftop": {
+    "luma": 61,
+    "target": 62,
+    "exposure": 3.632
+  },
+  "Casino": {
+    "luma": 65,
+    "target": 66,
+    "exposure": 3.544
+  },
+  "Skate Bowl": {
+    "luma": 156,
+    "target": 160,
+    "exposure": 2.21
+  },
+  "Planetarium": {
+    "luma": 28,
+    "target": 30,
+    "exposure": 1.334
+  },
+  "Zen Garden": {
+    "luma": 147,
+    "target": 150,
+    "exposure": 1.173
+  },
+  "Marfa": {
+    "luma": 147,
+    "target": 150,
+    "exposure": 2.494
+  },
+  "Natatorium": {
+    "luma": 157,
+    "target": 160,
+    "exposure": 1.899
+  },
+  "Chapel of Light": {
+    "luma": 55,
+    "target": 54,
+    "exposure": 1
+  }
+}

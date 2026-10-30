@@ -13,8 +13,8 @@ Everything runs client side and files are never uploaded.
 - `docs/shared/mvibe.js` is loaded first on every page. It signs every export with a small
   maker's mark and counts page views and exports when GoatCounter is configured
   (`GOATCOUNTER` at the top of the file; no cookies, no personal data).
-- `scripts/build-site-tools.sh` rebuilds the pages for MOSH LAB, SVG Forge 3D, Spinlab,
-  Spinlab V2 and ~M.Texture~ from `tools/`. The converters and Art Sheets are written
+- `scripts/build-site-tools.sh` rebuilds the pages for MOSH LAB, SVG Forge 3D, Spinlab (from
+  V5), Spinlab V3, Spinlab V2 and ~M.Texture~ from `tools/`. The converters and Art Sheets are written
   directly in `docs/tools/`.
 - `node scripts/serve.js` previews the site at http://localhost:8820/.
 
@@ -28,7 +28,9 @@ Everything runs client side and files are never uploaded.
 | **MP4 to GIF (max 50MB)** | Same engine, fits every GIF under 50 MB by stepping down colours, fps, then resolution | macOS droplet | [`tools/droplets/mp4-to-gif-50mb`](tools/droplets/mp4-to-gif-50mb) |
 | **Movie to Images** | Each video becomes a folder of full-resolution PNG frames (2 per second) | macOS droplet | [`tools/droplets/movie-to-images`](tools/droplets/movie-to-images) |
 | **Spinlab V2** | GLB hype-GIF and video studio ("Safe-Orbit Studio") | Electron app | [`tools/spinlab-v2`](tools/spinlab-v2) |
-| **Spinlab V3** | Spinlab rebuilt: loops that close, three camera moves, auto-framing, headless batch | Electron app | [`tools/spinlab-v3`](tools/spinlab-v3) |
+| **Spinlab V3** | Spinlab rebuilt: loops that close, three camera moves, auto-framing, headless batch. Frozen: the minted WRAPPED tokens render with its worlds | Electron app + web page | [`tools/spinlab-v3`](tools/spinlab-v3) |
+| **Spinlab V4** | Every world rebuilt as architecture: 32 rotundas, photographed PBR, per-world reflections, metered exposure, 36 photo eggs | Electron app | [`tools/spinlab-v4`](tools/spinlab-v4) |
+| **Spinlab V5** | The current Spinlab: 42 worlds, ambient occlusion, depth of field, film looks, grain, six camera moves, frame-exact MP4, posters | Electron app + web page | [`tools/spinlab-v5`](tools/spinlab-v5) |
 | **~M.Texture~** | Wraps 3D models in 2D art (native, box, sphere, cylinder, planar) and writes GLBs | Electron app + web page | [`tools/m-texture`](tools/m-texture) |
 | **Art Sheets** | Repaints an image as a cell painting and exports an editable Excel workbook, SVG and PNG | Native SwiftUI macOS app | [`tools/art-sheets`](tools/art-sheets) |
 
@@ -36,7 +38,7 @@ Everything runs client side and files are never uploaded.
 
 Each tool builds on its own. See the README in its folder.
 
-- **Electron apps** (MOSH LAB, Spinlab V2, Spinlab V3, ~M.Texture~): `npm install`, then
+- **Electron apps** (MOSH LAB, Spinlab V2, V3, V4, V5, ~M.Texture~): `npm install`, then
   `npm start` or the package script named in that README.
 - **SVG Forge 3D**: `npm install && ./build-macos.sh` gives `dist/SVG Forge 3D.app`.
 - **Art Sheets**: `zsh build.sh` gives `dist/Art sheets.app`.

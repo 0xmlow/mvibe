@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Rebuild the browser versions of MLow's tools into docs/tools/ from tools/.
+# Spinlab (the page) is built from tools/spinlab-v5; V3 and V2 keep their own pages.
 #
 #   scripts/build-site-tools.sh            build all five
 #   scripts/build-site-tools.sh spinlab    build only the named ones
-#                                          (mosh-lab svg-forge-3d spinlab spinlab-v2 m-texture)
+#                                          (mosh-lab svg-forge-3d spinlab spinlab-v3 spinlab-v2 m-texture)
 #
 # tools/ is never modified. Builds happen in a temp dir that is deleted at the end,
 # so the repo never gets node_modules. Web-only changes live in site-tools-patch.py.
@@ -26,7 +27,7 @@ TMP="$(mktemp -d "${TMPDIR:-/tmp}/mvibe-site.XXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 
 TARGETS=("$@")
-[ ${#TARGETS[@]} -eq 0 ] && TARGETS=(mosh-lab svg-forge-3d spinlab spinlab-v2 m-texture)
+[ ${#TARGETS[@]} -eq 0 ] && TARGETS=(mosh-lab svg-forge-3d spinlab spinlab-v3 spinlab-v2 m-texture)
 
 [ -f "$ROOT/docs/shared/mvibe.js" ] || { echo "docs/shared/mvibe.js is missing" >&2; exit 1; }
 [ -f "$ROOT/docs/assets/demo/mlow-helmet.glb" ] || { echo "docs/assets/demo/mlow-helmet.glb is missing" >&2; exit 1; }
@@ -103,8 +104,10 @@ for t in "${TARGETS[@]}"; do
   case "$t" in
     mosh-lab) build_mosh_lab ;;
     svg-forge-3d) build_svg_forge ;;
-    spinlab) build_spinlab spinlab-v3 spinlab "Spinlab" "Spinlab by MLow" \
-      "Spin a GLB through a world and export a looping GIF or video. Runs in your browser. An MLow tool." ;;
+    spinlab) build_spinlab spinlab-v5 spinlab "Spinlab" "Spinlab by MLow" \
+      "Spin a GLB through 42 built worlds and export a looping GIF, MP4 or poster. Runs in your browser. An MLow tool." ;;
+    spinlab-v3) build_spinlab spinlab-v3 spinlab-v3 "Spinlab V3" "Spinlab V3 by MLow" \
+      "The Spinlab the WRAPPED tokens render with, frozen. Spin a GLB and export a looping GIF in your browser. An MLow tool." ;;
     spinlab-v2) build_spinlab spinlab-v2 spinlab-v2 "Spinlab V2" "Spinlab V2 by MLow" \
       "The earlier Spinlab studio. Spin a GLB and export a GIF or video in your browser. An MLow tool." ;;
     m-texture) build_m_texture ;;

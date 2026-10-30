@@ -20,8 +20,8 @@
       tags: ["SVG", "GLB", "STL"], src: "svg-forge-3d",
       line: "Turn flat SVG artwork into real extruded 3D. Bevel it, light it, then export a GLB for the web or an STL for the printer." },
     { slug: "spinlab", name: "Spinlab", kind: "3d", icon: 1, accent: "#e59a7c", art: "trippers-03.webp",
-      tags: ["GLB", "GIF", "WebM"], src: "spinlab-v3",
-      line: "A hype studio for 3D models. Drop a GLB into a world, pick a camera move, and export a GIF that loops perfectly." },
+      tags: ["GLB", "GIF", "MP4", "PNG"], src: "spinlab-v5",
+      line: "A hype studio for 3D models. Drop a GLB into one of 42 built worlds, pick a camera move and a film look, and export a GIF, an MP4 or a poster that loops perfectly." },
     { slug: "m-texture", name: "~M.Texture~", kind: "3d", icon: 4, accent: "#581b9f", art: "flowers-03.webp",
       tags: ["GLB", "Art"], src: "m-texture",
       line: "Wrap any 3D model in a painting. Skin, drape or dissolve it, then download the new GLB." },
@@ -43,6 +43,9 @@
     { slug: "raw-heic-to-png", name: "RAW + HEIC to PNG", kind: "convert", icon: 1, accent: "#df4768", art: "trippers-08.webp",
       tags: ["RAW", "HEIC", "PNG"], src: "droplets/raw-heic-to-png",
       line: "Camera RAW from Nikon, Canon, Sony, Fuji and more, plus HEIC, out as clean 8 bit PNGs." },
+    { slug: "spinlab-v3", name: "Spinlab V3", kind: "3d", icon: 1, accent: "#8a7a9a", art: "trippers-05.webp",
+      tags: ["Frozen", "GLB", "GIF"], src: "spinlab-v3",
+      line: "The Spinlab the WRAPPED tokens render with, frozen so the minted art never changes. Closed loops, three moves, the 24 original worlds." },
     { slug: "spinlab-v2", name: "Spinlab V2", kind: "3d", icon: 1, accent: "#5c6a83", art: "trippers-01.webp",
       tags: ["Legacy", "GLB", "GIF"], src: "spinlab-v2",
       line: "The original Safe-Orbit Studio, kept as it was. Spinlab is the one to use; this is here for the record." },
@@ -115,7 +118,7 @@
   chips($("#toolFilters"), KINDS, (k) => grid.querySelectorAll(".tool").forEach((el) => el.classList.toggle("hidden", k !== "all" && el.dataset.kind !== k)));
 
   /* ---------- ticker ---------- */
-  const tick = TOOLS.filter((t) => t.slug !== "spinlab-v2").map((t) => `<span><img src="assets/brand/eye.png" alt="">${t.name}</span>`).join("");
+  const tick = TOOLS.filter((t) => t.slug !== "spinlab-v2" && t.slug !== "spinlab-v3").map((t) => `<span><img src="assets/brand/eye.png" alt="">${t.name}</span>`).join("");
   $("#ticker").innerHTML = tick + tick;
 
   /* ---------- art ---------- */

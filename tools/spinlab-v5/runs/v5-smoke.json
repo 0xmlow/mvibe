@@ -1,0 +1,17 @@
+{
+ "outDir": "v5-smoke-out",
+ "defaults": { "width": 640, "height": 640, "frames": 48, "fps": 16, "maxSize": 480 },
+ "jobs": [
+  { "out": "mms__grand-central__hero.gif", "move": "hero", "scene": "Grand Central", "poster": true, "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/magnetospheric-multiscale-mms-a__wrapped-in__the-bell-of-the-ferry.glb" },
+  { "out": "whale__tokyo__low.gif", "move": "low", "scene": "Tokyo Alley", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb" },
+  { "out": "suit__casino__crane.gif", "move": "crane", "scene": "Casino", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb" },
+  { "out": "asteroid__marfa__turntable.gif", "move": "turntable", "scene": "Marfa", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/1999-rq36-asteroid__wrapped-in__garden-daylight.glb" },
+  { "out": "hubble__natatorium__orbit.gif", "move": "orbit", "scene": "Natatorium", "poster": 2, "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_hubble-25th-anniversary-model__wrapped-in__looking-glass.glb" },
+  { "out": "whale__chapel__overhead__aces-deep-noao.gif", "move": "overhead", "scene": "Chapel of Light", "look": "ACES", "lens": "deep", "ao": false, "grain": 0, "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb" },
+  { "out": "suit__rooftop__hero__spin.gif", "move": "hero", "scene": "Rooftop", "spin": true, "float": false, "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb" },
+  { "out": "asteroid__zen__orbit__macro.gif", "move": "orbit", "scene": "Zen Garden", "lens": "macro", "grain": 2, "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/1999-rq36-asteroid__wrapped-in__garden-daylight.glb" },
+  { "out": "hubble__skate-bowl__crane.gif", "move": "crane", "scene": "Skate Bowl", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_hubble-25th-anniversary-model__wrapped-in__looking-glass.glb" },
+  { "out": "whale__planetarium__hero.gif", "move": "hero", "scene": "Planetarium", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb" },
+  { "out": "mms__auto__orbit.gif", "move": "orbit", "scene": "auto", "brand": false, "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/magnetospheric-multiscale-mms-b__wrapped-in__the-ring-light-told-the-truth.glb" }
+ ]
+}

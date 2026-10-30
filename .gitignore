@@ -16,3 +16,6 @@ plate-dist/
 tools/droplets/*/ffmpeg
 tools/svg-forge-3d/Web/three-engine.js
 tools/spinlab-v3/runs/*/
+tools/spinlab-v4/runs/*/
+tools/spinlab-v5/runs/*/
+tools/spinlab-*/runs/meter*/
