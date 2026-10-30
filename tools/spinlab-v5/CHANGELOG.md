@@ -41,5 +41,7 @@ V5 and V6 live in this folder: V5 is the photograph, V6 is the toolbox.
   triangles in 106 ms (4.2 MB to 0.48 MB), five new rooms rendering.
 - The ten rooms calibrated twice (`runs/meter6`); Subway Car sits 9 luma under target at
   the 4x cap with its piece at 168, which reads right.
-- `runs/v6-smoke-out`: see the README's note on the smoke batch across forge, library,
-  wrap, FX and the new rooms.
+- `runs/v6-smoke-out`: 11 jobs across forge, library (local and IPFS), wrap, FX and the
+  new rooms: 0 failures, every loop closes, GLBs and poster written.
+- Packaged 2026-10-30 as `release-v5/mac-arm64/Spinlab V6.app` (409 MB, library inside);
+  `--batch` from the app renders a library piece with FX and a forged type piece with a poster.

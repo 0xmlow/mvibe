@@ -76,7 +76,7 @@ V5 keys (see Jobs file).
 
     npm run desktop:build      # bundle the renderer
     npm run desktop:open       # open the app
-    npm run desktop:package    # build release-v5/mac-arm64/Spinlab V6.app (needs ~400 MB free)
+    npm run desktop:package    # build release-v5/mac-arm64/Spinlab V6.app (409 MB with the library)
     npm run batch runs/jobs.json
     npm run meter              # contact sheet + numbers, runs/meter/
     npm run calibrate          # meter, write world-tone.json, rebuild
@@ -157,4 +157,3 @@ and V4's and V3's still apply.
 - MOSH LAB's JS-drawn overlays (ASCII, emoji rain, petal storm, stamps, cam HUD) are its
   canvas layer and are not ported; the 53 shader effects are.
 - The Natatorium water reads weakly at eye level; the Subway Car could use a few riders.
-- A packaged `.app` for V6 needs about 400 MB free to build.
