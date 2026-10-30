@@ -170,18 +170,20 @@ function pieceBounds(root: THREE.Object3D): Bounds | null {
   const q = (arr: Array<[number, number]>, t: number) => { let acc = 0; for (const [v, w] of arr) { acc += w; if (acc >= totalArea * t) return v; } return arr[arr.length - 1][0]; };
   const r97 = q(radial, 0.97), y2 = q(heights, 0.02), y98 = q(heights, 0.98);
   const boxRadial = Math.hypot(size.x / 2, size.z / 2);
-  const ratio = Math.max(r97 / boxRadial, (y98 - y2) / size.y);
-  if (ratio > 0.8) return { center, size, min: box.min.clone(), trimmed: false };
-  // Trust the area-weighted fit: 97% of the surface is inside it. The floor only guards
-  // against a degenerate sample.
-  const k = Math.max(0.15, ratio);
-  const radius = Math.max(r97, boxRadial * k) * 1.04;
-  const lo = Math.max(y2, center.y - size.y / 2 * k), hi = Math.min(y98, center.y + size.y / 2 * k);
+  // A piece is boom-heavy when 97% of its surface sits inside less than half of its box,
+  // radially or vertically. Only then is the fit trimmed. A tail, a stand or a base plate
+  // is small but not that small, so ordinary pieces keep their whole box and nothing is
+  // ever cropped off the plinth.
+  const radialRatio = r97 / boxRadial, heightRatio = (y98 - y2) / size.y;
+  if (radialRatio > 0.5 && heightRatio > 0.5) return { center, size, min: box.min.clone(), trimmed: false };
+  const k = Math.max(0.3, Math.min(radialRatio, heightRatio));
+  const radius = (radialRatio <= 0.5 ? Math.max(r97, boxRadial * k) : boxRadial) * 1.08;
+  const lo = heightRatio <= 0.5 ? y2 : box.min.y, hi = heightRatio <= 0.5 ? y98 : box.max.y;
   return {
     center: new THREE.Vector3(center.x, (lo + hi) / 2, center.z),
     // The footprint is a disc of this radius; the framing takes hypot(halfX, halfZ), so
     // hand it a square whose diagonal is the radius, not a square of side 2r.
-    size: new THREE.Vector3(radius * Math.SQRT2, Math.max(hi - lo, size.y * 0.15), radius * Math.SQRT2),
+    size: new THREE.Vector3(radius * Math.SQRT2, Math.max(hi - lo, size.y * 0.3), radius * Math.SQRT2),
     min: box.min.clone(), trimmed: true,
   };
 }

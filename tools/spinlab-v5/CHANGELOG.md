@@ -30,6 +30,11 @@ V5 and V6 live in this folder: V5 is the photograph, V6 is the toolbox.
   `decimate`, `library`, `loadLibrary`.
 
 ## Fixed
+- **Pieces loaded too close and overflowed the stage** (found by MLow on the first GUI
+  try): the V6 area-weighted trim cut a whale's tail and base out of its bounds, so the
+  camera moved in and the piece was scaled past the plinth. The trim now applies only when
+  97% of the surface sits inside less than half the box (a spacecraft's booms), and an
+  ordinary piece keeps its whole box.
 - Decimation dropped `COLOR_0`, so the Three D Scans pieces (vertex-coloured, no
   material) rendered black. All non-position attributes are averaged per cell now.
 - The library builder choked on an empty manifest left by a disk-full run.
