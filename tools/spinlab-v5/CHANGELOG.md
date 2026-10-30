@@ -1,46 +1,45 @@
-# Spinlab V5, what changed and why
+# Spinlab V6, what changed and why
 
 V3's log (camera, framing, closed orbit, batch) is in `../spinlab-v3/CHANGELOG.md` and
 V4's (the worlds as architecture, metering, PBR, eggs) in `../spinlab-v4/CHANGELOG.md`.
-V5 is the photograph: how the frame is rendered, and ten more places to render it in.
+V5 and V6 live in this folder: V5 is the photograph, V6 is the toolbox.
 
-# 5.0 (2026-10-29)
+# 6.0 (2026-10-29, night)
 
 ## Added
-- **Post chain**: GTAO ambient occlusion, a Bokeh depth of field focused on the piece
-  each frame, and a lens pass (vignette, phase-seeded grain, chromatic aberration,
-  AgX contrast and saturation) after the tone curve. `SolidOnlyPass` hides see-through
-  meshes from the AO and depth passes.
-- **Looks**: AgX (default), ACES, Neutral. **Lenses**: f/16, f/2.8 (default), f/1.4.
-  **Grain**: clean, fine, film. All live, in the UI, the saved project and the batch.
-- **Ten rooms**: Grand Central, Tokyo Alley, Rooftop, Casino, Skate Bowl, Planetarium,
-  Zen Garden, Marfa, Natatorium, Chapel of Light. 42 worlds, 38 rotundas.
-- **Kit**: `motes`, `neonSign`, `windowsTexture`, `skyline`, `waterTower`, `stringLights`,
-  `rakedSand`. Motes added to ten existing rooms.
-- **Moves**: `low` (worm's eye), `crane` (rise and push in), `turntable` (piece turns).
-  `cameraDollyFactor` in token-traits beside `cameraHeightFactor`; `STUDIO_MOVES` kept
-  apart from the minted `MOVES`.
-- **Piece motion toggles**: spin (one turn a loop) and float.
-- **Video**: frame-exact, 30 fps, full stage, MP4 when the recorder supports H.264.
-- **Poster**: a PNG at 2x the stage from the UI (`P`) and `poster` in batch jobs.
-- **World finder**: search, voice and room/void chips, surprise, keyboard stepping.
-- **Seven Poly Haven sets** (47 total): asphalt_02, rubber_tiles, painted_concrete,
-  concrete_floor_02, wood_floor_deck, corrugated_iron_02, patterned_concrete_pavers_02.
-- Saved projects are version 4 (move, look, lens, ao, grain, spin, float, fps, size).
-  Versions 2 and 3 still open.
+- **Forge** (`app/forge.ts`): SVG to 3D (SVG Forge 3D's parser, extrusion and nine
+  material presets, ported), type to 3D (canvas text traced with marching squares,
+  simplified, holes assigned to their glyph, extruded), GLB export of the piece
+  (GLTFExporter, baked transforms, JPEG textures), and vertex-clustering decimation.
+- **Wrap** (`app/wrap.ts` + `app/wraplab.js` from ~M.Texture~): box, sphere, cylinder,
+  planar and native projections; tiles; skin, drape (with cinch cords) and dissolve;
+  unwrap. The unwrapped original is kept so a wrap can be redone.
+- **FX** (`app/mosh.ts` + `app/mosh-effects.js` from MOSH LAB): 53 GLSL effects as
+  `MoshPass`es between OutputPass and the lens pass, `u_t` = loop phase, feedback
+  targets for datamosh and ghost trails, per-effect params with MOSH LAB's dice, and a
+  `piece` target through a mask render of the piece alone.
+- **Library** (`electron/library.cjs`, `public/library`): 160 CC0 museum scans decimated
+  to ~28k triangles with thumbnails and a manifest (107 MB), plus the 600 WRAPPED pieces
+  listed from their IPFS pins with plate thumbnails. Loads by click, by batch key, by API.
+- **Ten rooms**: Bodega, Laundromat, Diner, Subway Car, Microwave, Ball Pit, Moon,
+  Dinosaur Hall, Birthday, Volcano Lair. 52 worlds, 48 rotundas.
+- **UI**: a tab strip in the left panel (WORLDS, LIBRARY, FORGE, WRAP, FX), SVG drops on
+  the main stage, `SAVE PIECE AS GLB`.
+- **Batch**: `svg`, `text`, `forge`, `library`, `wrap`, `fx`, `saveGlb`.
+- **API**: `loadSVG`, `loadText`, `wrap`, `unwrap`, `setFX`, `fx`, `exportGLB`,
+  `decimate`, `library`, `loadLibrary`.
 
 ## Fixed
-- **Boom-heavy pieces framed as a speck** (open since V3): framing and normalisation now
-  use area-weighted trimmed bounds (97th percentile radial, 2nd to 98th height). A vertex
-  percentile was still all boom: a thin boom has hundreds of vertices and no surface.
-- **The dollhouse cut popped** (open since V4): overhead parts now fade over 1.5 m of
-  camera rise, each with its own cloned materials.
-- **Video did not loop** and stuttered on slow frames: it was the live preview recorded
-  on the wall clock. Now rendered on the synthetic clock, frame by frame.
+- Decimation dropped `COLOR_0`, so the Three D Scans pieces (vertex-coloured, no
+  material) rendered black. All non-position attributes are averaged per cell now.
+- The library builder choked on an empty manifest left by a disk-full run.
 
 ## Verified
-- `tsc` clean. Renderer builds (1.17 MB, gzip 329 kB).
-- `runs/meter`: the tone table was reset and calibrated twice; all 42 worlds within
-  4 luma of target; the voids sit at 5.7x (Chrome) and 6.2x (Orbit), as V4's did.
-- `runs/v5-smoke-out`: see the README's verification notes for the smoke batch across
-  the new rooms, all six moves, the looks, lenses, posters and a boom-heavy spacecraft.
+- `tsc` clean. Renderer builds.
+- Headless API run: type, SVG, box wrap, sphere drape with cords, VHS + kaleido on the
+  piece, datamosh + halftone, GLB export (239 kB), the horse decimated 150k to 27k
+  triangles in 106 ms (4.2 MB to 0.48 MB), five new rooms rendering.
+- The ten rooms calibrated twice (`runs/meter6`); Subway Car sits 9 luma under target at
+  the 4x cap with its piece at 168, which reads right.
+- `runs/v6-smoke-out`: see the README's note on the smoke batch across forge, library,
+  wrap, FX and the new rooms.

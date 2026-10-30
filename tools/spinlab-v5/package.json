@@ -1,9 +1,9 @@
 {
   "name": "spinlab-v5",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "main": "electron/main.cjs",
-  "description": "Spinlab V5. A desktop GLB hype GIF studio: 42 worlds built as architecture, ambient occlusion, depth of field, film looks, grain, six camera moves, frame-exact MP4, posters, metered exposure, closed loops, headless batch.",
+  "description": "Spinlab V6. A desktop GLB hype studio and 3D toolbox: 52 worlds built as architecture, SVG Forge and M.Texture and MOSH LAB inside it, a library of 160 CC0 museum scans and the 600 WRAPPED pieces, ambient occlusion, depth of field, film looks, six camera moves, frame-exact MP4, posters, GLB export, metered exposure, closed loops, headless batch.",
   "author": "Spinlab",
   "engines": {
     "node": ">=22.13.0"
@@ -59,8 +59,8 @@
   },
   "type": "module",
   "build": {
-    "appId": "studio.spinlab.desktop.v5",
-    "productName": "Spinlab V5",
+    "appId": "studio.spinlab.desktop.v6",
+    "productName": "Spinlab V6",
     "directories": {
       "output": "release-v5"
     },

@@ -208,5 +208,55 @@
     "luma": 55,
     "target": 54,
     "exposure": 1
+  },
+  "Laundromat": {
+    "luma": 137,
+    "target": 140,
+    "exposure": 1.413
+  },
+  "Diner": {
+    "luma": 128,
+    "target": 130,
+    "exposure": 1
+  },
+  "Microwave": {
+    "luma": 152,
+    "target": 150,
+    "exposure": 0.531
+  },
+  "Ball Pit": {
+    "luma": 154,
+    "target": 150,
+    "exposure": 0.324
+  },
+  "Moon": {
+    "luma": 52,
+    "target": 48,
+    "exposure": 0.523
+  },
+  "Dinosaur Hall": {
+    "luma": 135,
+    "target": 132,
+    "exposure": 0.844
+  },
+  "Birthday": {
+    "luma": 161,
+    "target": 158,
+    "exposure": 0.467
+  },
+  "Bodega": {
+    "luma": 147,
+    "target": 150,
+    "exposure": 2.867
+  },
+  "Volcano Lair": {
+    "luma": 62,
+    "target": 62,
+    "exposure": 3.437
+  },
+  "Subway Car": {
+    "luma": 123,
+    "target": 132,
+    "exposure": 4
   }
 }

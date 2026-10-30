@@ -1,7 +1,7 @@
 const { app, BrowserWindow, shell } = require("electron");
 const path = require("node:path");
 
-app.setName("Spinlab V5");
+app.setName("Spinlab V6");
 
 function createWindow() {
   const window = new BrowserWindow({

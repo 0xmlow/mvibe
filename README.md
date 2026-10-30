@@ -30,7 +30,7 @@ Everything runs client side and files are never uploaded.
 | **Spinlab V2** | GLB hype-GIF and video studio ("Safe-Orbit Studio") | Electron app | [`tools/spinlab-v2`](tools/spinlab-v2) |
 | **Spinlab V3** | Spinlab rebuilt: loops that close, three camera moves, auto-framing, headless batch. Frozen: the minted WRAPPED tokens render with its worlds | Electron app + web page | [`tools/spinlab-v3`](tools/spinlab-v3) |
 | **Spinlab V4** | Every world rebuilt as architecture: 32 rotundas, photographed PBR, per-world reflections, metered exposure, 36 photo eggs | Electron app | [`tools/spinlab-v4`](tools/spinlab-v4) |
-| **Spinlab V5** | The current Spinlab: 42 worlds, ambient occlusion, depth of field, film looks, grain, six camera moves, frame-exact MP4, posters | Electron app + web page | [`tools/spinlab-v5`](tools/spinlab-v5) |
+| **Spinlab V6** | The current Spinlab: 52 worlds, SVG Forge and ~M.Texture~ and MOSH LAB inside it, a library of 160 CC0 museum scans and the 600 WRAPPED pieces, ambient occlusion, depth of field, film looks, six camera moves, frame-exact MP4, posters, GLB out (folder still named v5) | Electron app + web page | [`tools/spinlab-v5`](tools/spinlab-v5) |
 | **~M.Texture~** | Wraps 3D models in 2D art (native, box, sphere, cylinder, planar) and writes GLBs | Electron app + web page | [`tools/m-texture`](tools/m-texture) |
 | **Art Sheets** | Repaints an image as a cell painting and exports an editable Excel workbook, SVG and PNG | Native SwiftUI macOS app | [`tools/art-sheets`](tools/art-sheets) |
 

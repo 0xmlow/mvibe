@@ -69,7 +69,7 @@ build_spinlab() {
   say "$display (from tools/$name)"
   local src="$TMP/$name" dst="$OUT/$slug"
   mkdir -p "$src"
-  (cd "$TOOLS/$name" && tar cf - --exclude node_modules --exclude desktop-dist --exclude 'release*' --exclude .next --exclude runs .) | (cd "$src" && tar xf -)
+  (cd "$TOOLS/$name" && tar cf - --exclude node_modules --exclude desktop-dist --exclude 'release*' --exclude .next --exclude runs --exclude ./public/library .) | (cd "$src" && tar xf -)
   if [ -n "${SPINLAB_NODE_MODULES:-}" ]; then
     ln -s "$SPINLAB_NODE_MODULES" "$src/node_modules"
   else
@@ -87,6 +87,9 @@ build_spinlab() {
   cp -R "$built/." "$dst/"
   $PATCH head "$dst/index.html" --slug "$slug" --name "$display" --title "$title" \
     --visible self --pill bottom-left --desc "$desc"
+  # The library (museum GLBs + thumbnails) is big and static: mirrored straight across,
+  # not through the vite temp copy, so the build's peak disk use stays small.
+  if [ -d "$TOOLS/$name/public/library" ]; then rsync -a --delete "$TOOLS/$name/public/library/" "$dst/library/"; fi
 }
 
 build_m_texture() {
@@ -105,7 +108,7 @@ for t in "${TARGETS[@]}"; do
     mosh-lab) build_mosh_lab ;;
     svg-forge-3d) build_svg_forge ;;
     spinlab) build_spinlab spinlab-v5 spinlab "Spinlab" "Spinlab by MLow" \
-      "Spin a GLB through 42 built worlds and export a looping GIF, MP4 or poster. Runs in your browser. An MLow tool." ;;
+      "Drop, forge or pick a 3D piece, wrap it, mosh it, spin it through 52 built worlds and export a GIF, MP4, poster or GLB. Runs in your browser. An MLow tool." ;;
     spinlab-v3) build_spinlab spinlab-v3 spinlab-v3 "Spinlab V3" "Spinlab V3 by MLow" \
       "The Spinlab the WRAPPED tokens render with, frozen. Spin a GLB and export a looping GIF in your browser. An MLow tool." ;;
     spinlab-v2) build_spinlab spinlab-v2 spinlab-v2 "Spinlab V2" "Spinlab V2 by MLow" \

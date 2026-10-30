@@ -1,4 +1,4 @@
-// Spinlab V5 worlds.
+// Spinlab V6 worlds.
 //
 // Same 24 names as V3, so jobs files and saved projects still open, rebuilt as
 // architecture. Every room is a rotunda laid out in radial bays, because the camera
@@ -15,7 +15,8 @@ import {
 
 export type SceneName = "Chrome" | "Neon" | "Trophy" | "Orbit" | "Gallery" | "Cathedral" | "Ryokan" | "Desert" | "Underwater" | "Arcade" | "Aurora" | "Moroccan" | "Garden" | "Bauhaus" | "Castle" | "Opera" | "Santorini" | "Parisian" | "Forest" | "Miami" | "Space Station" | "Infinity" | "Thai Palace" | "Florence"
   | "Guggenheim" | "Palm House" | "Library" | "City Hall" | "Disco" | "Brutalist" | "Ice Cave" | "Hammam"
-  | "Grand Central" | "Tokyo Alley" | "Rooftop" | "Casino" | "Skate Bowl" | "Planetarium" | "Zen Garden" | "Marfa" | "Natatorium" | "Chapel of Light";
+  | "Grand Central" | "Tokyo Alley" | "Rooftop" | "Casino" | "Skate Bowl" | "Planetarium" | "Zen Garden" | "Marfa" | "Natatorium" | "Chapel of Light"
+  | "Bodega" | "Laundromat" | "Diner" | "Subway Car" | "Microwave" | "Ball Pit" | "Moon" | "Dinosaur Hall" | "Birthday" | "Volcano Lair";
 
 type Voice = "Arsham" | "Hadid" | "Wright" | "Abloh";
 export const sceneMeta: Record<SceneName, { kicker: string; icon: string; colors: [string, string]; room: boolean; lead: Voice }> = {
@@ -61,6 +62,16 @@ export const sceneMeta: Record<SceneName, { kicker: string; icon: string; colors
   Marfa: { kicker: "Judd at golden hour", icon: "▭", colors: ["#f0a060", "#3a5a9a"], room: true, lead: "Arsham" },
   Natatorium: { kicker: "Indoor pool", icon: "≋", colors: ["#bfe6ee", "#4ab0d8"], room: true, lead: "Hadid" },
   "Chapel of Light": { kicker: "Ando's cross", icon: "✝", colors: ["#9a9690", "#fff6e8"], room: true, lead: "Arsham" },
+  Bodega: { kicker: "Chopped cheese & a cat", icon: "🐈", colors: ["#e8e2cc", "#c8102e"], room: true, lead: "Abloh" },
+  Laundromat: { kicker: "Spin cycle at 11 PM", icon: "◎", colors: ["#d8e0d8", "#2962ff"], room: true, lead: "Abloh" },
+  Diner: { kicker: "Googie chrome & pie", icon: "☕", colors: ["#f0e8d8", "#c8102e"], room: true, lead: "Wright" },
+  "Subway Car": { kicker: "Next stop, Spinlab", icon: "🚇", colors: ["#d8d8d4", "#ff7a1a"], room: true, lead: "Abloh" },
+  Microwave: { kicker: "30 seconds on high", icon: "▣", colors: ["#e4e8ec", "#9fff8a"], room: true, lead: "Hadid" },
+  "Ball Pit": { kicker: "No adults", icon: "●", colors: ["#2962ff", "#ff3b6b"], room: true, lead: "Abloh" },
+  Moon: { kicker: "Tranquility Base", icon: "☾", colors: ["#8a8a88", "#1a4aa8"], room: true, lead: "Hadid" },
+  "Dinosaur Hall": { kicker: "Bones under a dome", icon: "🦖", colors: ["#c8a888", "#e8dcc0"], room: true, lead: "Arsham" },
+  Birthday: { kicker: "Somebody turned 317", icon: "🎂", colors: ["#fff0f6", "#ff3b6b"], room: true, lead: "Abloh" },
+  "Volcano Lair": { kicker: "Do not press", icon: "🌋", colors: ["#4a4a50", "#ff4a00"], room: true, lead: "Hadid" },
 };
 
 const ORANGE = "#ff6b00";
@@ -125,6 +136,16 @@ export const rigs: Record<SceneName, Rig> = {
   Marfa: rig({ tone: 150, background: "#f0a060", env: ["#f0b080", "#ead8b4", "#9fb8d8", "#fff0c0", 2.8], hemi: ["#ffe0c0", "#c0a080", 2.4], key: { color: "#ffb878", intensity: 4.6, dir: [-7, 1.8, 3] }, rim: { color: "#9fb8ff", intensity: 0.8, dir: [5, 2, -4] }, exposure: 0.95, bloom: { strength: 0.3, radius: 0.5, threshold: 0.94 }, fog: { color: "#f0b080", density: 0.008 } }),
   Natatorium: rig({ tone: 160, background: "#dff6ff", env: ["#bfe6ee", "#4ab0d8", "#e8f0f2", "#ffffff", 2.6], hemi: ["#f0fbff", "#6aa0b8", 2.2], key: { color: "#fff8ee", intensity: 3, dir: [2, 9, 2] }, exposure: 0.95, bloom: { strength: 0.3, radius: 0.5, threshold: 0.95 } }),
   "Chapel of Light": rig({ tone: 54, background: "#1a1816", env: ["#4a4844", "#3a2e26", "#2a2824", "#fff6e8", 2.4], hemi: ["#cfc8c0", "#2a2420", 1], key: { color: "#fff0d8", intensity: 2.4, dir: [-6, 5, 2] }, rim: { color: "#fff0d8", intensity: 1, dir: [5, 4, -3] }, exposure: 1.05, bloom: { strength: 0.6, radius: 0.7, threshold: 0.85 }, fog: { color: "#1a1816", density: 0.016 } }),
+  Bodega: rig({ tone: 150, background: "#2a2824", env: ["#e8e2cc", "#d8d4c8", "#e0dcd0", "#f4f8ff", 2.4], hemi: ["#f4f8ff", "#a8a49a", 2.8], key: { color: "#f4f8ff", intensity: 2.6, dir: [2, 9, 2] }, exposure: 0.95, bloom: { strength: 0.3, radius: 0.5, threshold: 0.95 } }),
+  Laundromat: rig({ tone: 140, background: "#2a3030", env: ["#d8e0d8", "#c8d0cc", "#d0d8d4", "#eef6ff", 2.4], hemi: ["#eef6ff", "#8a9490", 1.8], key: { color: "#eef6ff", intensity: 2.6, dir: [-2, 9, 2] }, exposure: 0.95, bloom: { strength: 0.3, radius: 0.5, threshold: 0.95 } }),
+  Diner: rig({ tone: 130, background: "#3a2a24", env: ["#f0e8d8", "#e8e8e8", "#f0e8d8", "#ffe2a0", 2.4], hemi: ["#ffe8c8", "#8a7a6a", 1.5], key: { color: "#ffe6b8", intensity: 2.8, dir: [3, 8, 2] }, rim: { color: "#ff3b6b", intensity: 0.8, dir: [-4, 2, -4] }, exposure: 1, bloom: { strength: 0.6, radius: 0.6, threshold: 0.85 } }),
+  "Subway Car": rig({ tone: 132, background: "#1a1a1e", env: ["#d8d8d4", "#8a8278", "#e4e4e0", "#f4f6ff", 2.4], hemi: ["#f4f6ff", "#8a8a88", 3.2], key: { color: "#f4f6ff", intensity: 2.4, dir: [1, 9, 1] }, exposure: 0.95, bloom: { strength: 0.35, radius: 0.5, threshold: 0.92 } }),
+  Microwave: rig({ tone: 150, background: "#3a3a40", env: ["#e4e8ec", "#d8dce0", "#e4e8ec", "#ffe2a0", 2.6], hemi: ["#fff0d8", "#9a9ea4", 1.8], key: { color: "#ffe8c0", intensity: 2.8, dir: [2, 8, -3] }, exposure: 0.95, bloom: { strength: 0.4, radius: 0.6, threshold: 0.9 } }),
+  "Ball Pit": rig({ tone: 150, background: "#ffd0e8", env: ["#ffd23b", "#2962ff", "#ffd0e8", "#ffffff", 2.6], hemi: ["#fff0f8", "#8a7a30", 1.8], key: { color: "#fff6e0", intensity: 3.2, dir: [-3, 8, 3] }, exposure: 0.95, bloom: { strength: 0.25, radius: 0.5, threshold: 0.95 } }),
+  Moon: rig({ tone: 48, background: "#000004", env: ["#101012", "#8a8a88", "#000004", "#ffffff", 2.2], envIntensity: 0.8, hemi: ["#404048", "#2a2a28", 0.8], key: { color: "#ffffff", intensity: 5.2, dir: [6, 2.2, -3] }, exposure: 1, bloom: { strength: 0.35, radius: 0.5, threshold: 0.95 } }),
+  "Dinosaur Hall": rig({ tone: 132, background: "#2a2018", env: ["#c8a888", "#d8d0c0", "#e8e0d0", "#fff6e4", 2.4], hemi: ["#fff6e4", "#6a5a48", 1.5], key: { color: "#fff0d8", intensity: 3, dir: [-3, 9, 2] }, exposure: 1, bloom: { strength: 0.35, radius: 0.6, threshold: 0.92 }, fog: { color: "#2a2018", density: 0.01 } }),
+  Birthday: rig({ tone: 158, background: "#ffe8f0", env: ["#fff0f6", "#d8b890", "#fff8fa", "#ffffff", 2.6], hemi: ["#fff8fa", "#a08a70", 1.7], key: { color: "#fff6e8", intensity: 2.8, dir: [3, 8, 3] }, exposure: 0.95, bloom: { strength: 0.35, radius: 0.5, threshold: 0.93 } }),
+  "Volcano Lair": rig({ tone: 62, background: "#0a0a14", env: ["#4a4a50", "#3a2a24", "#3a3a40", "#ff6a00", 2.4], hemi: ["#9a8aa0", "#4a2a18", 2.2], key: { color: "#cfd8ff", intensity: 2.2, dir: [-4, 9, 3] }, rim: { color: "#ff6a00", intensity: 2.2, dir: [4, -1, -4] }, exposure: 1.05, bloom: { strength: 0.8, radius: 0.65, threshold: 0.8 }, fog: { color: "#0a0a14", density: 0.014 } }),
   Florence: rig({ background: "#6b5038", env: ["#e8dcc6", "#a05a3a", "#ffffff", "#fff0d0", 2.6], hemi: ["#fff0dc", "#7a4a30", 1.3], key: { color: "#ffe6b8", intensity: 3.6, dir: [1, 10, 0.6] }, exposure: 1, bloom: { strength: 0.3, radius: 0.5, threshold: 0.93 } }),
 };
 
@@ -2232,6 +2253,484 @@ const builders: Record<SceneName, Builder> = {
     standard(ctx, pbr("brushed_concrete_03", { tint: "#a8a49e", repeat: [2, 1] }), "drum", brand);
     if (brand) hallmark(ctx, 10.8, 6.8, Math.PI * 0.75 + 0.4);
     ctx.point({ color: "#fff0d8", intensity: 22, position: [0, 4, 0], distance: 20 });
+  },
+  // --- V6 rooms: detailed, fun, and a few that are jokes ---------------------------
+
+  // NEW YORKERS at the corner: the bodega. Shelves to the ceiling, the deli counter
+  // with the chopped cheese on the flat-top, a lotto sign, an ATM, a cat on the
+  // register, the ice box humming by the door. Abloh quotes the awning.
+  Bodega(ctx, brand) {
+    rotunda(ctx, {
+      radius: 11, height: 5.2, cove: 0.15,
+      floor: pbr("checkered_pavement_tiles", { tint: "#d8d4c8", repeat: [10, 10], rough: 0.7 }),
+      wall: pbr("white_stucco_02", { tint: "#e8e2cc", repeat: [4, 2] }),
+      roof: "flat", roofMat: mat("#d8d4c8", { rough: 0.9 }),
+    });
+    // Drop ceiling tiles with fluorescent troughs, one glowing strip per bay.
+    const ceilTex = painted(256, 256, (g, w, h) => { g.fillStyle = "#e0dcd0"; g.fillRect(0, 0, w, h); g.strokeStyle = "#b8b4a8"; g.lineWidth = 4; g.strokeRect(2, 2, w - 4, h - 4); const r = seeded("bodega-ceiling"); g.fillStyle = "rgba(0,0,0,.06)"; for (let i = 0; i < 300; i++) g.fillRect(r() * w, r() * h, 2, 2); });
+    ceilTex.wrapS = ceilTex.wrapT = THREE.RepeatWrapping; ceilTex.repeat.set(14, 14);
+    (ctx.world.getObjectByName("roof") as THREE.Mesh).material = new THREE.MeshStandardMaterial({ map: ceilTex, roughness: 0.9 });
+    const cans = ["#ff3b3b", "#3b8bff", "#ffd23b", "#3bff6b", "#ffffff", "#ff8bd0", "#ff6b00", "#111111"];
+    const can = new THREE.CylinderGeometry(0.06, 0.06, 0.16, 10);
+    const steel = mat("#b8bcc4", { metal: 0.9, rough: 0.35 });
+    ctx.around(10, 10.7, (bay, i) => {
+      if (i === 0) {
+        // The deli counter: a glass case, the flat-top, a sandwich board, the register with the cat.
+        ctx.mesh(new THREE.BoxGeometry(5, 1.1, 1.2), mat("#e8e4dc", { rough: 0.6 }), [0, 0.55, 1.4], bay);
+        ctx.mesh(new THREE.BoxGeometry(5, 0.7, 1.1), mat("#cfe6ee", { rough: 0.05, metal: 0.1, opacity: 0.45 }), [0, 1.45, 1.4], bay, false);
+        for (let k = 0; k < 6; k++) ctx.mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.3, 12), mat(["#f0c8a0", "#d8a070", "#ffe0c0"][k % 3], { rough: 0.8 }), [-2 + k * 0.8, 1.3, 1.4], bay);
+        ctx.mesh(new THREE.BoxGeometry(1.6, 0.9, 0.9), steel, [-3.2, 0.45, 0.6], bay);
+        ctx.mesh(new THREE.BoxGeometry(1.5, 0.04, 0.8), glow("#ff8a4a", 1.2), [-3.2, 0.92, 0.6], bay, false);
+        ctx.mesh(new THREE.BoxGeometry(0.7, 0.5, 0.5), mat("#2a2a30", { rough: 0.5 }), [3.2, 1.35, 1.4], bay);
+        ctx.mesh(new THREE.PlaneGeometry(0.5, 0.3), glow("#9fffb0", 1.4), [3.2, 1.45, 1.66], bay, false);
+        // The bodega cat: loaf position on the register, tail curled.
+        const fur = mat("#f0a040", { rough: 0.95 });
+        const body = ctx.mesh(new THREE.CapsuleGeometry(0.17, 0.3, 6, 12), fur, [3.2, 1.75, 1.3], bay); body.rotation.z = Math.PI / 2;
+        ctx.mesh(new THREE.SphereGeometry(0.15, 12, 10), fur, [3.45, 1.85, 1.3], bay);
+        for (const s of [-1, 1]) ctx.mesh(new THREE.ConeGeometry(0.05, 0.1, 6), fur, [3.45 + s * 0.08, 1.98, 1.3], bay);
+        ctx.mesh(tube([[2.95, 1.7, 1.3], [2.8, 1.68, 1.5], [2.95, 1.66, 1.62]], 0.03, 12, 6), fur, [0, 0, 0], bay);
+        for (const s of [-1, 1]) ctx.mesh(new THREE.SphereGeometry(0.02, 6, 4), glow("#9fff8a", 2), [3.57, 1.87, 1.3 + s * 0.05], bay, false);
+        if (brand) ctx.mesh(new THREE.PlaneGeometry(3, 0.5), new THREE.MeshBasicMaterial({ map: label("“DELI · GROCERY”", "#ffffff", "#c8102e", 1024, 170), toneMapped: false }), [0, 3.6, 0.05], bay, false);
+      } else if (i === 5) {
+        // Ice box and the ATM by the door, a lotto sign above.
+        ctx.mesh(new THREE.BoxGeometry(2, 3.2, 1), mat("#f0f0f0", { rough: 0.5 }), [-1.4, 1.6, 0.6], bay);
+        ctx.mesh(new THREE.PlaneGeometry(1.6, 2.6), glow("#bfe8ff", 1.5), [-1.4, 1.7, 1.11], bay, false);
+        ctx.mesh(new THREE.BoxGeometry(1, 2, 0.8), mat("#2a2a30", { rough: 0.5 }), [1.2, 1, 0.5], bay);
+        ctx.mesh(new THREE.PlaneGeometry(0.6, 0.45), glow("#3b8bff", 1.8), [1.2, 1.5, 0.91], bay, false);
+        const lotto = neonSign("LOTTO", "#ff3b3b", 1.8, 0.6, 2.6); lotto.position.set(1.2, 3.4, 0.08); bay.add(lotto);
+        const open = neonSign("OPEN 24H", "#36f5ff", 1.8, 0.5, 2.4); open.position.set(-1.4, 3.8, 0.08); bay.add(open);
+      } else {
+        // Shelves stacked with cans and boxes, the colours cycling so nothing repeats.
+        for (const x of [-2.1, 2.1]) ctx.mesh(new THREE.BoxGeometry(0.08, 4.2, 0.6), steel, [x, 2.1, 0.3], bay);
+        for (let s = 0; s < 6; s++) ctx.mesh(new THREE.BoxGeometry(4.2, 0.04, 0.6), steel, [0, 0.4 + s * 0.68, 0.3], bay, false);
+        const n = 11 * 5;
+        const im = new THREE.InstancedMesh(can, mat("#ffffff", { rough: 0.4, metal: 0.3 }), n);
+        const d = new THREE.Object3D();
+        for (let k = 0; k < n; k++) { const s = Math.floor(k / 11), c = k % 11; d.position.set(-1.9 + c * 0.38, 0.5 + s * 0.68, 0.2 + (c % 2) * 0.2); d.rotation.set(0, ctx.r() * 6, 0); d.updateMatrix(); im.setMatrixAt(k, d.matrix); im.setColorAt(k, new THREE.Color(cans[(k * 7 + i) % cans.length])); }
+        im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true; im.castShadow = true;
+        bay.add(im);
+        for (let b = 0; b < 4; b++) ctx.mesh(new THREE.BoxGeometry(0.5, 0.5, 0.35), mat(cans[(b + i * 3) % cans.length], { rough: 0.8 }), [-1.5 + b * 1, 3.95, 0.3], bay);
+        if (i === 3) frameSlot(ctx, bay, 0, 4.55, 0.02, 1.4, 0.5, mat("#111111", { rough: 0.6 }), "#2a2a2a");
+      }
+    });
+    for (let k = 0; k < 10; k++) { const a = (k / 10) * TAU + 0.31; const t = ctx.mesh(new THREE.BoxGeometry(1.2, 0.06, 0.3), glow("#f4f8ff", 1.9), [Math.sin(a) * 6, FLOOR + 5.15, Math.cos(a) * 6], ctx.world, false); t.rotation.y = a; t.name = "roof"; }
+    standard(ctx, pbr("checkered_pavement_tiles", { tint: "#c8c4b8", repeat: [2, 1] }), "drum", brand);
+    if (brand) hallmark(ctx, 10.6, 4.2, Math.PI * 0.8);
+    ctx.point({ color: "#f4f8ff", intensity: 28, position: [0, 4.5, 0], distance: 22 });
+  },
+
+  // The laundromat at 11 PM. A ring of front-loaders whose drums turn once a loop, a
+  // folding table, a change machine, one chair, and fluorescent light the colour of
+  // nothing. The piece is the only thing anyone would want to steal.
+  Laundromat(ctx, brand) {
+    rotunda(ctx, {
+      radius: 11, height: 4.6, cove: 0.15,
+      floor: pbr("large_floor_tiles_02", { tint: "#c8d0cc", repeat: [12, 12], rough: 0.5 }),
+      wall: pbr("white_stucco_02", { tint: "#d8e0d8", repeat: [4, 2] }),
+      roof: "flat", roofMat: mat("#d0d8d4", { rough: 0.9 }),
+    });
+    const steel = mat("#d8dce0", { metal: 0.85, rough: 0.3 });
+    const glass = mat("#9fb8c8", { metal: 0.2, rough: 0.05, opacity: 0.35 });
+    const drumGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.5, 24, 1, true);
+    ctx.around(12, 10.6, (bay, i) => {
+      if (i === 4) {
+        // Folding table, a basket, the change machine, the chair.
+        ctx.mesh(new THREE.BoxGeometry(3.2, 0.06, 1), mat("#e8e4d8", { rough: 0.6 }), [0, 0.9, 1.2], bay);
+        for (const x of [-1.4, 1.4]) ctx.mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.9, 8), steel, [x, 0.45, 1.2], bay);
+        ctx.mesh(new THREE.BoxGeometry(0.6, 0.4, 0.45), mat("#3b8bff", { rough: 0.6 }), [0.8, 1.13, 1.2], bay);
+        for (let k = 0; k < 4; k++) ctx.mesh(new THREE.BoxGeometry(0.3, 0.05, 0.25), mat(["#ff3b6b", "#ffffff", "#ffd23b", "#3bff9a"][k], { rough: 0.9 }), [-0.9 + (k % 2) * 0.35, 0.96 + Math.floor(k / 2) * 0.06, 1.1], bay, false);
+        ctx.mesh(new THREE.BoxGeometry(0.8, 1.8, 0.5), mat("#3a3a40", { rough: 0.5 }), [1.8, 0.9, 0.3], bay);
+        ctx.mesh(new THREE.PlaneGeometry(0.5, 0.2), glow("#ff3b3b", 2), [1.8, 1.5, 0.56], bay, false);
+        ctx.mesh(new THREE.BoxGeometry(0.5, 0.05, 0.5), mat("#ff6b00", { rough: 0.6 }), [-1.8, 0.45, 1.6], bay);
+        ctx.mesh(new THREE.BoxGeometry(0.5, 0.5, 0.05), mat("#ff6b00", { rough: 0.6 }), [-1.8, 0.7, 1.37], bay);
+        for (const [x, z] of [[-2, 1.4], [-1.6, 1.4], [-2, 1.8], [-1.6, 1.8]]) ctx.mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.43, 6), steel, [x, 0.22, z], bay);
+        if (brand) ctx.mesh(new THREE.PlaneGeometry(3, 0.42), new THREE.MeshBasicMaterial({ map: label("“WASH · DRY · FOLD”", "#ffffff", "#2962ff", 1024, 150), toneMapped: false }), [0, 3.4, 0.03], bay, false);
+      } else {
+        // Two stacked front-loaders per bay, drums turning in alternate directions.
+        for (let s = 0; s < 2; s++) {
+          const y = 0.75 + s * 1.5;
+          ctx.mesh(softBox(2.2, 1.45, 1.2, 0.06), mat("#e8ecf0", { rough: 0.45, metal: 0.2 }), [0, y, 0.6], bay);
+          ctx.mesh(new THREE.TorusGeometry(0.5, 0.06, 10, 32), steel, [0, y, 1.21], bay);
+          ctx.mesh(new THREE.CircleGeometry(0.47, 32), glass, [0, y, 1.22], bay, false);
+          const drum = ctx.mesh(drumGeo, mat("#9aa0a8", { metal: 0.9, rough: 0.3, side: THREE.DoubleSide }), [0, y, 0.75], bay, false);
+          drum.rotation.x = Math.PI / 2;
+          ctx.animate(drum, { spin: { axis: "y", turns: (i + s) % 2 ? 2 : -2 } });
+          // Laundry in the drum: a few colour blobs that tumble with it.
+          const wash = new THREE.Group(); wash.position.set(0, y, 0.75); bay.add(wash);
+          for (let k = 0; k < 4; k++) { const b = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), mat(["#ff3b6b", "#3b8bff", "#ffd23b", "#ffffff"][k], { rough: 0.9 })); b.position.set(Math.sin(k * 1.6) * 0.28, Math.cos(k * 1.6) * 0.28, 0); wash.add(b); }
+          ctx.animate(wash, { spin: { axis: "z", turns: (i + s) % 2 ? 2 : -2 } });
+          ctx.mesh(new THREE.PlaneGeometry(0.6, 0.12), glow(s ? "#3bff9a" : "#ff8a4a", 1.6), [0.6, y + 0.55, 1.21], bay, false);
+        }
+      }
+    });
+    for (let k = 0; k < 8; k++) { const a = (k / 8) * TAU; const t = ctx.mesh(new THREE.BoxGeometry(2.4, 0.06, 0.26), glow("#eef6ff", 1.8), [Math.sin(a) * 5.5, FLOOR + 4.55, Math.cos(a) * 5.5], ctx.world, false); t.rotation.y = a; t.name = "roof"; }
+    standard(ctx, pbr("large_floor_tiles_02", { tint: "#c0c8c4", repeat: [2, 1] }), "drum", brand);
+    if (brand) hallmark(ctx, 10.6, 3.9, Math.PI * 1.15);
+    ctx.point({ color: "#eef6ff", intensity: 26, position: [0, 4, 0], distance: 22 });
+  },
+
+  // The all-night diner. Red vinyl booths round the room, a chrome counter with
+  // stools, pie in the case, a jukebox, neon in the window, and coffee that has
+  // been on since Tuesday. Wright's Usonian in a Googie suit.
+  Diner(ctx, brand) {
+    rotunda(ctx, {
+      radius: 11, height: 4.8, cove: 0.2,
+      floor: pbr("checkered_pavement_tiles", { tint: "#e8e8e8", repeat: [12, 12], rough: 0.4 }),
+      wall: pbr("white_stucco", { tint: "#f0e8d8", repeat: [4, 2] }),
+      roof: "flat", roofMat: mat("#f0e8d8", { rough: 0.9 }),
+    });
+    const chrome = mat("#d8dce4", { metal: 1, rough: 0.12 });
+    const vinyl = mat("#c8102e", { rough: 0.45, metal: 0.05 });
+    const formica = mat("#f4f0e4", { rough: 0.3 });
+    ctx.around(10, 10.5, (bay, i) => {
+      if (i % 2 === 0) {
+        // A booth: two benches and a table, a window with neon behind.
+        for (const z of [0.4, 2.4]) { ctx.mesh(softBox(2.4, 0.5, 0.7, 0.08), vinyl, [0, 0.45, z], bay); ctx.mesh(softBox(2.4, 1.1, 0.25, 0.08), vinyl, [0, 1.0, z + (z < 1 ? -0.3 : 0.3)], bay); }
+        ctx.mesh(new THREE.BoxGeometry(2.2, 0.06, 0.9), formica, [0, 0.95, 1.4], bay);
+        ctx.mesh(new THREE.BoxGeometry(2.2, 0.03, 0.9), chrome, [0, 0.91, 1.4], bay, false);
+        ctx.mesh(new THREE.CylinderGeometry(0.04, 0.2, 0.9, 12), chrome, [0, 0.45, 1.4], bay);
+        ctx.mesh(new THREE.CylinderGeometry(0.08, 0.06, 0.12, 12), glow("#ffd27a", 1.1), [0.6, 1.04, 1.4], bay, false);
+        ctx.mesh(new THREE.CylinderGeometry(0.1, 0.08, 0.1, 12), mat("#ffffff", { rough: 0.3 }), [-0.5, 1.03, 1.3], bay);
+        ctx.mesh(new THREE.BoxGeometry(2.6, 1.6, 0.06), mat("#0a1a2a", { rough: 0.2, metal: 0.3 }), [0, 2.4, 0.03], bay, false);
+        const s = neonSign(["EAT", "OPEN", "PIE", "COFFEE", "24 HRS"][(i / 2) % 5], ["#ff3b6b", "#36f5ff", "#ffd23b", "#ff8a4a", "#3bff9a"][(i / 2) % 5], 2, 0.6, 2.8); s.position.set(0, 2.4, 0.1); bay.add(s);
+      } else {
+        // Counter section with stools, the pie case, the pass with the order wheel.
+        ctx.mesh(softBox(4.2, 1.0, 0.8, 0.1), mat("#2a7a8a", { rough: 0.4 }), [0, 0.5, 1.2], bay);
+        ctx.mesh(new THREE.BoxGeometry(4.3, 0.06, 0.9), formica, [0, 1.03, 1.2], bay);
+        ctx.mesh(new THREE.BoxGeometry(4.3, 0.08, 0.05), chrome, [0, 1.0, 1.66], bay, false);
+        for (let k = 0; k < 3; k++) { const x = -1.3 + k * 1.3; ctx.mesh(new THREE.CylinderGeometry(0.05, 0.14, 0.7, 12), chrome, [x, 0.35, 2.1], bay); ctx.mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.1, 16), vinyl, [x, 0.75, 2.1], bay); }
+        if (i === 1) { ctx.mesh(new THREE.BoxGeometry(1.4, 0.7, 0.6), mat("#cfe6ee", { rough: 0.05, metal: 0.1, opacity: 0.4 }), [-1.2, 1.4, 1.2], bay, false); for (let k = 0; k < 3; k++) ctx.mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.12, 16), mat(["#c8702a", "#f0d0a0", "#8a2a2a"][k], { rough: 0.8 }), [-1.6 + k * 0.4, 1.15 + (k % 2) * 0.25, 1.2], bay); }
+        if (i === 3) { ctx.mesh(new THREE.BoxGeometry(1.1, 1.9, 0.6), mat("#7a2a1a", { rough: 0.4 }), [1.3, 0.95, 0.4], bay); ctx.mesh(new THREE.PlaneGeometry(0.8, 0.6), glow("#ff8ad0", 2), [1.3, 1.5, 0.71], bay, false); ctx.mesh(new THREE.TorusGeometry(0.3, 0.04, 8, 24, Math.PI), glow("#36f5ff", 2.2), [1.3, 1.85, 0.72], bay, false); }
+        if (i === 5) frameSlot(ctx, bay, 0, 3, 0.05, 1.8, 1.2, chrome, "#f4f0e4");
+        if (i === 7 && brand) ctx.mesh(new THREE.PlaneGeometry(2.6, 0.5), new THREE.MeshBasicMaterial({ map: label("“DINER”", "#ffffff", "#c8102e", 1024, 170), toneMapped: false }), [0, 3.4, 0.05], bay, false);
+        if (i === 9) { ctx.mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.06, 32), chrome, [0, 3.2, 0.2], bay); for (let k = 0; k < 12; k++) ctx.mesh(new THREE.PlaneGeometry(0.1, 0.25), mat("#ffffff", { rough: 0.9, side: THREE.DoubleSide }), [Math.sin(k / 12 * TAU) * 0.55, 3.05, 0.2 + Math.cos(k / 12 * TAU) * 0.55], bay, false); }
+      }
+    });
+    // Googie ceiling: chrome boomerang lamps.
+    for (let k = 0; k < 6; k++) { const a = (k / 6) * TAU + 0.2; const lamp = ctx.mesh(new THREE.ConeGeometry(0.5, 0.5, 16, 1, true), chrome, [Math.sin(a) * 6.2, FLOOR + 4.1, Math.cos(a) * 6.2], ctx.world, false); lamp.name = "chandelier"; ctx.mesh(new THREE.SphereGeometry(0.12, 10, 8), glow("#ffe2a0", 2.6), [Math.sin(a) * 6.2, FLOOR + 3.9, Math.cos(a) * 6.2], ctx.world, false).name = "chandelier"; }
+    standard(ctx, chrome, "drum", brand);
+    if (brand) hallmark(ctx, 10.5, 4.1, Math.PI * 0.5);
+    ctx.point({ color: "#ffe2a0", intensity: 24, position: [0, 3.5, 0], distance: 22 });
+  },
+
+  // Inside the train. An L car at 3 AM: the orange and yellow seats, the poles, the
+  // ads, the map, the doors, the strip map blinking, nobody else on board. The
+  // tunnel lights go past once a loop. NEW YORKERS on the move.
+  "Subway Car"(ctx, brand) {
+    rotunda(ctx, {
+      radius: 11, height: 3.4, cove: 0.5,
+      floor: pbr("rubber_tiles", { tint: "#c8c0b4", repeat: [10, 10], rough: 0.85 }),
+      wall: mat("#d8d8d4", { rough: 0.4, metal: 0.2 }),
+      roof: "flat", roofMat: mat("#e4e4e0", { rough: 0.5 }),
+    });
+    const orange = mat("#ff7a1a", { rough: 0.5 }), yellow = mat("#ffc21a", { rough: 0.5 });
+    const steel = mat("#c8ccd0", { metal: 0.9, rough: 0.25 });
+    ctx.around(12, 10.6, (bay, i) => {
+      // Bench seats in alternating colours, a window above with the tunnel beyond, an ad.
+      for (let k = 0; k < 3; k++) { const m = ctx.mesh(softBox(0.9, 0.12, 0.8, 0.05), (i + k) % 2 ? orange : yellow, [-1 + k, 0.5, 0.6], bay); m.castShadow = true; ctx.mesh(softBox(0.9, 0.8, 0.12, 0.05), (i + k) % 2 ? orange : yellow, [-1 + k, 0.95, 0.2], bay); }
+      ctx.mesh(new THREE.BoxGeometry(3, 0.1, 0.9), steel, [0, 0.42, 0.6], bay, false);
+      ctx.mesh(new THREE.PlaneGeometry(2.6, 0.9), mat("#06070c", { rough: 0.2, metal: 0.4 }), [0, 1.95, 0.02], bay, false);
+      // Tunnel lights streaking past the window: a strip that scrolls one whole tile per loop.
+      const strip = painted(512, 64, (g, w, h) => { g.fillStyle = "#06070c"; g.fillRect(0, 0, w, h); for (let x = 0; x < w; x += 128) { g.fillStyle = "#ffe8a0"; g.fillRect(x + 50, 22, 28, 20); g.fillStyle = "#2a2f3a"; g.fillRect(x, 0, 6, h); } });
+      strip.wrapS = THREE.RepeatWrapping; strip.repeat.set(2, 1);
+      const win = ctx.mesh(new THREE.PlaneGeometry(2.6, 0.9), new THREE.MeshStandardMaterial({ map: strip, emissive: "#ffffff", emissiveMap: strip, emissiveIntensity: 1.4, roughness: 0.4 }), [0, 1.95, 0.03], bay, false);
+      ctx.animate(win, { scroll: { u: i % 2 ? 2 : -2, v: 0 } });
+      // Ad card above the window and a pole.
+      const ad = painted(512, 160, (g, w, h) => { g.fillStyle = ["#ffd23b", "#36f5ff", "#ff3b6b", "#ffffff"][i % 4]; g.fillRect(0, 0, w, h); g.fillStyle = "#111"; g.font = "bold 70px Helvetica"; g.textAlign = "center"; g.fillText(["SEE A DOCTOR", "LEARN TO CODE", "IT'S A WRAP", "DON'T HOLD DOORS", "WE BUY GOLD", "SPIN IT"][i % 6], w / 2, 105); });
+      ctx.mesh(new THREE.PlaneGeometry(2.4, 0.75), new THREE.MeshBasicMaterial({ map: ad, toneMapped: false }), [0, 2.85, 0.03], bay, false);
+      ctx.mesh(new THREE.CylinderGeometry(0.03, 0.03, 3.3, 10), steel, [1.4, 1.65, 1.2], bay);
+      if (i === 6) frameSlot(ctx, bay, 0, 2.85, 0.04, 2.4, 0.75, steel, "#f4f0e4");
+    });
+    // Ceiling: light panels and straps.
+    for (let k = 0; k < 12; k++) { const a = (k / 12) * TAU; const p = ctx.mesh(new THREE.BoxGeometry(1.6, 0.04, 0.3), glow("#f4f6ff", 1.7), [Math.sin(a) * 7, FLOOR + 3.37, Math.cos(a) * 7], ctx.world, false); p.rotation.y = a; p.name = "roof"; }
+    const rail = ctx.mesh(new THREE.TorusGeometry(6.2, 0.03, 8, 96), steel, [0, FLOOR + 2.9, 0], ctx.world, false); rail.rotation.x = Math.PI / 2; rail.name = "roof";
+    ctx.instanced(new THREE.TorusGeometry(0.12, 0.025, 6, 16), mat("#111111", { rough: 0.6 }), 24, () => undefined, (p, k, d) => { const a = (k / 24) * TAU; d.position.set(Math.sin(a) * 6.2, FLOOR + 2.72, Math.cos(a) * 6.2); d.rotation.set(0, a, Math.sin(p * TAU + k) * 0.12); }).name = "roof";
+    if (brand) { const s = ctx.keep(ctx.mesh(new THREE.PlaneGeometry(2.2, 0.36), new THREE.MeshBasicMaterial({ map: label("“NEXT STOP: SPINLAB”", "#ffd23b", "#111111", 1024, 160), toneMapped: false }), [0, FLOOR + 3.1, -5.8], ctx.world, false)); s.lookAt(0, FLOOR + 3.1, 0); }
+    standard(ctx, pbr("rubber_tiles", { tint: "#7a7268", repeat: [2, 1] }), "disc", brand);
+    ctx.point({ color: "#f4f6ff", intensity: 22, position: [0, 3, 0], distance: 20 });
+  },
+
+  // The piece in a microwave. The glass turntable is the plinth, the walls are the
+  // cavity, the door is the window to the kitchen, the clock reads the loop. 30 seconds
+  // on high. This is the only room where the turntable move is realism.
+  Microwave(ctx, brand) {
+    rotunda(ctx, {
+      radius: 11, height: 7.5, cove: 0.5,
+      floor: mat("#d8dce0", { metal: 0.6, rough: 0.35 }),
+      wall: mat("#e4e8ec", { metal: 0.5, rough: 0.4 }),
+      roof: "flat", roofMat: mat("#e4e8ec", { metal: 0.5, rough: 0.4 }),
+    });
+    // The cavity walls are perforated steel: a dot grid.
+    const perf = painted(128, 128, (g, w, h) => { g.fillStyle = "#e4e8ec"; g.fillRect(0, 0, w, h); g.fillStyle = "#6a6e74"; for (let y = 8; y < h; y += 16) for (let x = 8; x < w; x += 16) { g.beginPath(); g.arc(x, y, 4, 0, TAU); g.fill(); } });
+    perf.wrapS = perf.wrapT = THREE.RepeatWrapping; perf.repeat.set(30, 8);
+    (ctx.world.getObjectByName("drum") as THREE.Mesh).material = new THREE.MeshStandardMaterial({ map: perf, metalness: 0.5, roughness: 0.45, side: THREE.DoubleSide });
+    // The door: one bay is a big glass window with the mesh screen, the kitchen beyond.
+    ctx.around(4, 10.8, (bay, i) => {
+      if (i === 0) {
+        const kitchen = painted(1024, 512, (g, w, h) => { g.fillStyle = "#f0e8d8"; g.fillRect(0, 0, w, h); g.fillStyle = "#c8d8e8"; g.fillRect(0, h * 0.6, w, h * 0.4); g.fillStyle = "#8a6a4a"; g.fillRect(w * 0.1, h * 0.2, w * 0.3, h * 0.35); g.fillStyle = "#ffffff"; g.fillRect(w * 0.55, h * 0.15, w * 0.3, h * 0.42); g.fillStyle = "#ffd23b"; g.beginPath(); g.arc(w * 0.7, h * 0.35, 40, 0, TAU); g.fill(); g.fillStyle = "#2a2a2a"; g.font = "bold 40px Helvetica"; g.fillText("12:00", w * 0.12, h * 0.17); });
+        ctx.mesh(new THREE.PlaneGeometry(14, 7), new THREE.MeshBasicMaterial({ map: kitchen, toneMapped: false }), [0, 3.75, -0.6], bay, false);
+        ctx.mesh(new THREE.PlaneGeometry(14, 7), new THREE.MeshStandardMaterial({ map: perf.clone(), transparent: true, alphaMap: perf, opacity: 0.55, roughness: 0.4, metalness: 0.4 }), [0, 3.75, -0.2], bay, false);
+        ctx.mesh(new THREE.BoxGeometry(14, 0.5, 0.6), mat("#1a1a1e", { rough: 0.4 }), [0, 7.2, 0], bay, false);
+        ctx.mesh(new THREE.BoxGeometry(14, 0.5, 0.6), mat("#1a1a1e", { rough: 0.4 }), [0, 0.25, 0], bay, false);
+        ctx.mesh(new THREE.BoxGeometry(0.4, 2.2, 0.3), mat("#2a2a2e", { metal: 0.6, rough: 0.4 }), [6.4, 3.75, 0.3], bay);
+      } else if (i === 2) {
+        // The control panel on the back wall: a green clock that counts the loop, buttons.
+        const clock = ctx.mesh(new THREE.PlaneGeometry(2.6, 1), glow("#9fff8a", 2.2), [0, 5.2, 0.05], bay, false);
+        ctx.animate(clock, { pulse: { base: 2, amp: 0.6, cycles: 30 } });
+        for (let k = 0; k < 12; k++) ctx.mesh(new THREE.BoxGeometry(0.6, 0.4, 0.1), mat(k === 11 ? "#ff3b3b" : "#2a2a2e", { rough: 0.5 }), [-1 + (k % 3), 4.2 - Math.floor(k / 3) * 0.55, 0.05], bay);
+        if (brand) ctx.mesh(new THREE.PlaneGeometry(2.6, 0.4), new THREE.MeshBasicMaterial({ map: label("“HIGH · 0:30”", "#9fff8a", "#0a1a0a", 1024, 150), toneMapped: false }), [0, 5.95, 0.06], bay, false);
+      } else {
+        // The magnetron grille and the lamp behind it.
+        ctx.mesh(new THREE.PlaneGeometry(2.4, 1.4), new THREE.MeshStandardMaterial({ map: perf.clone(), roughness: 0.5, metalness: 0.4 }), [0, 5, 0.03], bay, false);
+        ctx.mesh(new THREE.PlaneGeometry(2.2, 1.2), glow("#ffe2a0", 1.8), [0, 5, 0.01], bay, false);
+      }
+    });
+    // The glass turntable: a wide disc with the roller ring under it, turning once a loop.
+    const tray = ctx.mesh(new THREE.CylinderGeometry(4.2, 4.2, 0.08, 72), mat("#cfe6ee", { rough: 0.05, metal: 0.1, opacity: 0.6 }), [0, PLINTH_TOP - 0.05, 0], ctx.world, false);
+    tray.userData.neverOcclude = true; ctx.animate(tray, { spin: { axis: "y", turns: 1 } });
+    const roller = ctx.mesh(new THREE.TorusGeometry(3.2, 0.06, 8, 64), mat("#ffffff", { rough: 0.6 }), [0, FLOOR + 0.12, 0], ctx.world, false); roller.rotation.x = Math.PI / 2; roller.userData.neverOcclude = true;
+    ctx.instanced(new THREE.SphereGeometry(0.1, 10, 8), mat("#ffffff", { rough: 0.5 }), 3, () => undefined, (p, k, d) => { const a = (k / 3) * TAU + p * TAU; d.position.set(Math.sin(a) * 3.2, FLOOR + 0.12, Math.cos(a) * 3.2); }).userData.neverOcclude = true;
+    // Steam: motes rising, warm.
+    motes(ctx, 90, "#ffffff", { inner: 1, outer: 4, low: PLINTH_TOP + 0.5, high: FLOOR + 6, glow: 0.6, size: 0.04 });
+    standard(ctx, mat("#e4e8ec", { metal: 0.5, rough: 0.4 }), "disc", brand);
+    ctx.point({ color: "#ffe2a0", intensity: 30, position: [0, 6, 0], distance: 24 });
+  },
+
+  // The ball pit. A thousand coloured balls in a padded ring, slide, foam blocks, a
+  // birthday-party ceiling of balloons. The piece floats on top like it won.
+  "Ball Pit"(ctx, brand) {
+    rotunda(ctx, {
+      radius: 11, height: 6, cove: 1.2,
+      floor: mat("#2962ff", { rough: 0.8 }),
+      wall: mat("#ffd23b", { rough: 0.8 }),
+      roof: "open",
+    });
+    skyDome(ctx, [[0, "#ff8ad0"], [0.5, "#ffd0e8"], [1, "#fff0f8"]]);
+    const colours = ["#ff3b6b", "#2962ff", "#ffd23b", "#3bff9a", "#ff8a4a", "#b85cff", "#36f5ff"];
+    // Balls: a thick instanced bed from the wall to the plinth, bobbing in whole cycles.
+    const ball = new THREE.SphereGeometry(0.22, 10, 8);
+    const seeds: number[][] = []; for (let i = 0; i < 1400; i++) seeds.push([ctx.r(), ctx.r(), ctx.r()]);
+    const im = ctx.instanced(ball, mat("#ffffff", { rough: 0.35, metal: 0 }), 1400, () => undefined, (p, i, d) => {
+      const [a, b, c] = seeds[i];
+      const rr = 3.2 + Math.sqrt(a) * 7.2, ang = b * TAU;
+      d.position.set(Math.sin(ang) * rr, FLOOR + 0.2 + c * 1.1 + Math.sin(p * TAU + i) * 0.03, Math.cos(ang) * rr);
+      d.rotation.set(i, a * 6, 0);
+    });
+    im.name = "balls";
+    for (let i = 0; i < 1400; i++) im.setColorAt(i, new THREE.Color(colours[i % colours.length]));
+    if (im.instanceColor) im.instanceColor.needsUpdate = true;
+    // Padded wall segments in alternating colours, a slide, foam blocks.
+    ctx.around(10, 10.6, (bay, i) => {
+      ctx.mesh(softBox(6.2, 2.6, 0.5, 0.25), mat(colours[i % colours.length], { rough: 0.9 }), [0, 1.3, 0.2], bay);
+      if (i === 2) { const slide = ctx.mesh(new THREE.BoxGeometry(1.4, 0.12, 6), mat("#ff8a4a", { rough: 0.4 }), [0, 2.6, 2.8], bay); slide.rotation.x = 0.55; ctx.mesh(new THREE.BoxGeometry(1.6, 1.2, 1.4), mat("#ff3b6b", { rough: 0.8 }), [0, 3.6, 0.3], bay); }
+      if (i === 6) for (let k = 0; k < 4; k++) ctx.mesh(softBox(0.9, 0.9, 0.9, 0.1), mat(colours[(k + 3) % colours.length], { rough: 0.9 }), [-1.5 + k * 1, 1.8 + (k % 2) * 0.9, 1.2], bay);
+      if (i === 8 && brand) ctx.mesh(new THREE.PlaneGeometry(3, 0.5), new THREE.MeshBasicMaterial({ map: label("“NO ADULTS”", "#111111", "#ffd23b", 1024, 170), toneMapped: false }), [0, 2.9, 0.47], bay, false);
+    });
+    // Balloons on strings, rising from the wall, bobbing.
+    const balloon = new THREE.SphereGeometry(0.35, 14, 10); balloon.scale(1, 1.2, 1);
+    ctx.instanced(balloon, mat("#ffffff", { rough: 0.25, metal: 0.1 }), 40, (i, d) => { const a = (i / 40) * TAU; d.position.set(Math.sin(a) * (9 + (i % 3)), FLOOR + 4 + (i % 4) * 0.6, Math.cos(a) * (9 + (i % 3))); }, (p, i, d) => { const a = (i / 40) * TAU; d.position.set(Math.sin(a) * (9 + (i % 3)), FLOOR + 4 + (i % 4) * 0.6 + Math.sin(p * TAU + i) * 0.15, Math.cos(a) * (9 + (i % 3))); }).name = "balloons";
+    const bim = ctx.world.getObjectByName("balloons") as THREE.InstancedMesh;
+    for (let i = 0; i < 40; i++) bim.setColorAt(i, new THREE.Color(colours[(i * 3) % colours.length]));
+    if (bim.instanceColor) bim.instanceColor.needsUpdate = true;
+    standard(ctx, mat("#ffffff", { rough: 0.6 }), "disc", brand);
+    ctx.point({ color: "#fff0f8", intensity: 20, position: [0, 5, 0], distance: 24 });
+  },
+
+  // The Moon. Tranquility Base: the regolith, the lander, the flag that does not
+  // wave, the footprints, the Earth over the horizon, and 1,800 stars. Low gravity
+  // is implied by the dust that hangs.
+  Moon(ctx, brand) {
+    stars(ctx, 1800, 0xffffff, 70, 0.12, true);
+    const ground = ctx.mesh(new THREE.CircleGeometry(60, 96), pbr("gravel_floor", { tint: "#8a8a88", repeat: [30, 30], rough: 1 }), [0, FLOOR, 0], ctx.world, false);
+    ground.rotation.x = -Math.PI / 2; ground.name = "floor"; ground.userData.neverOcclude = true;
+    // Craters: rings pressed into the ground, and boulders.
+    for (let i = 0; i < 14; i++) {
+      const a = ctx.r() * TAU, rr = 8 + ctx.r() * 40, s = 1 + ctx.r() * 4;
+      const rim = ctx.mesh(new THREE.TorusGeometry(s, s * 0.18, 8, 32), mat("#7a7a78", { rough: 1 }), [Math.sin(a) * rr, FLOOR, Math.cos(a) * rr], ctx.world, false);
+      rim.rotation.x = Math.PI / 2; rim.scale.y = 0.5; rim.userData.neverOcclude = true;
+    }
+    ctx.instanced(new THREE.DodecahedronGeometry(0.4, 0), mat("#6a6a68", { rough: 1 }), 60, (i, d) => { const a = ctx.r() * TAU, rr = 6 + ctx.r() * 40; d.position.set(Math.sin(a) * rr, FLOOR + 0.2, Math.cos(a) * rr); d.scale.set(0.5 + ctx.r() * 2, 0.4 + ctx.r(), 0.5 + ctx.r() * 2); d.rotation.set(ctx.r(), ctx.r() * TAU, 0); }, undefined, true).userData.neverOcclude = true;
+    // The lander: gold foil descent stage, silver ascent stage, four legs.
+    const foil = mat("#d4a017", { metal: 1, rough: 0.35 }), silver = mat("#c8ccd0", { metal: 0.9, rough: 0.4 });
+    const lx = Math.sin(2.2) * 11, lz = Math.cos(2.2) * 11;
+    const lander = new THREE.Group(); lander.position.set(lx, FLOOR, lz); lander.rotation.y = 2.2 + Math.PI;
+    const desc = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.6, 1.4, 8), foil); desc.position.y = 1.5; desc.castShadow = true; lander.add(desc);
+    const asc = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.6, 2.2), silver); asc.position.y = 3; asc.castShadow = true; lander.add(asc);
+    for (let k = 0; k < 4; k++) { const a = (k / 4) * TAU + Math.PI / 4; const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.4, 6), silver); leg.position.set(Math.sin(a) * 2.2, 0.9, Math.cos(a) * 2.2); leg.rotation.set(Math.cos(a) * 0.5, 0, -Math.sin(a) * 0.5); lander.add(leg); const pad = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.08, 16), foil); pad.position.set(Math.sin(a) * 2.9, 0.04, Math.cos(a) * 2.9); lander.add(pad); }
+    const dish = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 8, 0, TAU, 0, Math.PI / 2), silver); dish.position.set(0.8, 4.2, 0); dish.rotation.x = -0.6; lander.add(dish);
+    ctx.keep(lander); ctx.world.add(lander); lander.userData.neverOcclude = true;
+    // The flag, stiff on its rod, and the footprints walking from it to the plinth.
+    const fx = Math.sin(4.4) * 8.5, fz = Math.cos(4.4) * 8.5;
+    ctx.mesh(new THREE.CylinderGeometry(0.03, 0.03, 2.4, 6), silver, [fx, FLOOR + 1.2, fz]);
+    const flagTex = painted(256, 160, (g, w, h) => { g.fillStyle = "#ff6b00"; g.fillRect(0, 0, w, h); g.fillStyle = "#111"; g.font = "bold 46px Helvetica"; g.textAlign = "center"; g.fillText("“FLAG”", w / 2, h / 2 + 16); });
+    const flag = ctx.mesh(new THREE.PlaneGeometry(1.3, 0.8), new THREE.MeshStandardMaterial({ map: flagTex, side: THREE.DoubleSide, roughness: 0.9 }), [fx + 0.65, FLOOR + 2, fz], ctx.world, false); flag.rotation.y = 4.4;
+    ctx.instanced(new THREE.PlaneGeometry(0.22, 0.42), mat("#5a5a58", { rough: 1 }), 26, (i, d) => { const t = i / 26; const a = 4.4 - t * 1.1, rr = 8 - t * 4.2; d.position.set(Math.sin(a) * rr + (i % 2 ? 0.25 : -0.25), FLOOR + 0.005, Math.cos(a) * rr); d.rotation.set(-Math.PI / 2, 0, -a); }).userData.neverOcclude = true;
+    // The Earth, low on the horizon, turning once a loop.
+    const earthTex = painted(512, 256, (g, w, h) => { g.fillStyle = "#1a4aa8"; g.fillRect(0, 0, w, h); const r = seeded("earth"); g.fillStyle = "#3a8a3a"; for (let i = 0; i < 9; i++) { g.beginPath(); g.ellipse(r() * w, r() * h, 30 + r() * 70, 20 + r() * 50, r() * 3, 0, TAU); g.fill(); } g.fillStyle = "rgba(255,255,255,.75)"; for (let i = 0; i < 40; i++) { g.beginPath(); g.ellipse(r() * w, r() * h, 20 + r() * 60, 6 + r() * 12, r() * 3, 0, TAU); g.fill(); } });
+    const earth = ctx.mesh(new THREE.SphereGeometry(6, 48, 24), new THREE.MeshStandardMaterial({ map: earthTex, emissive: "#ffffff", emissiveMap: earthTex, emissiveIntensity: 0.55, roughness: 0.8 }), [Math.sin(0.9) * 50, FLOOR + 14, Math.cos(0.9) * 50], ctx.world, false);
+    earth.userData.neverOcclude = true; ctx.animate(earth, { spin: { axis: "y", turns: 1 } });
+    motes(ctx, 120, "#c8c8c0", { inner: 1, outer: 6, low: FLOOR + 0.1, high: FLOOR + 1.6, glow: 0.4, size: 0.03 });
+    standard(ctx, pbr("gravel_floor", { tint: "#8a8a88", repeat: [2, 1] }), "disc", brand);
+    if (brand) { const s = ctx.keep(ctx.mesh(new THREE.PlaneGeometry(3, 0.5), new THREE.MeshBasicMaterial({ map: label("“WE CAME IN PEACE”", "#ffffff"), transparent: true }), [lx * 0.72, FLOOR + 0.9, lz * 0.72], ctx.world, false)); s.lookAt(0, FLOOR + 0.9, 0); }
+    ctx.point({ color: "#ffffff", intensity: 10, position: [8, 3, -6], distance: 30 });
+  },
+
+  // The hall of dinosaurs. A natural history rotunda: a T. rex skeleton rearing over
+  // the piece, a sauropod neck crossing the dome, a triceratops skull, display cases,
+  // the museum light from a clerestory. Arsham's future archaeology, done honestly.
+  "Dinosaur Hall"(ctx, brand) {
+    rotunda(ctx, {
+      radius: 12, height: 11, cove: 0.2,
+      floor: pbr("marble_tiles", { tint: "#d8d0c0", repeat: [10, 10], rough: 0.5 }),
+      wall: pbr("red_sandstone_wall", { tint: "#c8a888", repeat: [5, 3] }),
+      roof: "dome", roofMat: pbr("white_stucco", { tint: "#e8e0d0", repeat: [6, 3], side: THREE.DoubleSide }),
+    });
+    const bone = mat("#e8dcc0", { rough: 0.7 });
+    const brass = mat("#c9a24a", { metal: 0.9, rough: 0.3 });
+    const skylight = ctx.mesh(new THREE.RingGeometry(7, 10.5, 96), glow("#fff6e4", 1.6), [0, FLOOR + 10.9, 0], ctx.world, false); skylight.rotation.x = Math.PI / 2; skylight.name = "skylight";
+    // A skeleton builder: spine of vertebrae along a curve, ribs hanging off it.
+    const skeleton = (pts: Array<[number, number, number]>, ribs: number, scale: number, parent: THREE.Object3D) => {
+      const curve = new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(...p)));
+      const n = Math.round(curve.getLength() / (0.32 * scale));
+      const vert = new THREE.SphereGeometry(0.17 * scale, 8, 6); vert.scale(1, 0.8, 1.3);
+      const spine = new THREE.InstancedMesh(vert, bone, n); const d = new THREE.Object3D();
+      for (let k = 0; k < n; k++) { const t = k / n; const p = curve.getPointAt(t), tan = curve.getTangentAt(t); d.position.copy(p); d.lookAt(p.clone().add(tan)); d.updateMatrix(); spine.setMatrixAt(k, d.matrix); }
+      spine.castShadow = true; parent.add(spine);
+      for (let k = 0; k < ribs; k++) {
+        const t = 0.25 + (k / ribs) * 0.4; const p = curve.getPointAt(t);
+        for (const s of [-1, 1]) { const r = new THREE.Mesh(tube([[p.x, p.y, p.z], [p.x + s * 0.5 * scale, p.y - 0.5 * scale, p.z], [p.x + s * 0.55 * scale, p.y - 1.3 * scale, p.z + 0.1], [p.x + s * 0.25 * scale, p.y - 1.9 * scale, p.z + 0.15]], 0.045 * scale, 12, 6), bone); r.castShadow = true; parent.add(r); }
+      }
+    };
+    // T. rex rearing over the piece from one bay: skull, spine, legs, tail round the wall.
+    const rex = new THREE.Group(); rex.position.set(Math.sin(0.5) * 6.5, FLOOR, Math.cos(0.5) * 6.5); rex.rotation.y = 0.5 + Math.PI;
+    skeleton([[0, 2.2, 4], [0, 3.6, 1.6], [0, 4.4, -0.4], [0, 4.2, -2.6], [0, 3.4, -4.6], [0.6, 2.6, -6.4]], 9, 1, rex);
+    const skull = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.9, 1.9), bone); skull.position.set(0, 2.3, 4.9); skull.rotation.x = 0.3; skull.castShadow = true; rex.add(skull);
+    const jaw = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.35, 1.6), bone); jaw.position.set(0, 1.6, 5); jaw.rotation.x = -0.2; rex.add(jaw);
+    for (let k = 0; k < 12; k++) { const t = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.22, 6), bone); t.position.set(-0.35 + (k % 6) * 0.14, 1.85, 4.3 + Math.floor(k / 6) * 0.7); t.rotation.x = Math.PI; rex.add(t); }
+    for (const s of [-1, 1]) { const leg = new THREE.Mesh(tube([[s * 0.5, 3.2, 0.4], [s * 0.8, 1.8, 1.0], [s * 0.7, 0.9, 0.3], [s * 0.7, 0.1, 0.9]], 0.1, 16, 8), bone); leg.castShadow = true; rex.add(leg); const foot = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.15, 0.9), bone); foot.position.set(s * 0.7, 0.07, 1.1); rex.add(foot); const arm = new THREE.Mesh(tube([[s * 0.45, 3.4, 2.6], [s * 0.6, 3.0, 3.0], [s * 0.5, 2.8, 3.3]], 0.04, 8, 6), bone); rex.add(arm); }
+    for (let k = 0; k < 3; k++) { const post = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 3.4, 6), mat("#2a2a2e", { metal: 0.7, rough: 0.5 })); post.position.set(0, 1.7, 1.2 - k * 2.6); rex.add(post); }
+    ctx.keep(rex); ctx.world.add(rex);
+    // Sauropod neck and head sweeping across the far side of the hall, high up.
+    const sauro = new THREE.Group(); sauro.position.set(Math.sin(3.6) * 9.5, FLOOR, Math.cos(3.6) * 9.5); sauro.rotation.y = 3.6 + Math.PI;
+    skeleton([[-3, 2.6, -1], [-1, 3.2, 0], [1, 3.4, 0.4], [2.6, 4.6, 1.2], [3.6, 6.4, 2.2], [4.2, 8.2, 3]], 10, 1.3, sauro);
+    const sh = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.45, 0.9), bone); sh.position.set(4.4, 8.4, 3.4); sauro.add(sh);
+    for (let k = 0; k < 4; k++) { const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.2, 2.6, 8), bone); leg.position.set(-2.2 + (k % 2) * 3, 1.3, (k < 2 ? -0.6 : 0.6)); leg.castShadow = true; sauro.add(leg); }
+    ctx.keep(sauro); ctx.world.add(sauro);
+    ctx.around(8, 11.8, (bay, i) => {
+      if (i % 2 === 0) { ctx.mesh(new THREE.BoxGeometry(2.4, 1.1, 1.2), mat("#3a2a1e", { rough: 0.7 }), [0, 0.55, 0.9], bay); ctx.mesh(new THREE.BoxGeometry(2.3, 1.4, 1.1), mat("#cfe6ee", { rough: 0.05, metal: 0.1, opacity: 0.3 }), [0, 1.8, 0.9], bay, false); const exhibit = [new THREE.DodecahedronGeometry(0.4, 1), new THREE.ConeGeometry(0.3, 0.9, 8), new THREE.TorusKnotGeometry(0.25, 0.08, 48, 8), new THREE.SphereGeometry(0.4, 12, 8)][(i / 2) % 4]; ctx.mesh(exhibit, bone, [0, 1.7, 0.9], bay); ctx.mesh(new THREE.PlaneGeometry(1.2, 0.3), new THREE.MeshBasicMaterial({ map: label(["“CRETACEOUS”", "“JURASSIC”", "“TRIASSIC”", "“HOLOCENE”"][(i / 2) % 4], "#111111", "#e8dcc0", 1024, 150), toneMapped: false }), [0, 1.2, 1.51], bay, false); }
+      else frameSlot(ctx, bay, 0, 4.6, 0.05, 2.4, 1.6, brass, "#2a2014");
+    });
+    // Triceratops skull on a plinth by the door.
+    const tx = Math.sin(5.4) * 9, tz = Math.cos(5.4) * 9;
+    ctx.mesh(new THREE.BoxGeometry(1.2, 0.9, 1.2), mat("#3a2a1e", { rough: 0.7 }), [tx, FLOOR + 0.45, tz]);
+    const tri = ctx.mesh(new THREE.SphereGeometry(0.6, 12, 8), bone, [tx, FLOOR + 1.4, tz]); tri.scale.set(1, 0.7, 1.3); tri.rotation.y = 5.4;
+    ctx.mesh(new THREE.CircleGeometry(0.9, 24), bone, [tx - Math.sin(5.4) * 0.4, FLOOR + 1.8, tz - Math.cos(5.4) * 0.4], ctx.world, false).rotation.y = 5.4;
+    for (const s of [-1, 1]) { const horn = ctx.mesh(new THREE.ConeGeometry(0.08, 0.8, 8), bone, [tx + Math.cos(5.4) * s * 0.35, FLOOR + 1.8, tz - Math.sin(5.4) * s * 0.35]); horn.rotation.x = -Math.PI / 2; horn.rotation.z = 5.4; }
+    motes(ctx, 140, "#fff2d8", { outer: 10, high: FLOOR + 9, glow: 0.7, size: 0.018 });
+    standard(ctx, pbr("marble_01", { tint: "#d8d0c0", repeat: [2, 1] }), "stepped", brand);
+    if (brand) hallmark(ctx, 11.75, 7.8, Math.PI * 1.35);
+    ctx.point({ color: "#fff6e4", intensity: 30, position: [0, 7, 0], distance: 26 });
+  },
+
+  // Birthday. A party room: streamers from the ceiling, a cake with candles that
+  // flicker, balloons, a piñata turning, a banner, confetti falling in whole cycles,
+  // presents round the plinth. Somebody turned 317.
+  Birthday(ctx, brand) {
+    rotunda(ctx, {
+      radius: 11, height: 6.5, cove: 0.2,
+      floor: pbr("herringbone_parquet", { tint: "#d8b890", repeat: [10, 10], rough: 0.5 }),
+      wall: mat("#fff0f6", { rough: 0.9 }),
+      roof: "flat", roofMat: mat("#fff8fa", { rough: 0.9 }),
+    });
+    const colours = ["#ff3b6b", "#2962ff", "#ffd23b", "#3bff9a", "#ff8a4a", "#b85cff"];
+    // Streamers: twisted ribbons from the centre of the ceiling out to the wall.
+    for (let k = 0; k < 18; k++) {
+      const a = (k / 18) * TAU, pts: Array<[number, number, number]> = [];
+      for (let s = 0; s <= 8; s++) { const t = s / 8; pts.push([Math.sin(a) * t * 10.6, FLOOR + 6.4 - Math.sin(t * Math.PI) * 1.6, Math.cos(a) * t * 10.6]); }
+      const rib = ctx.mesh(tube(pts, 0.05, 40, 4), mat(colours[k % colours.length], { rough: 0.6 }), [0, 0, 0], ctx.world, false); rib.name = "roof";
+    }
+    const balloon = new THREE.SphereGeometry(0.34, 14, 10); balloon.scale(1, 1.25, 1);
+    const bim = ctx.instanced(balloon, mat("#ffffff", { rough: 0.2, metal: 0.1 }), 36, () => undefined, (p, i, d) => { const a = (i / 36) * TAU + 0.1, rr = 7.5 + (i % 3) * 1.2; d.position.set(Math.sin(a) * rr, FLOOR + 5.4 - (i % 4) * 0.4 + Math.sin(p * TAU + i) * 0.12, Math.cos(a) * rr); });
+    bim.name = "roof"; for (let i = 0; i < 36; i++) bim.setColorAt(i, new THREE.Color(colours[i % colours.length])); if (bim.instanceColor) bim.instanceColor.needsUpdate = true;
+    // Confetti that falls and wraps, closing the loop.
+    const flake = new THREE.PlaneGeometry(0.09, 0.06);
+    const cim = ctx.instanced(flake, new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 0.5, side: THREE.DoubleSide }), 500, () => undefined, (p, i, d) => { const r = Math.sqrt((i * 0.618) % 1) * 10, a = i * 2.399; const fall = (p * (1 + (i % 2)) + ((i * 0.37) % 1)) % 1; d.position.set(Math.sin(a) * r, FLOOR + 6.3 - fall * 6.4, Math.cos(a) * r); d.rotation.set(p * TAU * 2 + i, i, p * TAU * 3); });
+    for (let i = 0; i < 500; i++) cim.setColorAt(i, new THREE.Color(colours[i % colours.length])); if (cim.instanceColor) cim.instanceColor.needsUpdate = true;
+    cim.userData.neverOcclude = true;
+    ctx.around(8, 10.6, (bay, i) => {
+      if (i === 0) {
+        // The cake table.
+        ctx.mesh(new THREE.BoxGeometry(3, 0.08, 1.2), mat("#ffffff", { rough: 0.6 }), [0, 0.9, 1], bay);
+        for (const x of [-1.3, 1.3]) ctx.mesh(new THREE.BoxGeometry(0.1, 0.9, 0.1), mat("#8a6a4a", { rough: 0.8 }), [x, 0.45, 1], bay);
+        for (let t = 0; t < 3; t++) ctx.mesh(new THREE.CylinderGeometry(0.6 - t * 0.17, 0.6 - t * 0.17, 0.3, 32), mat(["#ff8ad0", "#fff0f6", "#ff8ad0"][t], { rough: 0.7 }), [0, 1.09 + t * 0.3, 1], bay);
+        for (let c = 0; c < 8; c++) { const a = (c / 8) * TAU; ctx.mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.25, 6), mat(colours[c % colours.length], { rough: 0.6 }), [Math.sin(a) * 0.22, 2.1, 1 + Math.cos(a) * 0.22], bay, false); const flame = ctx.mesh(new THREE.SphereGeometry(0.035, 8, 6), glow("#ffd27a", 3.2), [Math.sin(a) * 0.22, 2.26, 1 + Math.cos(a) * 0.22], bay, false); ctx.animate(flame, { pulse: { base: 3, amp: 1.2, cycles: 5 + c, phase: c / 8 } }); }
+        if (brand) ctx.mesh(new THREE.PlaneGeometry(4.2, 0.6), new THREE.MeshBasicMaterial({ map: label("“HAPPY BIRTHDAY”", "#ffffff", "#ff3b6b", 1024, 170), toneMapped: false }), [0, 3.8, 0.05], bay, false);
+      } else if (i === 4) {
+        // The piñata, a star, turning on its string.
+        ctx.mesh(new THREE.CylinderGeometry(0.01, 0.01, 2.2, 4), mat("#111111", { rough: 0.9 }), [0, 5.3, 2.6], bay, false);
+        const star = ctx.mesh(new THREE.OctahedronGeometry(0.7, 0), mat("#ffd23b", { rough: 0.8 }), [0, 4.2, 2.6], bay); star.scale.set(1, 0.7, 1); ctx.animate(star, { spin: { axis: "y", turns: 1 }, sway: { axis: "z", amp: 0.15, cycles: 2 } });
+        for (let k = 0; k < 6; k++) ctx.mesh(new THREE.PlaneGeometry(0.12, 0.6), mat(colours[k], { rough: 0.9, side: THREE.DoubleSide }), [Math.sin(k) * 0.5, 3.4, 2.6 + Math.cos(k) * 0.5], bay, false);
+        frameSlot(ctx, bay, 0, 3, 0.05, 1.8, 1.2, mat("#ffffff", { rough: 0.5 }), "#fff0f6");
+      } else frameSlot(ctx, bay, 0, 3 + (i % 2) * 0.6, 0.05, 1.6, 1.1, mat(colours[i % colours.length], { rough: 0.6 }), "#fff0f6");
+    });
+    // Presents round the plinth, outside the camera's ring.
+    for (let k = 0; k < 9; k++) { const a = (k / 9) * TAU + 0.2, rr = 8.2 + (k % 2) * 0.8, s = 0.5 + (k % 3) * 0.2; const box = ctx.mesh(new THREE.BoxGeometry(s, s, s), mat(colours[k % colours.length], { rough: 0.6 }), [Math.sin(a) * rr, FLOOR + s / 2, Math.cos(a) * rr]); box.rotation.y = k; ctx.mesh(new THREE.BoxGeometry(s * 1.02, s * 1.02, 0.08), mat("#ffffff", { rough: 0.5 }), [Math.sin(a) * rr, FLOOR + s / 2, Math.cos(a) * rr]).rotation.y = k; ctx.mesh(new THREE.BoxGeometry(0.08, s * 1.02, s * 1.02), mat("#ffffff", { rough: 0.5 }), [Math.sin(a) * rr, FLOOR + s / 2, Math.cos(a) * rr]).rotation.y = k; }
+    standard(ctx, mat("#ffffff", { rough: 0.5 }), "drum", brand);
+    if (brand) hallmark(ctx, 10.6, 5.2, Math.PI * 1.1);
+    ctx.point({ color: "#fff0f6", intensity: 26, position: [0, 5, 0], distance: 22 });
+  },
+
+  // The volcano lair. A hollowed cone: basalt walls, a lava moat round the plinth,
+  // a control room with blinking consoles, a rocket on its gantry, a monorail, the
+  // world map, and a chair that swivels to face the camera. Hadid does Ken Adam.
+  "Volcano Lair"(ctx, brand) {
+    const lava = surface("caustic", "#ff4a00", "#ffe08a", "lava");
+    rotunda(ctx, {
+      radius: 11.5, height: 12, cove: 0.5,
+      floor: pbr("brushed_concrete_03", { tint: "#6a6a70", repeat: [10, 10], rough: 0.8 }),
+      wall: pbr("mossy_rock", { tint: "#4a4a50", repeat: [6, 4] }),
+      roof: "coffered", roofMat: pbr("mossy_rock", { tint: "#3a3a40", repeat: [6, 4], side: THREE.DoubleSide }), oculus: 3,
+    });
+    // The crater sky through the oculus.
+    skyDome(ctx, [[0, "#1a0a2a"], [0.5, "#3a1a3a"], [1, "#0a0a14"]]);
+    stars(ctx, 600, 0xffd0c0, 60, 0.1, true);
+    // Lava moat: a ring of scrolling caustic fire round the plinth island, with a grate bridge.
+    const moat = ctx.mesh(new THREE.RingGeometry(3.4, 5.6, 96), new THREE.MeshStandardMaterial({ map: lava.map, emissive: "#ff6a00", emissiveMap: lava.map, emissiveIntensity: 2.2, roughness: 0.9 }), [0, FLOOR - 0.6, 0], ctx.world, false);
+    moat.rotation.x = -Math.PI / 2; moat.userData.neverOcclude = true; (moat.material as THREE.MeshStandardMaterial).map!.repeat.set(4, 4); ctx.animate(moat, { scroll: { u: 1, v: -1 } });
+    for (const rr of [3.4, 5.6]) ctx.mesh(new THREE.CylinderGeometry(rr, rr, 0.6, 96, 1, true), pbr("mossy_rock", { tint: "#2a2a30", repeat: [12, 1], side: THREE.DoubleSide }), [0, FLOOR - 0.3, 0], ctx.world, false).userData.neverOcclude = true;
+    const bridge = ctx.mesh(new THREE.BoxGeometry(2.6, 0.08, 1.2), mat("#4a4a52", { metal: 0.8, rough: 0.4 }), [Math.sin(0.4) * 4.5, FLOOR - 0.02, Math.cos(0.4) * 4.5], ctx.world, false); bridge.rotation.y = 0.4 + Math.PI / 2; bridge.userData.neverOcclude = true;
+    const steel = mat("#8a8e96", { metal: 0.9, rough: 0.35 });
+    ctx.around(8, 11.1, (bay, i) => {
+      if (i === 0) {
+        // The rocket on its gantry.
+        ctx.mesh(new THREE.CylinderGeometry(0.7, 0.9, 7, 24), mat("#e8e8ec", { metal: 0.6, rough: 0.35 }), [0, 4.4, 1.8], bay);
+        ctx.mesh(new THREE.ConeGeometry(0.7, 1.8, 24), mat("#ff3b3b", { rough: 0.4 }), [0, 8.8, 1.8], bay);
+        for (let k = 0; k < 3; k++) { const a = (k / 3) * TAU; const fin = ctx.mesh(new THREE.BoxGeometry(0.1, 1.6, 1.2), mat("#ff3b3b", { rough: 0.4 }), [Math.sin(a) * 1.1, 1.6, 1.8 + Math.cos(a) * 1.1], bay); fin.rotation.y = a; }
+        ctx.mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.4, 16), glow("#ff8a4a", 1.4), [0, 0.8, 1.8], bay, false);
+        for (let k = 0; k < 8; k++) ctx.mesh(new THREE.BoxGeometry(2.6, 0.08, 0.08), steel, [-1.6, 1 + k * 1.1, 1.8 + (k % 2 ? 1 : -1) * 0.8], bay, false);
+        for (const z of [1, 2.6]) ctx.mesh(new THREE.BoxGeometry(0.12, 9.5, 0.12), steel, [-2.9, 4.75, z], bay);
+      } else if (i === 4) {
+        // The control room: a world map, consoles with blinking lights, the chair.
+        const map = painted(1024, 512, (g, w, h) => { g.fillStyle = "#0a1a2a"; g.fillRect(0, 0, w, h); const r = seeded("lair-map"); g.fillStyle = "#2a6a4a"; for (let k = 0; k < 14; k++) { g.beginPath(); g.ellipse(r() * w, r() * h, 40 + r() * 120, 30 + r() * 70, r() * 3, 0, TAU); g.fill(); } g.strokeStyle = "#3aa0ff"; g.lineWidth = 2; for (let x = 0; x < w; x += 64) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke(); } for (let y = 0; y < h; y += 64) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); } g.fillStyle = "#ff3b3b"; for (let k = 0; k < 6; k++) { g.beginPath(); g.arc(r() * w, r() * h, 8, 0, TAU); g.fill(); } });
+        ctx.mesh(new THREE.PlaneGeometry(6, 3), new THREE.MeshStandardMaterial({ map, emissive: "#ffffff", emissiveMap: map, emissiveIntensity: 1.2, roughness: 0.5 }), [0, 4.6, 0.1], bay, false);
+        for (let k = 0; k < 3; k++) { const x = -2 + k * 2; ctx.mesh(new THREE.BoxGeometry(1.8, 1, 0.9), mat("#3a3a44", { rough: 0.4, metal: 0.4 }), [x, 0.5, 1.4], bay); const top = ctx.mesh(new THREE.BoxGeometry(1.8, 0.06, 0.9), mat("#2a2a30", { rough: 0.5 }), [x, 1.03, 1.4], bay, false); top.rotation.x = 0.2; for (let b = 0; b < 8; b++) { const led = ctx.mesh(new THREE.BoxGeometry(0.1, 0.03, 0.1), glow(["#ff3b3b", "#3bff9a", "#ffd23b"][b % 3], 2.4), [x - 0.7 + (b % 4) * 0.45, 1.08 + Math.floor(b / 4) * 0.08, 1.2 + Math.floor(b / 4) * 0.35], bay, false); ctx.animate(led, { pulse: { base: 2, amp: 2, cycles: 1 + ((b + k) % 4), phase: (b * 0.13 + k * 0.3) % 1 } }); } }
+        const chair = ctx.mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.12, 24), mat("#111111", { rough: 0.5 }), [0, 0.5, 3.2], bay); ctx.mesh(new THREE.CylinderGeometry(0.06, 0.3, 0.5, 12), steel, [0, 0.25, 3.2], bay);
+        const back = ctx.mesh(new THREE.BoxGeometry(1, 1.4, 0.15), mat("#111111", { rough: 0.5 }), [0, 1.2, 3.65], bay); ctx.animate(back, { sway: { axis: "y", amp: 0.5, cycles: 1 } }); ctx.animate(chair, { sway: { axis: "y", amp: 0.5, cycles: 1 } });
+        if (brand) ctx.mesh(new THREE.PlaneGeometry(3, 0.42), new THREE.MeshBasicMaterial({ map: label("“DO NOT PRESS”", "#ff3b3b", "#111111", 1024, 150), toneMapped: false }), [0, 2.6, 0.12], bay, false);
+      } else if (i === 2 || i === 6) {
+        // Monorail tunnel mouths with a car passing once a loop.
+        const { frame, fill } = archGeometry(3, 3.4, "round", 0.4, 0.5); ctx.mesh(frame, steel, [0, 0, -0.1], bay, false); ctx.mesh(fill, mat("#06060a", { rough: 1 }), [0, 0, 0.02], bay, false);
+        ctx.mesh(new THREE.BoxGeometry(2.6, 0.2, 0.3), steel, [0, 2.6, 0.3], bay, false);
+      } else frameSlot(ctx, bay, 0, 4, 0.08, 2, 1.4, steel, "#1a1a20");
+    });
+    ctx.instanced(softBox(2.4, 1, 1, 0.2), mat("#e8e8ec", { metal: 0.6, rough: 0.35 }), 1, () => undefined, (p, _i, d) => { const a = 1.57 + (0.5 - 0.5 * Math.cos(p * TAU)) * Math.PI; const rr = 10.4; d.position.set(Math.sin(a) * rr, FLOOR + 3.2, Math.cos(a) * rr); d.rotation.y = a + Math.PI / 2; });
+    // Lava glow motes and the hanging lamps.
+    motes(ctx, 100, "#ff8a3a", { inner: 3.5, outer: 6, low: FLOOR - 0.3, high: FLOOR + 2.5, glow: 1.4, size: 0.025 });
+    for (let k = 0; k < 6; k++) { const a = (k / 6) * TAU + 0.3; ctx.mesh(new THREE.CylinderGeometry(0.01, 0.01, 4, 4), steel, [Math.sin(a) * 7.5, FLOOR + 9.5, Math.cos(a) * 7.5], ctx.world, false).name = "chandelier"; ctx.mesh(new THREE.ConeGeometry(0.5, 0.4, 16, 1, true), steel, [Math.sin(a) * 7.5, FLOOR + 7.5, Math.cos(a) * 7.5], ctx.world, false).name = "chandelier"; ctx.mesh(new THREE.SphereGeometry(0.1, 8, 6), glow("#ffd0a0", 2.6), [Math.sin(a) * 7.5, FLOOR + 7.35, Math.cos(a) * 7.5], ctx.world, false).name = "chandelier"; }
+    standard(ctx, pbr("brushed_concrete_03", { tint: "#5a5a60", repeat: [2, 1] }), "stepped", brand);
+    if (brand) hallmark(ctx, 11.05, 7.2, Math.PI * 1.6);
+    ctx.point({ color: "#ff6a00", intensity: 40, position: [0, -1, 0], distance: 14 });
+    ctx.point({ color: "#9fb4ff", intensity: 18, position: [-7, 6, 5], distance: 24 });
   },
 };
 

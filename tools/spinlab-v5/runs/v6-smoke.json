@@ -1,0 +1,17 @@
+{
+ "outDir": "v6-smoke-out",
+ "defaults": { "width": 640, "height": 640, "frames": 36, "fps": 12, "maxSize": 480 },
+ "jobs": [
+  { "out": "type__diner__turntable.gif", "move": "turntable", "scene": "Diner", "text": "SPIN\nLAB", "forge": { "material": "chrome", "depth": 1.4 }, "saveGlb": true },
+  { "out": "svg__bodega__orbit.gif", "move": "orbit", "scene": "Bodega", "svg": "smoke.svg", "forge": { "material": "neon" } },
+  { "out": "horse__laundromat__hero__wrap-drape.gif", "move": "hero", "scene": "Laundromat", "library": "tds_horse", "wrap": { "art": "/Users/degens/Documents/Claude/Projects/ARCHITECT/marfa-light-observatory/assets/clock-07-blossom-binary.jpg", "mode": "sphere", "treatment": "drape" }, "saveGlb": true },
+  { "out": "whale__subway__low__fx-vhs.gif", "move": "low", "scene": "Subway Car", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb", "fx": [ { "id": "vhs", "params": {} }, { "id": "rgbshift", "params": { "amt": 0.01 } } ] },
+  { "out": "suit__microwave__turntable.gif", "move": "turntable", "scene": "Microwave", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb" },
+  { "out": "asteroid__ballpit__crane__fx-piece.gif", "move": "crane", "scene": "Ball Pit", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/1999-rq36-asteroid__wrapped-in__garden-daylight.glb", "fx": [ { "id": "kaleido", "params": { "sides": 8, "spin": 1 }, "target": "piece" } ] },
+  { "out": "hubble__moon__orbit.gif", "move": "orbit", "scene": "Moon", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_hubble-25th-anniversary-model__wrapped-in__looking-glass.glb" },
+  { "out": "lib__dinosaur__hero.gif", "move": "hero", "scene": "Dinosaur Hall", "library": "nmnhpaleo_mammuthus-primigenius-blumbach" },
+  { "out": "whale__birthday__hero__fx-halftone.gif", "move": "hero", "scene": "Birthday", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/ph_bronze_whale_statue__wrapped-in__melting.glb", "fx": [ { "id": "halftone", "params": {}, "target": "piece" } ] },
+  { "out": "suit__volcano__crane.gif", "move": "crane", "scene": "Volcano Lair", "glb": "/Users/degens/Documents/Claude/Projects/ARCHITECT/wrapped-archive/assets/mint/nasa_z2-spacesuit__wrapped-in__tokenized-garbage-no-09.glb", "poster": true },
+  { "out": "wrappedlib__casino__orbit.gif", "move": "orbit", "scene": "Casino", "library": "wrapped:1999-rq36-asteroid__wrapped-in__garden-daylight" }
+ ]
+}

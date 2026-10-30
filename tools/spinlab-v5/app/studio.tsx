@@ -24,6 +24,13 @@ import worldTone from "./world-tone.json";
 const calibration = worldTone as Record<string, { luma?: number; exposure?: number }>;
 import { fileToDataUrl, loadLocalProject, saveLocalProject, type Lens, type Look, type SavedProject } from "./persistence";
 import { cameraDollyFactor, cameraHeightFactor, frameDistance, STUDIO_MOVES } from "./token-traits.mjs";
+import { svgToGroup, textToGroup, groupToGLB, decimateGroup, FORGE_DEFAULTS, FORGE_MATERIALS, TYPE_DEFAULTS, type ForgeOptions, type TypeOptions } from "./forge";
+import { artTexture, wrapGroup, WRAP_DEFAULTS, type WrapOptions } from "./wrap";
+import { FX, fxById, fxDefaults, fxRandom, MoshPass, STAGE_NAMES, type FxInstance } from "./mosh";
+
+type Tool = "worlds" | "library" | "forge" | "wrap" | "fx";
+type LibraryItem = { key: string; label: string; source: string; credit: string; license: string; url: string; thumb: string; bytes?: number; tris?: number; kind: "museum" | "wrapped" };
+type LibraryManifest = { museum: LibraryItem[]; wrapped: LibraryItem[] };
 
 type Ratio = "1:1" | "9:16" | "16:9";
 export type CameraMove = "orbit" | "overhead" | "hero" | "low" | "crane" | "turntable";
@@ -185,6 +192,8 @@ export function Studio() {
   const photoRef = useRef<HTMLInputElement>(null);
   const projectRef = useRef<HTMLInputElement>(null);
   const queueRef = useRef<HTMLInputElement>(null);
+  const svgRef = useRef<HTMLInputElement>(null);
+  const artFileRef = useRef<HTMLInputElement>(null);
   const hydratedRef = useRef(false);
   const stepFrameRef = useRef<((delta: number, elapsed: number, advance: boolean) => void) | null>(null);
   const resizeRef = useRef<((scale?: number) => void) | null>(null);
@@ -208,6 +217,9 @@ export function Studio() {
     bokeh: BokehPass;
     dofPass: SolidOnlyPass;
     lens: ShaderPass;
+    fxPasses: MoshPass[];
+    maskTarget: THREE.WebGLRenderTarget;
+    maskMaterial: THREE.MeshBasicMaterial;
     rig: { hemi: THREE.HemisphereLight; key: THREE.DirectionalLight; rim: THREE.DirectionalLight };
     pmrem: THREE.PMREMGenerator;
     probes: Map<string, THREE.WebGLRenderTarget>;
@@ -256,6 +268,27 @@ export function Studio() {
   const [spin, setSpin] = useState(false);
   const [float, setFloat] = useState(true);
   const [search, setSearch] = useState("");
+  const [tool, setTool] = useState<Tool>("worlds");
+  // V6 forge: the last source, so sliders re-forge it live.
+  const forgeSourceRef = useRef<{ kind: "svg"; svg: string; name: string } | { kind: "text"; text: string } | null>(null);
+  const [forge, setForge] = useState<ForgeOptions>({ ...FORGE_DEFAULTS });
+  const [typeText, setTypeText] = useState("SPIN\nLAB");
+  const [typeFont, setTypeFont] = useState(TYPE_DEFAULTS.font);
+  // V6 wrap: the unwrapped piece is kept so a wrap can be redone or undone.
+  const unwrappedRef = useRef<THREE.Object3D | null>(null);
+  const artRef = useRef<{ tex: THREE.Texture; canvas: HTMLCanvasElement; name: string } | null>(null);
+  const [artName, setArtName] = useState<string | null>(null);
+  const [wrapOptions, setWrapOptions] = useState<WrapOptions>({ ...WRAP_DEFAULTS });
+  const [wrapped, setWrapped] = useState(false);
+  // V6 FX: MOSH LAB effects stacked on the frame.
+  const [fx, setFx] = useState<FxInstance[]>([]);
+  const [fxPick, setFxPick] = useState(FX[0]?.id ?? "");
+  // V6 library.
+  const [library, setLibrary] = useState<LibraryManifest | null>(null);
+  const [libraryTab, setLibraryTab] = useState<"museum" | "wrapped">("museum");
+  const [librarySearch, setLibrarySearch] = useState("");
+  const [libraryKey, setLibraryKey] = useState<string | null>(null);
+  const [draggingTool, setDraggingTool] = useState<"" | "svg" | "art">("");
   const [voice, setVoice] = useState<"All" | "Arsham" | "Hadid" | "Wright" | "Abloh" | "Rooms" | "Voids">("All");
 
   const worldNames = useMemo(() => Object.keys(sceneMeta) as SceneName[], []);
@@ -428,6 +461,11 @@ export function Studio() {
     composer.addPass(new OutputPass());
     const lens = new ShaderPass(LENS_SHADER);
     composer.addPass(lens);
+    // MOSH LAB effects are inserted between OutputPass and the lens pass, in display space,
+    // which is where MOSH LAB itself runs them. A mask of the piece lets an effect target
+    // the piece alone.
+    const maskTarget = new THREE.WebGLRenderTarget(1, 1);
+    const maskMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
     const asset = new THREE.Group();
     const world = new THREE.Group();
@@ -466,6 +504,8 @@ export function Studio() {
       composer.setSize(w, h);
       bloom.resolution.set(w / 2, h / 2);
       lens.uniforms.resolution.value.set(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
+      maskTarget.setSize(Math.max(1, Math.round(w * renderer.getPixelRatio() / 2)), Math.max(1, Math.round(h * renderer.getPixelRatio() / 2)));
+      engine.current?.fxPasses.forEach((pass) => pass.setSize(w * renderer.getPixelRatio(), h * renderer.getPixelRatio()));
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       gtao.setSize(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
@@ -525,6 +565,20 @@ export function Studio() {
       });
       engine.current?.mixer?.update(delta);
       renderer.info.reset();
+      const passes = engine.current?.fxPasses ?? [];
+      if (passes.length) {
+        const needMask = passes.some((pass) => pass.target === "piece");
+        if (needMask) {
+          // The piece alone, white on black, for effects that target it.
+          const keepBackground = scene.background, keepFog = scene.fog;
+          world.visible = false; contact.visible = false;
+          scene.background = new THREE.Color(0x000000); scene.fog = null; scene.overrideMaterial = maskMaterial;
+          renderer.setRenderTarget(maskTarget); renderer.clear(); renderer.render(scene, camera); renderer.setRenderTarget(null);
+          scene.overrideMaterial = null; scene.background = keepBackground; scene.fog = keepFog;
+          world.visible = true; contact.visible = asset.visible;
+        }
+        for (const pass of passes) { pass.setPhase(phase); pass.setMask(needMask ? maskTarget.texture : null); }
+      }
       composer.render();
     };
     stepFrameRef.current = stepFrame;
@@ -534,7 +588,7 @@ export function Studio() {
     };
     engine.current = {
       renderer, scene, camera, asset, world, clock, raycaster, occluded, raf: requestAnimationFrame(loop),
-      composer, bloom, gtao, aoPass, bokeh, dofPass, lens, rig: { hemi, key, rim }, pmrem, probes: new Map(), contact, exposure: 1,
+      composer, bloom, gtao, aoPass, bokeh, dofPass, lens, fxPasses: [], maskTarget, maskMaterial, rig: { hemi, key, rim }, pmrem, probes: new Map(), contact, exposure: 1,
     };
 
     return () => {
@@ -543,6 +597,8 @@ export function Studio() {
       disposeWorld(world);
       engine.current?.probes.forEach((probe) => probe.dispose());
       composer.dispose();
+      engine.current?.fxPasses.forEach((pass) => pass.dispose());
+      maskTarget.dispose();
       gtao.dispose();
       pmrem.dispose();
       renderer.dispose();
@@ -580,6 +636,24 @@ export function Studio() {
     brandRef.current = brand;
     applyWorld(sceneName);
   }, [sceneName, brand, applyWorld]);
+
+  // The FX chain: one MoshPass per instance, inserted before the lens pass in order.
+  useEffect(() => {
+    const current = engine.current;
+    if (!current) return;
+    for (const pass of current.fxPasses) { current.composer.removePass(pass); pass.dispose(); }
+    current.fxPasses = [];
+    const at = current.composer.passes.indexOf(current.lens);
+    const size = current.renderer.getSize(new THREE.Vector2()).multiplyScalar(current.renderer.getPixelRatio());
+    fx.forEach((instance, i) => {
+      const def = fxById(instance.id);
+      if (!def) return;
+      const pass = new MoshPass(def, instance.params, instance.target ?? "frame");
+      pass.setSize(size.x, size.y);
+      current.composer.insertPass(pass, at + i);
+      current.fxPasses.push(pass);
+    });
+  }, [fx]);
 
   useEffect(() => {
     loadLocalProject().then((project) => {
@@ -634,7 +708,7 @@ export function Studio() {
   const saveProjectFile = useCallback(() => {
     const project = projectNow();
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    download(new Blob([JSON.stringify(project)], { type: "application/json" }), `Spinlab-V5-${stamp}.spinlab.json`);
+    download(new Blob([JSON.stringify(project)], { type: "application/json" }), `Spinlab-V6-${stamp}.spinlab.json`);
     setNotice("New permanent project file saved");
   }, [projectNow]);
 
@@ -780,10 +854,140 @@ export function Studio() {
     return { radius: distance, center: center.toArray(), size: size.toArray(), trimmed: bounds.trimmed };
   }, []);
 
+  // Put a group on the plinth: normalise on the trimmed bounds, stand it on its lowest
+  // point, frame it. Shared by GLB loading, the forge, the wrap and the library.
+  const placePiece = useCallback((model: THREE.Object3D, name: string, info: string) => {
+    const current = engine.current;
+    if (!current) return;
+    current.mixer?.stopAllAction(); current.mixer = undefined;
+    current.asset.traverse((node) => { if (node instanceof THREE.Mesh) { node.geometry?.dispose(); (Array.isArray(node.material) ? node.material : [node.material]).forEach((m) => m?.dispose()); } });
+    current.asset.clear();
+    model.traverse((node) => { if (node instanceof THREE.Mesh) { node.castShadow = true; node.receiveShadow = true; } });
+    model.updateMatrixWorld(true);
+    const bounds = pieceBounds(model);
+    if (!bounds) throw new Error("Nothing visible to place");
+    const { size, center, min } = bounds;
+    const scale = 3.45 / (Math.max(size.x, size.y, size.z) || 1);
+    model.scale.multiplyScalar(scale);
+    model.position.set(-center.x * scale, -min.y * scale - 1.78, -center.z * scale);
+    model.updateMatrixWorld(true);
+    current.asset.add(model);
+    frameAsset(fillRef.current, elevationRef.current);
+    setAssetName(name);
+    setAssetInfo(info + (bounds.trimmed ? " · framed on the body" : ""));
+  }, [frameAsset]);
+
+  const forgeNow = useCallback((options: ForgeOptions, source = forgeSourceRef.current, font = typeFont) => {
+    if (!source) return;
+    try {
+      const group = source.kind === "svg" ? svgToGroup(source.svg, options) : textToGroup(source.text, { ...options, font } as Partial<TypeOptions>);
+      unwrappedRef.current = null; setWrapped(false);
+      let tris = 0; group.traverse((o) => { if (o instanceof THREE.Mesh) tris += (o.geometry.index ? o.geometry.index.count : o.geometry.attributes.position.count) / 3; });
+      placePiece(group, source.kind === "svg" ? source.name.replace(/\.svg$/i, "") : source.text.replace(/\s+/g, " ").slice(0, 24), `${source.kind === "svg" ? "SVG forged" : "Type forged"} · ${group.children.length} shapes · ${Math.round(tris / 1000)}k tris`);
+      setNotice(source.kind === "svg" ? "SVG forged into 3D" : "Type forged into 3D");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message.slice(0, 64) : "Forge failed");
+    }
+  }, [placePiece, typeFont]);
+
+  const loadSVGText = useCallback((svg: string, name: string, options?: Partial<ForgeOptions>) => {
+    forgeSourceRef.current = { kind: "svg", svg, name };
+    const next = { ...forge, ...(options ?? {}) };
+    if (options) setForge(next);
+    forgeNow(next, forgeSourceRef.current);
+  }, [forge, forgeNow]);
+
+  const loadType = useCallback((text: string, options?: Partial<ForgeOptions>, font?: string) => {
+    forgeSourceRef.current = { kind: "text", text };
+    const next = { ...forge, ...(options ?? {}) };
+    if (options) setForge(next);
+    forgeNow(next, forgeSourceRef.current, font ?? typeFont);
+  }, [forge, forgeNow, typeFont]);
+
+  // Wrap the piece in the loaded art. The unwrapped original is kept for UNWRAP.
+  const wrapNow = useCallback((options: WrapOptions = wrapOptions) => {
+    const current = engine.current, art = artRef.current;
+    if (!current || !art) { setNotice("Drop a painting first"); return; }
+    const source = unwrappedRef.current ?? current.asset.children[0];
+    if (!source) { setNotice("Nothing on the plinth to wrap"); return; }
+    if (!unwrappedRef.current) unwrappedRef.current = source;
+    try {
+      const copy = source.clone(true);
+      // The source keeps its placement; strip it so placePiece can normalise the copy afresh.
+      copy.position.set(0, 0, 0); copy.scale.set(1, 1, 1); copy.rotation.set(0, 0, 0);
+      const result = wrapGroup(copy, art, options);
+      placePiece(result, `${assetName.replace(/ · wrapped.*$/, "")} · wrapped in ${art.name}`, `${options.mode} projection · ${options.treatment}${options.tiles !== 1 ? ` · ${options.tiles}x tiles` : ""}`);
+      setWrapped(true);
+      setNotice("Wrapped");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message.slice(0, 64) : "Wrap failed");
+    }
+  }, [wrapOptions, placePiece, assetName]);
+
+  const unwrapNow = useCallback(() => {
+    const source = unwrappedRef.current;
+    if (!source) return;
+    unwrappedRef.current = null;
+    source.position.set(0, 0, 0); source.scale.set(1, 1, 1); source.rotation.set(0, 0, 0);
+    placePiece(source, assetName.replace(/ · wrapped.*$/, ""), "Unwrapped");
+    setWrapped(false);
+    setNotice("Unwrapped");
+  }, [placePiece, assetName]);
+
+  const loadArt = useCallback(async (file: File | Blob, name: string) => {
+    try {
+      artRef.current?.tex.dispose();
+      const art = await artTexture(file);
+      artRef.current = { ...art, name };
+      setArtName(name);
+      setNotice(`Painting loaded · ${art.canvas.width}×${art.canvas.height}`);
+    } catch { setNotice("That image could not be read"); }
+  }, []);
+
+  const exportPieceGLB = useCallback(async () => {
+    const current = engine.current;
+    if (!current) throw new Error("engine not ready");
+    const bytes = await groupToGLB(current.asset);
+    return bytes;
+  }, []);
+
+  const saveGLB = async () => {
+    try {
+      const bytes = await exportPieceGLB();
+      download(new Blob([bytes], { type: "model/gltf-binary" }), `${assetName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "piece"}.spinlab.glb`);
+      setNotice(`GLB saved · ${(bytes.byteLength / 1024 / 1024).toFixed(1)} MB`);
+    } catch (error) { setNotice(error instanceof Error ? error.message.slice(0, 64) : "GLB export failed"); }
+  };
+
+  // The library: museum scans decimated into public/library, and the 600 WRAPPED pieces
+  // from their IPFS pins. The manifest is written by electron/library.cjs.
+  useEffect(() => {
+    const rootPath = window.location.protocol === "file:" ? "./" : "./";
+    fetch(`${rootPath}library/manifest.json`).then((r) => (r.ok ? r.json() : null)).then((m) => { if (m) setLibrary(m as LibraryManifest); }).catch(() => undefined);
+  }, []);
+
+  const loadLibraryItem = useCallback(async (item: LibraryItem) => {
+    setNotice(`Fetching ${item.label}…`);
+    setLibraryKey(item.key);
+    try {
+      const response = await fetch(item.url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const bytes = await response.arrayBuffer();
+      unwrappedRef.current = null; setWrapped(false);
+      await loadFilesRef.current?.([new File([bytes], `${item.key}.glb`, { type: "model/gltf-binary" })]);
+      setAssetName(item.label);
+      setAssetInfo(`${item.source} · ${item.license}${item.credit ? ` · ${item.credit}` : ""}`);
+      setNotice(`${item.label} loaded from the library`);
+    } catch (error) { setNotice(error instanceof Error ? `Library: ${error.message.slice(0, 50)}` : "Library load failed"); }
+  }, []);
+  const loadFilesRef = useRef<((files: FileList | File[]) => Promise<void>) | null>(null);
+
   const loadFiles = useCallback(async (incoming: FileList | File[]) => {
     const files = Array.from(incoming);
     const file = files.find((item) => item.name.toLowerCase().endsWith(".glb"));
-    if (!file) { setNotice("Choose a .glb file"); return; }
+    const svg = files.find((item) => item.name.toLowerCase().endsWith(".svg"));
+    if (!file && svg) { loadSVGText(await svg.text(), svg.name); setTool("forge"); return; }
+    if (!file) { setNotice("Choose a .glb or .svg file"); return; }
     const current = engine.current;
     if (!current) return;
     setNotice("Decoding model, materials & textures…");
@@ -806,14 +1010,6 @@ export function Studio() {
     try {
       const buffer = await file.arrayBuffer();
       const gltf = await loader.parseAsync(buffer, "");
-      current.mixer?.stopAllAction();
-      current.asset.traverse((node) => {
-        if (!(node instanceof THREE.Mesh)) return;
-        node.geometry?.dispose();
-        const materials = Array.isArray(node.material) ? node.material : [node.material];
-        materials.forEach((material) => material?.dispose());
-      });
-      current.asset.clear();
       const model = gltf.scene;
       let meshCount = 0;
       let textureCount = 0;
@@ -839,24 +1035,12 @@ export function Studio() {
         });
       });
       model.updateMatrixWorld(true);
-      // Normalise on the trimmed bounds, so a piece with thin booms is sized by its body,
-      // and stand it on its true lowest point.
-      const bounds = pieceBounds(model);
-      if (!bounds) throw new Error("The file contains no visible geometry");
-      const { size, center, min } = bounds;
-      const maxSide = Math.max(size.x, size.y, size.z) || 1;
-      const scale = 3.45 / maxSide;
-      model.scale.setScalar(scale);
-      model.position.set(-center.x * scale, -min.y * scale - 1.78, -center.z * scale);
-      model.updateMatrixWorld(true);
-      current.asset.add(model);
-      frameAsset(fillRef.current, elevationRef.current);
+      unwrappedRef.current = null; setWrapped(false); forgeSourceRef.current = null;
+      placePiece(model, file.name.replace(/\.glb$/i, ""), `${meshCount} meshes · ${textureCount} texture slots · ${gltf.animations.length} clips`);
       if (gltf.animations.length) {
         current.mixer = new THREE.AnimationMixer(model);
         gltf.animations.forEach((clip) => current.mixer?.clipAction(clip).play());
-      } else current.mixer = undefined;
-      setAssetName(file.name.replace(/\.glb$/i, ""));
-      setAssetInfo(`${meshCount} meshes · ${textureCount} texture slots · ${gltf.animations.length} clips${bounds.trimmed ? " · framed on the body" : ""}`);
+      }
       setNotice(`Loaded full model · ${(file.size / 1024 / 1024).toFixed(1)} MB`);
     } catch (error) {
       console.error(error);
@@ -866,7 +1050,8 @@ export function Studio() {
       ktx2.dispose();
       objectUrls.forEach((url) => URL.revokeObjectURL(url));
     }
-  }, [frameAsset]);
+  }, [placePiece, loadSVGText]);
+  useEffect(() => { loadFilesRef.current = loadFiles; }, [loadFiles]);
 
   // --- Batch automation hook (additive; the UI never touches this) -------------
   // Published so a headless Electron runner can drive the real studio engine:
@@ -917,6 +1102,17 @@ export function Studio() {
           lights: (() => { let k = 0; current.scene.traverse((o) => { if ((o as THREE.Light).isLight) k++; }); return k; })(),
         };
       },
+      // V6: forge, wrap, FX, library, GLB out.
+      loadSVG: (svg: string, options: Partial<ForgeOptions> = {}, name = "forge.svg") => loadSVGText(svg, name, options),
+      loadText: (text: string, options: Partial<ForgeOptions> = {}, font?: string) => loadType(text, options, font),
+      wrap: async (dataUrl: string, options: Partial<WrapOptions> = {}) => { const blob = await (await fetch(dataUrl)).blob(); await loadArt(blob, "art"); const next = { ...WRAP_DEFAULTS, ...options }; setWrapOptions(next); wrapNow(next); },
+      unwrap: () => unwrapNow(),
+      setFX: (list: FxInstance[]) => setFx((list ?? []).filter((f) => fxById(f.id)).map((f) => ({ id: f.id, params: { ...fxDefaults(fxById(f.id)!), ...(f.params ?? {}) }, target: f.target === "piece" ? "piece" : "frame" }))),
+      fx: () => FX.map((f) => ({ id: f.id, name: f.name, stage: f.stage, params: f.params })),
+      exportGLB: async () => { const bytes = await exportPieceGLB(); let binary = ""; const view = new Uint8Array(bytes); for (let i = 0; i < view.length; i++) binary += String.fromCharCode(view[i]); return { base64: btoa(binary), bytes: bytes.byteLength }; },
+      decimate: (target: number) => (engine.current ? decimateGroup(engine.current.asset, target) : null),
+      library: () => library,
+      loadLibrary: async (key: string) => { const all = [...(library?.museum ?? []), ...(library?.wrapped ?? [])]; const item = all.find((i) => i.key === key || `wrapped:${i.key}` === key); if (!item) throw new Error(`no library item ${key}`); await loadLibraryItem(item); },
       // A poster frame at `scale` times the stage, PNG, base64 only across the bridge.
       poster: (phase = 0, scale = 2) => { const p = renderPoster(phase, scale); return { base64: p.dataUrl.split(",")[1], width: p.width, height: p.height }; },
       eggSlots: () => (engine.current ? eggCapacity(engine.current.world) : 0),
@@ -976,7 +1172,7 @@ export function Studio() {
       }),
     };
     (window as unknown as { __spinlab?: typeof api }).__spinlab = api;
-  }, [assetInfo, assetName, assetTone, frameAsset, loadFiles, notice, renderClip, renderPoster]);
+  }, [assetInfo, assetName, assetTone, frameAsset, loadFiles, notice, renderClip, renderPoster, loadSVGText, loadType, loadArt, wrapNow, unwrapNow, exportPieceGLB, library, loadLibraryItem]);
 
   // Video, frame by frame. V4 recorded the live preview on the wall clock, so the loop
   // did not close and a slow frame became a stutter. Now each frame is rendered on the
@@ -1131,7 +1327,7 @@ export function Studio() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <a className="brand" href="#" aria-label="Spinlab home"><span className="brand-mark">S</span><span>SPINLAB</span><em>V5 · DESKTOP</em></a>
+        <a className="brand" href="#" aria-label="Spinlab home"><span className="brand-mark">S</span><span>SPINLAB</span><em>V6 · DESKTOP</em></a>
         <div className="top-actions">
           <span className="status-dot"><i /> {notice}</span>
           <button className="ghost-button" onClick={() => fileRef.current?.click()}>{pillIcon("upload")} Load GLB</button>
@@ -1169,7 +1365,89 @@ export function Studio() {
           <label className="control-label example-label">QUICK EXAMPLES</label>
           <div className="example-grid">{(["Crystal", "Ring", "Relic", "Bloom"] as const).map((item) => <button key={item} onClick={() => loadExample(item)}><i>{item === "Crystal" ? "◆" : item === "Ring" ? "◉" : item === "Relic" ? "▰" : "✿"}</i><span>{item}</span></button>)}</div>
 
-          <div className="panel-heading scene-title"><span>02</span><div><b>CHOOSE A WORLD</b><small>{worldNames.length} WORLDS · {roomCount} ROTUNDAS · EVERY ANGLE BUILT</small></div></div>
+          <div className="tabs">
+            {([["worlds", "WORLDS"], ["library", "LIBRARY"], ["forge", "FORGE"], ["wrap", "WRAP"], ["fx", "FX"]] as Array<[Tool, string]>).map(([k, label]) => <button key={k} className={tool === k ? "active" : ""} onClick={() => setTool(k)}>{label}{k === "fx" && fx.length ? ` · ${fx.length}` : ""}</button>)}
+          </div>
+          {tool === "library" && <div>
+            <div className="panel-heading"><span>02</span><div><b>THE LIBRARY</b><small>{library ? `${library.museum.length} MUSEUM SCANS · ${library.wrapped.length} WRAPPED PIECES` : "LOADING…"}</small></div></div>
+            <div className="segmented" style={{ marginBottom: 8 }}><button className={libraryTab === "museum" ? "active" : ""} onClick={() => setLibraryTab("museum")}>CC0 MUSEUMS</button><button className={libraryTab === "wrapped" ? "active" : ""} onClick={() => setLibraryTab("wrapped")}>WRAPPED · IPFS</button></div>
+            <div className="world-tools"><input value={librarySearch} onChange={(e) => setLibrarySearch(e.target.value)} placeholder="Find a piece…" aria-label="Find a piece" /><button onClick={() => { const list = (library?.[libraryTab] ?? []); if (list.length) loadLibraryItem(list[Math.floor(Math.random() * list.length)]); }}>SURPRISE</button></div>
+            <div className="lib-grid">
+              {(library?.[libraryTab] ?? []).filter((i) => !librarySearch.trim() || `${i.label} ${i.source} ${i.credit}`.toLowerCase().includes(librarySearch.trim().toLowerCase())).map((item) => (
+                <button key={item.key} className={libraryKey === item.key ? "selected" : ""} title={`${item.label} · ${item.source} · ${item.license}`} onClick={() => loadLibraryItem(item)}>
+                  <img src={item.thumb} alt="" loading="lazy" /><span>{item.label}</span>
+                </button>
+              ))}
+            </div>
+            <p className="lib-note">{libraryTab === "museum" ? "Scans from Three D Scans, Smithsonian Open Access and Wikimedia Commons, all CC0 or public domain, decimated for the plinth. Credits travel with each piece." : "MLow's WRAPPED pieces, streamed from their IPFS pins. The art is MLow's; the objects underneath are CC0."}</p>
+          </div>}
+          {tool === "forge" && <div>
+            <div className="panel-heading"><span>02</span><div><b>FORGE A PIECE</b><small>SVG FORGE 3D · TYPE · MAKE GLBS</small></div></div>
+            <div className="tool-card">
+              <div className={`tool-drop ${draggingTool === "svg" ? "active" : ""}`} onClick={() => svgRef.current?.click()} onDragOver={(e) => { e.preventDefault(); setDraggingTool("svg"); }} onDragLeave={() => setDraggingTool("")} onDrop={async (e) => { e.preventDefault(); setDraggingTool(""); const f = e.dataTransfer.files?.[0]; if (f) loadSVGText(await f.text(), f.name); }}>DROP AN SVG · EXTRUDE IT</div>
+              <input ref={svgRef} hidden type="file" accept=".svg,image/svg+xml" onChange={async (e) => { const f = e.target.files?.[0]; if (f) loadSVGText(await f.text(), f.name); }} />
+              <small>Fills and strokes become bevelled solids with their colours kept. The SVG Forge 3D pipeline, inside Spinlab.</small>
+            </div>
+            <div className="tool-card">
+              <textarea value={typeText} onChange={(e) => setTypeText(e.target.value)} spellCheck={false} aria-label="Type to forge" />
+              <div className="row"><span>FONT</span><select value={typeFont} onChange={(e) => setTypeFont(e.target.value)} style={{ height: 26, background: "#141418", color: "#f2f0e9", border: "1px solid #2d2d33", borderRadius: 3, fontSize: 9, fontWeight: 900 }}>
+                {[["Helvetica Neue, Helvetica, Arial, sans-serif", "HELVETICA"], ["Impact, Haettenschweiler, sans-serif", "IMPACT"], ["Georgia, Times New Roman, serif", "GEORGIA"], ["Courier New, monospace", "COURIER"], ["Arial Black, Arial, sans-serif", "ARIAL BLACK"], ["Futura, Avenir Next, sans-serif", "FUTURA"], ["Brush Script MT, cursive", "BRUSH"]].map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select></div>
+              <div className="tool-actions"><button className="primary" onClick={() => loadType(typeText, undefined, typeFont)}>↗ FORGE TYPE</button><button onClick={() => { setTypeText("MLOW\n317"); }}>MLOW 317</button></div>
+            </div>
+            <div className="tool-card">
+              <div className="row"><span>DEPTH</span><input type="range" min={0.2} max={3} step={0.05} value={forge.depth} onChange={(e) => { const next = { ...forge, depth: Number(e.target.value) }; setForge(next); forgeNow(next); }} /></div>
+              <div className="row"><span>BEVEL</span><input type="range" min={0} max={1} step={0.05} value={forge.bevel} onChange={(e) => { const next = { ...forge, bevel: Number(e.target.value) }; setForge(next); forgeNow(next); }} /></div>
+              <div className="row"><span>FINISH</span><div className="segmented" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>{(Object.keys(FORGE_MATERIALS) as Array<keyof typeof FORGE_MATERIALS>).map((m) => <button key={m} className={forge.material === m ? "active" : ""} onClick={() => { const next = { ...forge, material: m }; setForge(next); forgeNow(next); }}>{m.toUpperCase()}</button>)}</div></div>
+              <div className="row"><span>COLOUR</span><div style={{ display: "flex", gap: 6, alignItems: "center" }}><input type="color" value={forge.color} onChange={(e) => { const next = { ...forge, color: e.target.value }; setForge(next); forgeNow(next); }} style={{ width: 36, height: 26, border: "1px solid #2d2d33", background: "#141418", borderRadius: 3 }} /><button className={forge.preserveColors ? "active" : ""} style={{ flex: 1, height: 26, fontSize: 8, fontWeight: 900, border: "1px solid #2d2d33", background: forge.preserveColors ? "#282a21" : "#141418", color: forge.preserveColors ? "#c9ff35" : "#77777e", borderRadius: 3, cursor: "pointer" }} onClick={() => { const next = { ...forge, preserveColors: !forge.preserveColors }; setForge(next); forgeNow(next); }}>{forge.preserveColors ? "SVG COLOURS" : "ONE COLOUR"}</button></div></div>
+              <small>Sliders re-forge the last SVG or type live. Save the result as a GLB with the button under MAKE, then wrap it, spin it, or load it anywhere.</small>
+            </div>
+          </div>}
+          {tool === "wrap" && <div>
+            <div className="panel-heading"><span>02</span><div><b>WRAP IN A PAINTING</b><small>~M.TEXTURE~ · SKIN · DRAPE · DISSOLVE</small></div></div>
+            <div className="tool-card">
+              <div className={`tool-drop ${draggingTool === "art" ? "active" : ""}`} onClick={() => artFileRef.current?.click()} onDragOver={(e) => { e.preventDefault(); setDraggingTool("art"); }} onDragLeave={() => setDraggingTool("")} onDrop={(e) => { e.preventDefault(); setDraggingTool(""); const f = e.dataTransfer.files?.[0]; if (f) loadArt(f, f.name.replace(/\.[a-z0-9]+$/i, "")); }}>{artName ? `ART: ${artName.toUpperCase()}` : "DROP A PAINTING · JPG / PNG"}</div>
+              <input ref={artFileRef} hidden type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) loadArt(f, f.name.replace(/\.[a-z0-9]+$/i, "")); }} />
+              <div className="row"><span>MAP</span><div className="segmented five">{(["native", "box", "sphere", "cylinder", "planar"] as WrapOptions["mode"][]).map((m) => <button key={m} className={wrapOptions.mode === m ? "active" : ""} onClick={() => setWrapOptions({ ...wrapOptions, mode: m })}>{m.toUpperCase()}</button>)}</div></div>
+              <div className="row"><span>TILES</span><input type="range" min={1} max={8} step={1} value={wrapOptions.tiles} onChange={(e) => setWrapOptions({ ...wrapOptions, tiles: Number(e.target.value) })} /></div>
+              <div className="row"><span>TREAT</span><div className="segmented">{(["skin", "drape", "dissolve"] as WrapOptions["treatment"][]).map((t) => <button key={t} className={wrapOptions.treatment === t ? "active" : ""} onClick={() => setWrapOptions({ ...wrapOptions, treatment: t })}>{t.toUpperCase()}</button>)}</div></div>
+              {wrapOptions.treatment !== "skin" && <div className="row"><span>AMOUNT</span><input type="range" min={0.2} max={2} step={0.1} value={wrapOptions.amount} onChange={(e) => setWrapOptions({ ...wrapOptions, amount: Number(e.target.value) })} /></div>}
+              <div className="tool-actions"><button className="primary" disabled={!artName} onClick={() => wrapNow(wrapOptions)}>↗ WRAP THE PIECE</button><button disabled={!wrapped} onClick={unwrapNow}>UNWRAP</button></div>
+              <small>Skin lays the painting on. Drape inflates and smooths the form like cloth, with cords. Dissolve erodes it by the painting's own dark passages. All baked, so the GLB carries it.</small>
+            </div>
+          </div>}
+          {tool === "fx" && <div>
+            <div className="panel-heading"><span>02</span><div><b>MOSH LAB FX</b><small>{FX.length} EFFECTS · STACK THEM · FRAME OR PIECE</small></div></div>
+            <div className="tool-card">
+              <div className="fx-add">
+                <select value={fxPick} onChange={(e) => setFxPick(e.target.value)} aria-label="Pick an effect">
+                  {[1, 2, 3, 4, 5].map((stage) => <optgroup key={stage} label={STAGE_NAMES[stage]}>{FX.filter((f) => f.stage === stage).map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}</optgroup>)}
+                </select>
+                <button onClick={() => { const def = fxById(fxPick); if (def) setFx([...fx, { id: def.id, params: fxDefaults(def), target: "frame" }]); }}>+ ADD</button>
+              </div>
+              <div className="tool-actions"><button onClick={() => { const picks = [...FX].sort(() => Math.random() - 0.5).slice(0, 2 + Math.floor(Math.random() * 2)).sort((a, b) => a.stage - b.stage); setFx(picks.map((def) => ({ id: def.id, params: fxRandom(def), target: Math.random() > 0.5 ? "piece" : "frame" }))); setNotice("Moshed"); }}>🎲 SURPRISE MOSH</button><button disabled={!fx.length} onClick={() => setFx([])}>CLEAR ALL</button></div>
+            </div>
+            {fx.map((instance, index) => { const def = fxById(instance.id)!; return (
+              <div className="fx-chip" key={`${instance.id}-${index}`}>
+                <header><b>{def.name}</b><span>
+                  <button className={instance.target === "piece" ? "on" : ""} title="Only the piece" onClick={() => setFx(fx.map((f, i) => i === index ? { ...f, target: f.target === "piece" ? "frame" : "piece" } : f))}>{instance.target === "piece" ? "PIECE" : "FRAME"}</button>
+                  <button title="Dice" onClick={() => setFx(fx.map((f, i) => i === index ? { ...f, params: fxRandom(def) } : f))}>🎲</button>
+                  <button title="Remove" onClick={() => setFx(fx.filter((_, i) => i !== index))}>×</button>
+                </span></header>
+                {def.params.map((p) => (
+                  <div className="fx-param" key={p.k}>
+                    <label title={p.label}>{p.label.toUpperCase()}</label>
+                    {p.type === "select" ? <select value={Number(instance.params[p.k] ?? p.def)} onChange={(e) => setFx(fx.map((f, i) => i === index ? { ...f, params: { ...f.params, [p.k]: Number(e.target.value) } } : f))}>{(p.options ?? []).map((o, k) => <option key={o} value={k}>{o}</option>)}</select>
+                      : p.type === "color" ? <input type="color" value={String(instance.params[p.k] ?? p.def)} onChange={(e) => setFx(fx.map((f, i) => i === index ? { ...f, params: { ...f.params, [p.k]: e.target.value } } : f))} />
+                      : <input type="range" min={p.min} max={p.max} step={p.step} value={Number(instance.params[p.k] ?? p.def)} onChange={(e) => setFx(fx.map((f, i) => i === index ? { ...f, params: { ...f.params, [p.k]: Number(e.target.value) } } : f))} />}
+                    <output>{p.type === "select" ? "" : p.type === "color" ? "" : Number(instance.params[p.k] ?? p.def).toFixed(p.int ? 0 : 2)}</output>
+                  </div>
+                ))}
+              </div>); })}
+            <p className="lib-note">Every effect is MOSH LAB's own GLSL, run as a pass on the 3D frame, keyed to the loop so it closes. FRAME moshes everything; PIECE masks it to the thing on the plinth.</p>
+          </div>}
+          {tool === "worlds" && <div>
+          <div className="panel-heading scene-title" style={{ marginTop: 0 }}><span>02</span><div><b>CHOOSE A WORLD</b><small>{worldNames.length} WORLDS · {roomCount} ROTUNDAS · EVERY ANGLE BUILT</small></div></div>
           <div className="world-tools">
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Find a world…" aria-label="Find a world" />
             <button onClick={surpriseWorld} title="A random world">SURPRISE</button>
@@ -1187,6 +1465,7 @@ export function Studio() {
             ))}
             {!shownWorlds.length && <div className="keys">No world matches</div>}
           </div>
+          </div>}
         </aside>
 
         <section className="stage-column">
@@ -1256,12 +1535,12 @@ export function Studio() {
           <div className="autosave-line"><i /> AUTO-SAVED ON THIS DEVICE</div>
           <div className="quality-note"><b>{format === "GIF" ? `${size}P CLOSED LOOP` : "FRAME-EXACT MP4 / WEBM"}</b><span>{format === "GIF" ? `${fps} FPS · ${Math.round(duration * fps)} FRAMES` : `30 FPS · ${duration * 30} FRAMES · 16 MBPS`}</span></div>
           <button className="make-button" onClick={startExport} disabled={exporting}><span>{exporting ? `RENDERING ${Math.round(progress)}%` : queue.length ? `MAKE ${queue.length} GIFS` : `MAKE ${format === "GIF" ? "GIF" : "VIDEO"}`}</span><i>↗</i><em style={{ width: `${progress}%` }} /></button>
-          <div className="poster-row"><button onClick={exportPoster} disabled={exporting}>↓ POSTER PNG · 2×</button><button onClick={() => { orbitRef.current.angle = 0; orbitRef.current.view = 0.55; setNotice("View reset"); }}>↻ RESET VIEW</button></div>
+          <div className="poster-row"><button onClick={exportPoster} disabled={exporting}>↓ POSTER PNG · 2×</button><button onClick={saveGLB} disabled={exporting}>↓ SAVE PIECE AS GLB</button></div>
           <div className="keys"><b>SPACE</b> play · <b>[ ]</b> worlds · <b>E</b> export · <b>P</b> poster · <b>R</b> reset</div>
           <p className="privacy">Models, settings, and photo easter eggs stay on this device. Every manual save creates a new timestamped project file.</p>
         </aside>
       </section>
-      <footer><span>SPINLAB V5 / HYPE ENGINE</span><span>{worldNames.length} WORLDS · AMBIENT OCCLUSION · DEPTH OF FIELD · FILM LOOKS · CLOSED LOOPS · HEADLESS BATCH</span></footer>
+      <footer><span>SPINLAB V6 / HYPE ENGINE</span><span>{worldNames.length} WORLDS · FORGE · WRAP · {FX.length} MOSH FX · LIBRARY · CLOSED LOOPS · HEADLESS BATCH</span></footer>
     </main>
   );
 }

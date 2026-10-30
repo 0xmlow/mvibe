@@ -1,4 +1,4 @@
-// Spinlab V5 headless batch renderer.
+// Spinlab V6 headless batch renderer.
 //
 //   npx electron electron/batch.cjs jobs.json
 //   "/Applications/Spinlab V5.app/Contents/MacOS/Spinlab V5" --batch jobs.json
@@ -12,6 +12,15 @@
 //   float  true | false                     the piece bobs
 //   move   also "low" | "crane" | "turntable"
 //   poster true | number                    also write a PNG still (true = 2x the stage)
+//
+// V6 job keys:
+//   svg     "/path/to.svg"                   forge the piece from an SVG instead of a GLB
+//   text    "WORDS"                          forge the piece from type (\n for lines)
+//   forge   { depth, bevel, material, color, preserveColors }   forge settings for svg/text
+//   library "tds_horse" | "wrapped:<plate>"  load a piece from the built-in library
+//   wrap    { art: "/path/to.jpg", mode, tiles, treatment, amount }   M.Texture wrap of the piece
+//   fx      [ { id: "vhs", params: {...}, target: "frame" | "piece" } ]   MOSH LAB effects
+//   saveGlb true                             also write the finished piece as <name>.glb
 //
 // Drives the real studio engine offscreen through window.__spinlab, so headless
 // output and hand export come off the same pipeline.
@@ -106,6 +115,15 @@ async function runBatch(app, BrowserWindow, jobsPath) {
       await evaluate(`window.__spinlab.setGrain(${Number(settings.grain) || 0})`);
       await evaluate(`window.__spinlab.setPiece(${JSON.stringify({ spin: !!settings.spin, float: settings.float !== false })})`);
 
+      const forge = JSON.stringify(settings.forge || {});
+      if (settings.svg) {
+        const svg = fs.readFileSync(path.resolve(path.dirname(path.resolve(jobsPath)), settings.svg), "utf8");
+        await evaluate(`window.__spinlab.loadSVG(${JSON.stringify(svg)}, ${forge}, ${JSON.stringify(path.basename(settings.svg))})`);
+      } else if (settings.text) {
+        await evaluate(`window.__spinlab.loadText(${JSON.stringify(settings.text)}, ${forge})`);
+      } else if (settings.library) {
+        await evaluate(`window.__spinlab.loadLibrary(${JSON.stringify(settings.library)})`);
+      }
       if (settings.glb) {
         const bytes = fs.readFileSync(path.resolve(settings.glb));
         await evaluate(`(async () => {
@@ -115,8 +133,16 @@ async function runBatch(app, BrowserWindow, jobsPath) {
           await window.__spinlab.loadGLB(buffer.buffer, ${JSON.stringify(path.basename(settings.glb))});
         })()`);
       }
-      log(`  loaded ${path.basename(settings.glb || "-")}`);
+      log(`  loaded ${path.basename(settings.glb || settings.svg || settings.library || settings.text || "-")}`);
       await wait(settings.settleMs);
+      if (settings.wrap && settings.wrap.art) {
+        const abs = path.resolve(path.dirname(path.resolve(jobsPath)), settings.wrap.art);
+        const ext = path.extname(abs).slice(1).toLowerCase().replace("jpg", "jpeg");
+        const dataUrl = `data:image/${ext};base64,${fs.readFileSync(abs).toString("base64")}`;
+        await evaluate(`window.__spinlab.wrap(${JSON.stringify(dataUrl)}, ${JSON.stringify({ mode: settings.wrap.mode, tiles: settings.wrap.tiles, treatment: settings.wrap.treatment, amount: settings.wrap.amount, flipV: settings.wrap.flipV })})`);
+        await wait(300);
+      }
+      await evaluate(`window.__spinlab.setFX(${JSON.stringify(settings.fx || [])})`);
 
       let scene = settings.scene;
       let tone = null;
@@ -155,8 +181,14 @@ async function runBatch(app, BrowserWindow, jobsPath) {
         posterFile = target.replace(/\.gif$/i, "") + "__poster.png";
         fs.writeFileSync(posterFile, Buffer.from(poster.base64, "base64"));
       }
-      log(`${index + 1}/${config.jobs.length} ${name} · ${scene} · ${settings.move} · ${settings.look}/${settings.lens} · ${(size / 1e6).toFixed(2)} MB${posterFile ? " · poster" : ""}`);
-      report.push({ ...settings, scene, file: target, bytes: size, width: clip.width, height: clip.height, tone, framing, poster: posterFile });
+      let glbFile = null;
+      if (settings.saveGlb) {
+        const glb = await evaluate("window.__spinlab.exportGLB()");
+        glbFile = target.replace(/\.gif$/i, "") + ".glb";
+        fs.writeFileSync(glbFile, Buffer.from(glb.base64, "base64"));
+      }
+      log(`${index + 1}/${config.jobs.length} ${name} · ${scene} · ${settings.move} · ${settings.look}/${settings.lens} · ${(size / 1e6).toFixed(2)} MB${posterFile ? " · poster" : ""}${glbFile ? " · glb" : ""}${(settings.fx || []).length ? ` · fx ${settings.fx.map((f) => f.id).join("+")}` : ""}`);
+      report.push({ ...settings, scene, file: target, bytes: size, width: clip.width, height: clip.height, tone, framing, poster: posterFile, glb: glbFile });
     } catch (error) {
       const why = error && error.message ? error.message : String(error);
       log(`${index + 1}/${config.jobs.length} FAILED ${settings.out || settings.glb} · ${why.slice(0, 90)}`);
