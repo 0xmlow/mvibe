@@ -4,9 +4,24 @@ import ClearframeCore
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// Files opened with Clearframe (Finder "Open With", the Dock icon, `open -a`) arrive here, all of
+/// them at once, even before the window exists; the window drains the list when it appears.
+final class OpenQueue: ObservableObject {
+  static let shared = OpenQueue()
+  @Published var urls: [URL] = []
+}
+final class AppDelegate: NSObject, NSApplicationDelegate {
+  func application(_ application: NSApplication, open urls: [URL]) {
+    OpenQueue.shared.urls += urls.filter(\.isFileURL)
+  }
+}
 @main struct ClearframeApp: App {
+  @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
   var body: some Scene {
-    WindowGroup { ContentView().frame(minWidth: 1180, minHeight: 780) }.defaultSize(
+    WindowGroup {
+      ContentView().frame(minWidth: 1180, minHeight: 780)
+        .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
+    }.handlesExternalEvents(matching: ["*"]).defaultSize(
       width: 1440, height: 920
     ).windowStyle(.hiddenTitleBar)
   }
@@ -59,6 +74,12 @@ struct ContentView: View {
     }.background(Theme.ink).preferredColorScheme(.dark).tint(Theme.cyan)
       .onChange(of: studio.settings) { studio.invalidate() }
       .onChange(of: studio.previewTime) { studio.invalidate() }
+      // Files opened with Clearframe from Finder, or dropped on its Dock icon.
+      .onReceive(OpenQueue.shared.$urls) { urls in
+        guard !urls.isEmpty else { return }
+        OpenQueue.shared.urls = []
+        studio.add(urls)
+      }
       .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification))
     { _ in
       studio.cancel()
@@ -274,19 +295,19 @@ struct ContentView: View {
       }.frame(maxWidth: .infinity, maxHeight: .infinity).overlay(
         RoundedRectangle(cornerRadius: 16).stroke(Theme.line)
       )
-      .onDrop(of: [.fileURL], isTargeted: $dropping) { providers in
+      .onDrop(of: [.fileURL, .movie, .image, .audiovisualContent], isTargeted: $dropping) {
+        providers in
         guard !studio.busy else { return false }
         Task {
           var urls: [URL] = []
           for provider in providers {
-            let url: URL? = await withCheckedContinuation { continuation in
-              _ = provider.loadObject(ofClass: URL.self) { url, _ in
-                continuation.resume(returning: url)
-              }
-            }
-            if let url { urls.append(url) }
+            if let url = await DropLoader.url(from: provider) { urls.append(url) }
           }
-          studio.add(urls)
+          if urls.isEmpty {
+            studio.error = "Nothing in that drop could be read as a file. Try Add files instead."
+          } else {
+            studio.add(urls)
+          }
         }
         return true
       }
@@ -307,7 +328,7 @@ struct ContentView: View {
         }.font(.caption).disabled(studio.busy)
       }
       if let player = studio.player {
-        VideoPlayer(player: player).frame(height: 160).clipShape(RoundedRectangle(cornerRadius: 10))
+        PlayerView(player: player).frame(height: 160).clipShape(RoundedRectangle(cornerRadius: 10))
       }
       if let message = studio.selected?.failure {
         Text(message).font(.caption).foregroundStyle(.orange).lineLimit(4).textSelection(.enabled)
@@ -494,7 +515,7 @@ struct ContentView: View {
         if studio.total > 0 { Text("\(studio.completed) / \(studio.total)").monospacedDigit() }
         Button("Cancel") { studio.cancel() }
       } else {
-        Text("CLEARFRAME 0.2  /  MLOW").font(.system(size: 9, design: .monospaced)).tracking(1)
+        Text("CLEARFRAME 0.3  /  MLOW").font(.system(size: 9, design: .monospaced)).tracking(1)
       }
     }.font(.caption).foregroundStyle(.secondary).padding(.horizontal, 24).padding(.vertical, 12)
       .background(Theme.panel).overlay(alignment: .top) {
@@ -543,5 +564,61 @@ struct RegionCanvas: View {
       ).foregroundStyle(.black)
     }.frame(width: r.width * w, height: r.height * h).offset(x: r.x * w, y: r.y * h)
       .allowsHitTesting(false)
+  }
+}
+
+/// Turns whatever Finder, a browser download list, Photos or the Dock's Downloads stack drops
+/// into a readable file URL. Plain file URLs come straight through; file promises and in-memory
+/// media are copied into a temporary folder first.
+enum DropLoader {
+  static func url(from provider: NSItemProvider) async -> URL? {
+    if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
+      let url: URL? = await withCheckedContinuation { cont in
+        provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
+          if let data = item as? Data {
+            cont.resume(returning: URL(dataRepresentation: data, relativeTo: nil)?.standardizedFileURL)
+          } else if let url = item as? URL {
+            cont.resume(returning: url.standardizedFileURL)
+          } else {
+            cont.resume(returning: nil)
+          }
+        }
+      }
+      if let url, url.isFileURL { return url }
+    }
+    for type in [UTType.movie, .audiovisualContent, .image] where provider.hasItemConformingToTypeIdentifier(type.identifier) {
+      let copied: URL? = await withCheckedContinuation { cont in
+        _ = provider.loadFileRepresentation(forTypeIdentifier: type.identifier) { temp, _ in
+          guard let temp else { return cont.resume(returning: nil) }
+          let folder = FileManager.default.temporaryDirectory.appendingPathComponent(
+            "clearframe-drops/" + UUID().uuidString, isDirectory: true)
+          let name = provider.suggestedName.map { $0 + "." + temp.pathExtension } ?? temp.lastPathComponent
+          let dest = folder.appendingPathComponent(name)
+          do {
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            try FileManager.default.copyItem(at: temp, to: dest)
+            cont.resume(returning: dest)
+          } catch { cont.resume(returning: nil) }
+        }
+      }
+      if let copied { return copied }
+    }
+    return nil
+  }
+}
+
+/// AppKit's player view. SwiftUI's VideoPlayer aborts at first use in apps built with SwiftPM
+/// (its _AVKit_SwiftUI metadata cannot find its AVPlayerView superclass), which crashed every
+/// Motion preview.
+struct PlayerView: NSViewRepresentable {
+  let player: AVPlayer
+  func makeNSView(context: Context) -> AVPlayerView {
+    let view = AVPlayerView()
+    view.controlsStyle = .inline
+    view.player = player
+    return view
+  }
+  func updateNSView(_ view: AVPlayerView, context: Context) {
+    if view.player !== player { view.player = player }
   }
 }

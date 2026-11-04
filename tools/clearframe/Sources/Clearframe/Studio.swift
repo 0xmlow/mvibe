@@ -82,7 +82,7 @@ struct SavedRecipe: Codable, Identifiable {
     original = selected?.thumbnail
     preview = nil
     draft = nil
-    previewTime = 0
+    previewTime = selected.map { $0.isStill ? 0 : min(1.0, $0.duration * 0.1) } ?? 0
     player = nil
   }
   func choose() {
@@ -91,8 +91,23 @@ struct SavedRecipe: Codable, Identifiable {
     p.allowsMultipleSelection = true
     if p.runModal() == .OK { add(p.urls) }
   }
+  /// Files that arrive while an import, preview or export is running wait here instead of being dropped.
+  private var waiting: [URL] = []
   func add(_ urls: [URL]) {
-    guard !busy else { return }
+    guard !busy else {
+      let first = waiting.isEmpty
+      waiting += urls
+      if first {
+        status = "Busy; \(waiting.count) file(s) will import next."
+        Task {
+          while busy { try? await Task.sleep(nanoseconds: 250_000_000) }
+          let next = waiting
+          waiting = []
+          add(next)
+        }
+      }
+      return
+    }
     let existing = Set(items.map { $0.url.standardizedFileURL })
     let unique = Array(Set(urls.map { $0.standardizedFileURL })).filter { !existing.contains($0) }
       .sorted { $0.lastPathComponent < $1.lastPathComponent }
@@ -111,8 +126,10 @@ struct SavedRecipe: Codable, Identifiable {
           var item = MediaItem(url: url)
           item.info = info
           do {
+            // Many encoders open on a black frame, so the poster comes from a little way in.
+            let poster = info.isStill ? 0 : min(1.0, info.duration * 0.1)
             let (image, w, h) = try await thumbnail(
-              info.decodeURL, time: 0, hdr: info.hdr, job: job)
+              info.decodeURL, time: poster, hdr: info.hdr, job: job)
             item.thumbnail = image
             item.width = w
             item.height = h

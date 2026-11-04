@@ -22,6 +22,12 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 <key>CFBundleIconFile</key><string>Clearframe</string>
 <key>LSMinimumSystemVersion</key><string>14.0</string>
 <key>NSHighResolutionCapable</key><true/>
+<key>CFBundleDocumentTypes</key><array><dict>
+<key>CFBundleTypeName</key><string>Media</string>
+<key>CFBundleTypeRole</key><string>Viewer</string>
+<key>LSHandlerRank</key><string>Alternate</string>
+<key>LSItemContentTypes</key><array><string>public.movie</string><string>public.image</string><string>public.audiovisual-content</string><string>public.plain-text</string></array>
+</dict></array>
 </dict></plist>
 PLIST
 codesign --force --sign - "$APP"
