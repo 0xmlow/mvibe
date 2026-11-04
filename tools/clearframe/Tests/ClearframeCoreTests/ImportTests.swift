@@ -98,6 +98,29 @@ final class ImportTests: XCTestCase {
     return CGImageSourceGetCount(src)
   }
 
+  /// CLEARFRAME_IMPORT_MATRIX: import (probe + thumbnail) only, fast enough for hundreds of files.
+  func testImportOnlyMatrix() throws {
+    guard let folder = ProcessInfo.processInfo.environment["CLEARFRAME_IMPORT_MATRIX"] else {
+      throw XCTSkip("Set CLEARFRAME_IMPORT_MATRIX to a folder of sample media")
+    }
+    let files = try FileManager.default.contentsOfDirectory(atPath: folder).filter { !$0.hasPrefix(".") }.sorted()
+    var failures: [String] = []
+    for name in files {
+      let url = URL(fileURLWithPath: folder).appendingPathComponent(name)
+      do {
+        let info = try Media.inspect(url)
+        let thumb = dir.appendingPathComponent(UUID().uuidString + ".png")
+        try Pipeline.thumbnail(input: info.decodeURL, output: thumb, time: 0, hdr: info.hdr, control: JobControl())
+        guard FileManager.default.fileExists(atPath: thumb.path) else { throw MediaError.message("empty thumbnail") }
+        try? FileManager.default.removeItem(at: thumb)
+        Media.removeProxy(info, original: url)
+      } catch { failures.append("\(name): \(error.localizedDescription.prefix(300))") }
+    }
+    print("IMPORT MATRIX \(files.count - failures.count)/\(files.count) ok")
+    for f in failures { print("IMPORT FAIL " + f) }
+    XCTAssertTrue(failures.isEmpty)
+  }
+
   /// Point CLEARFRAME_MATRIX at a folder of real files (phone HEIC/MOV, WebM, MKV, ProRes,
   /// animated WebP, AVIF...) to run every one of them through import, preview and export.
   func testRealFileMatrix() throws {

@@ -60,7 +60,8 @@ public enum Media {
   /// Inspect a file and, for stills, decode them with ImageIO into an upright proxy.
   /// ImageIO reads iPhone grid HEIC, camera RAW, animated WebP/HEICS, CMYK JPEG and EXIF
   /// orientation, all of which the FFmpeg 7.0 still decoders get wrong or reject.
-  public static func inspect(_ url: URL) throws -> MediaInfo {
+  public static func inspect(_ original: URL) throws -> MediaInfo {
+    let url = try resolve(original)
     let ext = url.pathExtension.lowercased()
     if ext == "gif" || videoExtensions.contains(ext) { return try probe(url) }
     do { return try imageIOProxy(url) } catch {
@@ -68,6 +69,31 @@ public enum Media {
       if let info = try? probe(url) { return info }
       throw error
     }
+  }
+
+  /// Follows Finder aliases and symlinks, and explains empty or missing files in plain words.
+  public static func resolve(_ url: URL) throws -> URL {
+    var target = url.resolvingSymlinksInPath()
+    if let isAlias = try? target.resourceValues(forKeys: [.isAliasFileKey]).isAliasFile, isAlias {
+      do {
+        target = try URL(resolvingAliasFileAt: target, options: [.withoutUI])
+      } catch {
+        throw MediaError.message(
+          "\(url.lastPathComponent) is a Finder alias whose original file is gone or on a disk that is not connected.")
+      }
+    }
+    let values = try? target.resourceValues(forKeys: [.fileSizeKey, .isDirectoryKey])
+    if values == nil || !FileManager.default.fileExists(atPath: target.path) {
+      throw MediaError.message("\(url.lastPathComponent) could not be found. It may have been moved or deleted.")
+    }
+    if values?.isDirectory == true {
+      throw MediaError.message("\(url.lastPathComponent) is a folder. Open the files inside it instead.")
+    }
+    if (values?.fileSize ?? 0) == 0 {
+      throw MediaError.message(
+        "\(url.lastPathComponent) is empty (0 bytes), usually a download that never finished. Download it again.")
+    }
+    return target
   }
 
   static func imageIOProxy(_ url: URL) throws -> MediaInfo {
