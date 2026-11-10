@@ -13,20 +13,43 @@
     "dist:linux": "electron-builder --linux"
   },
   "devDependencies": {
-    "electron": "^33.0.0",
-    "electron-builder": "^25.0.0"
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0"
   },
   "build": {
     "appId": "nyc.mlow.moshlab",
     "productName": "MOSH LAB",
-    "files": ["main.js", "app/**/*"],
-    "directories": { "buildResources": "build", "output": "dist" },
+    "files": [
+      "main.js",
+      "app/**/*"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
     "mac": {
       "icon": "build/icon.icns",
       "category": "public.app-category.graphics-design",
-      "target": [{ "target": "dmg", "arch": ["arm64"] }]
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ]
     },
-    "win": { "icon": "build/icon.png", "target": ["nsis"] },
-    "linux": { "icon": "build/icon.png", "target": ["AppImage"] }
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "icon": "build/icon.png",
+      "target": [
+        "AppImage"
+      ]
+    }
   }
 }
