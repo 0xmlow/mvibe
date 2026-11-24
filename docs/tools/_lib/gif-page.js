@@ -1,11 +1,38 @@
 /* gif-page.js: page logic shared by "MP4 to GIF" and "MP4 to GIF (max 50MB)".
- * A page with an <input id="maxmb"> fits every GIF under that many megabytes. */
+ * A page with an <input id="maxmb"> fits every GIF under that many megabytes.
+ * A page with a <select id="mode"> offers: x (ready for X, phone limit), xweb (X, web limit),
+ * max (full quality, no limit) and both (max + x). X versions are named <name>_X.gif. */
 import { setupDrop, progress, card, refreshAll, autoPref, fmtBytes, $ } from "./ui.js";
-import { classify, videoToGif, imagesToGif } from "./gif-engine.js";
+import { classify, videoToGif, imagesToGif, X } from "./gif-engine.js";
 import { VideoError } from "./video.js";
 
 const auto = autoPref();
 const mbInput = $("#maxmb");
+const modeSel = $("#mode");
+const bytesFor = (mb) => Math.floor(mb * 1000000 * 0.97);
+try { const m = localStorage.getItem("mvibe-gif-mode"); if (modeSel && m && [...modeSel.options].some((o) => o.value === m)) modeSel.value = m; } catch (e) {}
+modeSel && modeSel.addEventListener("change", () => { try { localStorage.setItem("mvibe-gif-mode", modeSel.value); } catch (e) {} });
+
+/* One run per version to make. */
+function runs() {
+  const xRun = (mb, label) => ({ x: true, mb, label, opts: { targetBytes: bytesFor(mb), box: X, maxFrames: X.frames, suffix: X.suffix } });
+  const maxRun = { x: false, label: "max quality", opts: { targetBytes: target() } };
+  switch (modeSel ? modeSel.value : "") {
+    case "x": return [xRun(X.mb, "for X")];
+    case "xweb": return [xRun(X.webMb, "for X, web upload")];
+    case "both": return [maxRun, xRun(X.mb, "for X")];
+    default: return [maxRun];
+  }
+}
+
+/* The X check, done on the finished file rather than trusted from the settings. */
+function xTag(r, mb) {
+  const ok = r.size <= mb * 1000000 && r.width <= X.w && r.height <= X.h && r.frames <= X.frames;
+  const el = document.createElement("span");
+  el.className = ok ? "tag" : "tag warn";
+  el.textContent = ok ? `Ready for X: under ${mb} MB, ${r.width} x ${r.height}, ${r.frames} frames` : "Over X's limits, try a shorter clip";
+  return el;
+}
 const logEl = $(".log");
 const used = new Set();
 const unique = (name) => { const stem = name.replace(/\.gif$/i, ""); let n = name, i = 1; while (used.has(n)) n = `${stem}-${i++}.gif`; used.add(n); return n; };
@@ -18,12 +45,13 @@ function target() {
   return Math.floor(mb * 1000000 * 0.97); // decimal MB, 3% margin, as in the droplet
 }
 
-async function show(r, sourceLabel) {
+async function show(r, sourceLabel, run) {
   const name = unique(r.name);
   const url = URL.createObjectURL(r.blob);
   const lines = [`${r.width} x ${r.height}, ${r.frames} frame${r.frames === 1 ? "" : "s"}${r.fps ? `, ${r.fps} fps` : ""}`, `${fmtBytes(r.size)}, ${r.colors} colours, ${r.dither.replace("sierra2_4a", "Sierra Lite dither").replace("bayer:", "Bayer dither, scale ")}`, sourceLabel];
   let extra = null;
-  if (r.overTarget) { extra = document.createElement("span"); extra.className = "tag warn"; extra.textContent = "Still over the size limit at the smallest setting"; }
+  if (run && run.x) extra = xTag(r, run.mb);
+  else if (r.overTarget) { extra = document.createElement("span"); extra.className = "tag warn"; extra.textContent = "Still over the size limit at the smallest setting"; }
   card({ thumb: url, title: name, lines, blob: r.blob, filename: name, marked: true, extra });
   if (auto()) await window.MVIBE.download(r.blob, name, { marked: true });
 }
@@ -33,36 +61,42 @@ setupDrop(async (files) => {
   const skipped = files.length - vids.length - imgs.length;
   if (!vids.length && !imgs.length) { progress(0, "Nothing to convert. Drop videos, or several images for a slideshow."); return; }
   if (logEl) logEl.textContent = "";
-  const T = target();
-  const jobs = vids.length + (imgs.length ? 1 : 0);
+  const R = runs();
+  const jobs = (vids.length + (imgs.length ? 1 : 0)) * R.length;
   let done = 0, ok = 0, bad = 0;
   const onProgress = (label) => (p) => progress((done + p.frac) / jobs, `${label}: ${p.phase}`);
 
   for (const v of vids) {
-    try {
-      if (T) log(`${v.name}, target ${T} bytes`);
-      const r = await videoToGif(v, { targetBytes: T, onProgress: onProgress(v.name), onLog: (s) => log("  " + s) });
-      await show(r, `from ${v.name}`);
-      ok++;
-    } catch (e) {
-      (e instanceof VideoError ? console.warn : console.error)(e);
-      card({ title: v.name, error: e instanceof VideoError ? e.message : `Could not convert. ${e && e.message ? e.message : e}` });
-      bad++;
+    for (const run of R) {
+      const T = run.opts.targetBytes;
+      try {
+        if (T) log(`${v.name} ${run.label}, target ${T} bytes`);
+        const r = await videoToGif(v, { ...run.opts, onProgress: onProgress(`${v.name} ${run.label}`), onLog: (s) => log("  " + s) });
+        await show(r, `from ${v.name}, ${run.label}`, run);
+        ok++;
+      } catch (e) {
+        (e instanceof VideoError ? console.warn : console.error)(e);
+        card({ title: v.name, error: e instanceof VideoError ? e.message : `Could not convert. ${e && e.message ? e.message : e}` });
+        bad++;
+      }
+      done++; refreshAll();
     }
-    done++; refreshAll();
   }
   if (imgs.length) {
-    try {
-      if (T) log(`${imgs.length} images, target ${T} bytes`);
-      const r = await imagesToGif(imgs, { targetBytes: T, onProgress: onProgress(`${imgs.length} image slideshow`), onLog: (s) => log("  " + s) });
-      await show(r, `slideshow of ${r.count} image${r.count === 1 ? "" : "s"}, 0.6 s each`);
-      ok++;
-    } catch (e) {
-      console.error(e);
-      card({ title: `${imgs.length} images`, error: `Could not build the slideshow. ${e && e.message ? e.message : e}` });
-      bad++;
+    for (const run of R) {
+      const T = run.opts.targetBytes;
+      try {
+        if (T) log(`${imgs.length} images ${run.label}, target ${T} bytes`);
+        const r = await imagesToGif(imgs, { ...run.opts, onProgress: onProgress(`${imgs.length} image slideshow ${run.label}`), onLog: (s) => log("  " + s) });
+        await show(r, `slideshow of ${r.count} image${r.count === 1 ? "" : "s"}, 0.6 s each, ${run.label}`, run);
+        ok++;
+      } catch (e) {
+        console.error(e);
+        card({ title: `${imgs.length} images`, error: `Could not build the slideshow. ${e && e.message ? e.message : e}` });
+        bad++;
+      }
+      done++; refreshAll();
     }
-    done++; refreshAll();
   }
   progress(1, `${ok} GIF${ok === 1 ? "" : "s"} made${bad ? `, ${bad} failed` : ""}${skipped ? `, ${skipped} other file${skipped === 1 ? "" : "s"} skipped` : ""}.`);
 });

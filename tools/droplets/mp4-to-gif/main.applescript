@@ -1,5 +1,7 @@
--- MP4 to GIF droplet (max quality): videos -> one GIF each; images -> one unified GIF.
+-- MP4 to GIF droplet: videos -> one GIF each; images -> one unified GIF.
+-- Asks each run: X ready (fits X's limits, named _X.gif), Both, or Max quality.
 property modeArgs : ""
+property askMode : true
 
 on run
 	try
@@ -33,7 +35,23 @@ on processItems(theItems)
 		return
 	end if
 	
-	set outText to do shell script scriptPath & modeArgs & argStr
+	set runArgs to modeArgs
+	if askMode then
+		try
+			set pick to button returned of (display dialog "How should the GIFs be made?" & return & return & "X ready: posts on X from phone or web (up to 1280 × 1080, 350 frames, under 5 MB). Saved as name_X.gif." & return & return & "Max quality: full size, every frame, no size limit." & return & return & "Both: one of each." buttons {"Max quality", "Both", "X ready"} default button "X ready" with title "MP4 → GIF")
+		on error number -128
+			return
+		end try
+		if pick is "X ready" then
+			set runArgs to " --x"
+		else if pick is "Both" then
+			set runArgs to " --both"
+		else
+			set runArgs to ""
+		end if
+	end if
+
+	set outText to do shell script scriptPath & runArgs & argStr
 	
 	set createdCount to 0
 	set errCount to 0

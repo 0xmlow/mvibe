@@ -5,6 +5,8 @@
  *     image's upright size (longest side capped at 2560), saturation x1.40, contrast x1.10,
  *     its own palette per frame.
  *   - with a size target, the same fidelity ladder and resolution steps as the droplet.
+ *   - with box / maxFrames (the X preset), the frame fits inside the box and the GIF keeps
+ *     under the frame cap, lowering the frame rate first (never below 5 fps).
  * Every frame gets MVIBE.mark() before it is quantized. */
 import { decodeStill } from "./images.js";
 import { openVideo, seekFrame } from "./video.js";
@@ -19,6 +21,12 @@ export const L_FPS = [100, 100, 100, 100, 85, 70, 55];
 export const L_COL = [256, 256, 256, 200, 160, 128, 96];
 export const L_DIT = ["sierra2_4a", "bayer:5", "bayer:4", "bayer:3", "bayer:2", "bayer:2", "bayer:1"];
 export const S_SCALE = [0.85, 0.72, 0.60, 0.50, 0.42, 0.35, 0.28, 0.22];
+
+/* X (Twitter) GIF limits, checked 2026-11: 1280 x 1080, 350 frames, 5 MB from the phone app
+ * (15 MB from the web). Same numbers as convert.sh --x. */
+export const X = { w: 1280, h: 1080, frames: 350, mb: 5, webMb: 15, suffix: "_X" };
+const withSuffix = (name, sfx) => sfx ? name.replace(/\.gif$/i, `${sfx}.gif`) : name;
+const even = (v) => Math.max(2, Math.trunc(v / 2) * 2);
 
 const VIDEO_EXT = /\.(mp4|mov|m4v|mkv|webm|avi|mpg|mpeg|wmv|flv|ts|3gp|mts|m2ts|ogv)$/i;
 const IMAGE_EXT = /\.(png|jpe?g|bmp|tiff?|heic|heif|webp|gif|avif)$/i;
@@ -100,9 +108,20 @@ export async function videoToGif(file, opts = {}) {
   const target = opts.targetBytes || 0;
   const report = opts.onProgress || (() => {});
   const log = opts.onLog || (() => {});
+  const box = opts.box || null, maxF = opts.maxFrames || 0;
   const V = await openVideo(file);
-  const { video, width: W0, height: H0, duration } = V;
-  const nBase = Math.max(1, Math.round(duration * FPS));
+  const { video, width: W0, height: H0, duration: fullDur } = V;
+  // Frame cap: lower the frame rate first; below 5 fps, keep the opening seconds instead.
+  let F0 = FPS, duration = fullDur;
+  if (maxF && fullDur * FPS > maxF) {
+    F0 = Math.floor(maxF / fullDur);
+    if (F0 < 5) { F0 = 5; duration = maxF / 5; }
+    log(`${fullDur.toFixed(2)} s: ${F0} fps${duration < fullDur ? `, first ${duration.toFixed(1)} s` : ""} to stay under ${maxF} frames`);
+  }
+  // Box: the largest size that fits inside it (X: 1280 x 1080), never upscaled.
+  const bk = box ? Math.min(1, box.w / W0, box.h / H0) : 1;
+  const BW = bk === 1 ? W0 : even(W0 * bk), BH = bk === 1 ? H0 : even(H0 * bk);
+  const nBase = Math.max(1, Math.round(duration * F0));
   const canCache = W0 * H0 * 4 * nBase <= CACHE_BUDGET;
   const cache = [];
   const canvas = document.createElement("canvas");
@@ -116,7 +135,7 @@ export async function videoToGif(file, opts = {}) {
   const sCtx = sCan.getContext("2d", { willReadFrequently: true });
   const sample = new Uint8Array(sw * sh * 4 * nBase);
   for (let i = 0; i < nBase; i++) {
-    await seekFrame(video, Math.min(i / FPS, Math.max(0, duration - 0.001)));
+    await seekFrame(video, Math.min(i / F0, Math.max(0, duration - 0.001)));
     sCtx.drawImage(video, 0, 0, sw, sh);
     sample.set(sCtx.getImageData(0, 0, sw, sh).data, i * sw * sh * 4);
     if (canCache) cache.push(await createImageBitmap(video));
@@ -124,16 +143,16 @@ export async function videoToGif(file, opts = {}) {
   }
 
   async function drawAt(t) {
-    if (canCache) return cache[Math.min(cache.length - 1, Math.round(t * FPS))];
+    if (canCache) return cache[Math.min(cache.length - 1, Math.round(t * F0))];
     await seekFrame(video, Math.min(t, Math.max(0, duration - 0.001)));
     return video;
   }
 
   async function attempt(fpsPct, colors, dither, scale, base, span) {
-    const f = Math.max(8, Math.round(FPS * fpsPct / 100));
-    const fps = Math.min(f, FPS);
-    const W = scale === 1 ? W0 : Math.max(2, Math.trunc(W0 * scale / 2) * 2);
-    const H = scale === 1 ? H0 : Math.max(2, Math.trunc(H0 * scale / 2) * 2);
+    const f = Math.max(Math.min(8, F0), Math.round(F0 * fpsPct / 100));
+    const fps = Math.min(f, F0);
+    const W = scale === 1 ? BW : even(BW * scale);
+    const H = scale === 1 ? BH : even(BH * scale);
     const n = Math.max(1, Math.round(duration * fps));
     const dl = delays(n, fps);
     canvas.width = W; canvas.height = H;
@@ -163,8 +182,10 @@ export async function videoToGif(file, opts = {}) {
     for (let i = 0; i < L_FPS.length; i++, k++) {
       r = await attempt(L_FPS[i], L_COL[i], L_DIT[i], 1, 0.25 + 0.75 * k / steps, 0.75 / steps);
       const sz = signedSize(r.bytes);
-      log(`ladder[${i}] ${r.fps} fps, ${r.colors} colours, ${r.dither}: ${sz} bytes`);
+      log(`ladder[${i}] ${r.W}x${r.H}, ${r.fps} fps, ${r.colors} colours, ${r.dither}: ${sz} bytes`);
       if (sz <= target) return finish(r, false);
+      // Fewer colours never halve a GIF: still over twice the target, go straight to resizing.
+      if (i >= 1 && sz > 2 * target) { log("over 2x the target: straight to resizing"); k = L_FPS.length; break; }
     }
     for (const s of S_SCALE) {
       r = await attempt(L_FPS[6], L_COL[6], L_DIT[6], s, 0.25 + 0.75 * k / steps, 0.75 / steps); k++;
@@ -179,7 +200,7 @@ export async function videoToGif(file, opts = {}) {
   }
 
   function finish(r, over) {
-    return { blob: new Blob([r.bytes], { type: "image/gif" }), name: videoGifName(file), width: r.W, height: r.H, fps: r.fps, colors: r.colors, dither: r.dither, frames: r.frames, size: signedSize(r.bytes), overTarget: over };
+    return { blob: new Blob([r.bytes], { type: "image/gif" }), name: withSuffix(videoGifName(file), opts.suffix), width: r.W, height: r.H, fps: r.fps, colors: r.colors, dither: r.dither, frames: r.frames, size: signedSize(r.bytes), overTarget: over };
   }
 }
 
@@ -204,8 +225,10 @@ export async function imagesToGif(files, opts = {}) {
   const target = opts.targetBytes || 0;
   const report = opts.onProgress || (() => {});
   const log = opts.onLog || (() => {});
-  const sorted = [...files].sort((a, b) => natural.compare(a.name, b.name));
-  const name = slideshowName(sorted);
+  const maxF = opts.maxFrames || 0;
+  let sorted = [...files].sort((a, b) => natural.compare(a.name, b.name));
+  if (maxF && sorted.length > maxF) { log(`${sorted.length} images, keeping the first ${maxF} (frame cap)`); sorted = sorted.slice(0, maxF); }
+  const name = withSuffix(slideshowName(sorted), opts.suffix);
 
   // Decode every image upright, once.
   const bitmaps = [];
@@ -218,6 +241,7 @@ export async function imagesToGif(files, opts = {}) {
   if (w0 > IMG_MAX_DIM || h0 > IMG_MAX_DIM) s = w0 > h0 ? IMG_MAX_DIM / w0 : IMG_MAX_DIM / h0;
   let W0 = Math.trunc(w0 * s), H0 = Math.trunc(h0 * s);
   W0 -= W0 % 2; H0 -= H0 % 2; W0 = Math.max(2, W0); H0 = Math.max(2, H0);
+  if (opts.box) { const bk = Math.min(1, opts.box.w / W0, opts.box.h / H0); if (bk < 1) { W0 = even(W0 * bk); H0 = even(H0 * bk); } }
 
   // Normalised frames at W0 x H0: crop to fill, colour boost. Kept as bitmaps for rescaling.
   const work = document.createElement("canvas"); work.width = W0; work.height = H0;
@@ -262,8 +286,9 @@ export async function imagesToGif(files, opts = {}) {
     const steps = L_COL.length + S_SCALE.length; let k = 0, r = null;
     for (let i = 0; i < L_COL.length; i++, k++) {
       r = await attempt(L_COL[i], L_DIT[i], 1, 0.15 + 0.85 * k / steps, 0.85 / steps);
-      const sz = signedSize(r.bytes); log(`ladder[${i}] ${r.colors} colours, ${r.dither}: ${sz} bytes`);
+      const sz = signedSize(r.bytes); log(`ladder[${i}] ${r.W}x${r.H}, ${r.colors} colours, ${r.dither}: ${sz} bytes`);
       if (sz <= target) return finish(r, false);
+      if (i >= 1 && sz > 2 * target) { log("over 2x the target: straight to resizing"); k = L_COL.length; break; }
     }
     for (const sc of S_SCALE) {
       r = await attempt(L_COL[6], L_DIT[6], sc, 0.15 + 0.85 * k / steps, 0.85 / steps); k++;

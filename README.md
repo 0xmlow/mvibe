@@ -24,7 +24,7 @@ Everything runs client side and files are never uploaded.
 | **SVG Forge 3D** | Turns SVG artwork into extruded 3D meshes; exports GLB, STL and PNG | Native macOS app (WebKit + three.js) | [`tools/svg-forge-3d`](tools/svg-forge-3d) |
 | **HEIC to PNG** | Drop HEIC/HEIF photos, get upright full-resolution PNGs beside them | macOS droplet | [`tools/droplets/heic-to-png`](tools/droplets/heic-to-png) |
 | **RAW + HEIC to PNG** | Same, plus camera RAW (NEF, CR2/CR3, ARW, RAF, DNG…) through the system RAW pipeline | macOS droplet | [`tools/droplets/raw-heic-to-png`](tools/droplets/raw-heic-to-png) |
-| **MP4 to GIF** | Each video becomes its own max-quality GIF; a set of images becomes one animated GIF | macOS droplet | [`tools/droplets/mp4-to-gif`](tools/droplets/mp4-to-gif) |
+| **MP4 to GIF** | Each video becomes its own GIF, ready to post on X, max quality, or both; a set of images becomes one animated GIF | macOS droplet + web page | [`tools/droplets/mp4-to-gif`](tools/droplets/mp4-to-gif) |
 | **MP4 to GIF (max 50MB)** | Same engine, fits every GIF under 50 MB by stepping down colours, fps, then resolution | macOS droplet | [`tools/droplets/mp4-to-gif-50mb`](tools/droplets/mp4-to-gif-50mb) |
 | **Movie to Images** | Each video becomes a folder of full-resolution PNG frames (2 per second) | macOS droplet | [`tools/droplets/movie-to-images`](tools/droplets/movie-to-images) |
 | **Spinlab V2** | GLB hype-GIF and video studio ("Safe-Orbit Studio") | Electron app | [`tools/spinlab-v2`](tools/spinlab-v2) |

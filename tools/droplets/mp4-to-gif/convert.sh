@@ -1,11 +1,16 @@
 #!/bin/bash
 # convert.sh — engine for the "MP4 to GIF" droplets.
 #
-# Usage:  convert.sh [--max-mb N] <file> [<file> ...]
+# Usage:  convert.sh [--x | --both] [--max-mb N] <file> [<file> ...]
 #   - each video  -> its own high-quality GIF (next to the source)
 #   - all images  -> one unified animated GIF (slideshow, ordered by name)
 #   - with --max-mb N, every produced GIF is fit under N megabytes while
 #     preserving as much fidelity/resolution as possible.
+#   - with --x, every GIF is made to post on X (Twitter): it fits inside
+#     1280 x 1080, has at most 350 frames and stays under 5 MB, the limit for
+#     posting from the phone app (pass --max-mb 15 after --x for web only).
+#     Output is named <name>_X.gif.
+#   - with --both, each input gets the max quality GIF AND the _X.gif.
 # Prints a machine-readable summary on stdout for the AppleScript wrapper.
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -21,15 +26,55 @@ IMG_CONTRAST=1.10   # slight contrast boost (1.0 = untouched)
 PAD_COLOR=white     # (unused; kept for reference)
 # ------------------
 
-# ---- optional size target ----
+# ---- X (Twitter) limits, checked 2026-11 ----
+X_MAX_W=1280        # GIF resolution cap on X
+X_MAX_H=1080
+X_MAX_FRAMES=350    # X refuses GIFs with more frames
+X_MB=5              # phone app limit (web allows 15)
+# ------------------
+
+# ---- options ----
 TARGET=0            # bytes; 0 = no limit (max quality)
-if [ "$1" = "--max-mb" ]; then
-  MB="$2"; shift 2
+BOXF=""             # extra scale filter that fits the frame in a box (X mode)
+MAX_FRAMES=0        # 0 = no frame cap
+SUFFIX=""           # appended to output names (X mode: _X)
+XMODE=0; BOTH=0; MB=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --max-mb) MB="$2"; shift 2 ;;
+    --x)      XMODE=1; shift ;;
+    --both)   BOTH=1; shift ;;
+    *) break ;;
+  esac
+done
+
+# --both: run once at max quality and once for X, then report both together.
+if [ "$BOTH" -eq 1 ]; then
+  xargs_mb=(); [ -n "$MB" ] && xargs_mb=(--max-mb "$MB")
+  a="$("$0" "$@")"; b="$("$0" --x "${xargs_mb[@]}" "$@")"
+  c1="$(printf '%s\n%s\n' "$a" "$b" | awk -F'[= ]' '/^CREATED=/{c+=$2; e+=$4} END{print c+0, e+0}')"
+  echo "CREATED=${c1% *} ERRORS=${c1#* }"
+  printf '%s\n%s\n' "$a" "$b" | grep '^OUT:'
+  exit 0
+fi
+
+if [ "$XMODE" -eq 1 ]; then
+  [ -z "$MB" ] && MB="$X_MB"
+  BOXF="scale=w='min(iw\,$X_MAX_W)':h='min(ih\,$X_MAX_H)':force_original_aspect_ratio=decrease:force_divisible_by=2:flags=lanczos,"
+  MAX_FRAMES="$X_MAX_FRAMES"
+  SUFFIX="_X"
+fi
+if [ -n "$MB" ]; then
   # decimal MB with a 3% safety margin so we land safely under the stated limit
   TARGET="$(awk -v m="$MB" 'BEGIN{printf "%d", m*1000000*0.97}')"
 fi
 
-printf '\n[%s] --- run start (target=%s bytes, %d item[s]) ---\n' "$(date)" "$TARGET" "$#" >> "$LOG"
+printf '\n[%s] --- run start (target=%s bytes, x=%s, %d item[s]) ---\n' "$(date)" "$TARGET" "$XMODE" "$#" >> "$LOG"
+
+# Seconds of a video, read from ffmpeg's banner (the droplet bundles ffmpeg only).
+duration() {
+  "$FF" -hide_banner -i "$1" 2>&1 | awk -F'[:, ]+' '/Duration:/{print $3*3600+$4*60+$5; exit}'
+}
 
 filesize() { stat -f%z "$1" 2>/dev/null || echo 0; }
 gt() { awk -v a="$1" -v b="$2" 'BEGIN{exit !(a>b)}'; }   # a > b ?
@@ -89,8 +134,9 @@ S_SCALE=(0.85 0.72 0.60 0.50 0.42 0.35 0.28 0.22)
 enc_video() {
   local IN="$1" OUT="$2" F="$3" C="$4" D="$5" S="$6"
   local pal; pal="$(mktemp -t mp4gif_pal).png"
-  "$FF" -y -i "$IN" -vf "fps=$F,scale=$S:flags=lanczos,palettegen=max_colors=$C:stats_mode=diff" "$pal" >>"$LOG" 2>&1 \
-  && "$FF" -y -i "$IN" -i "$pal" -filter_complex "fps=$F,scale=$S:flags=lanczos[x];[x][1:v]paletteuse=dither=$D:diff_mode=rectangle" -loop 0 "$OUT" >>"$LOG" 2>&1
+  local tl=(); [ -n "$TLIM" ] && tl=(-t "$TLIM")
+  "$FF" -y "${tl[@]}" -i "$IN" -vf "fps=$F,${BOXF}scale=$S:flags=lanczos,palettegen=max_colors=$C:stats_mode=diff" "$pal" >>"$LOG" 2>&1 \
+  && "$FF" -y "${tl[@]}" -i "$IN" -i "$pal" -filter_complex "fps=$F,${BOXF}scale=$S:flags=lanczos[x];[x][1:v]paletteuse=dither=$D:diff_mode=rectangle" -loop 0 "$OUT" >>"$LOG" 2>&1
   local rc=$?; rm -f "$pal"; return $rc
 }
 
@@ -99,7 +145,7 @@ enc_video() {
 # own vivid 256 colors instead of sharing one washed-out global palette.
 enc_images() {
   local G="$1" FR="$2" OUT="$3" C="$4" D="$5" S="$6"
-  "$FF" -y -framerate "$FR" -i "$G" -lavfi "scale=$S,split[a][b];[a]palettegen=max_colors=$C:stats_mode=single[p];[b][p]paletteuse=dither=$D:new=1" -loop 0 "$OUT" >>"$LOG" 2>&1
+  "$FF" -y -framerate "$FR" -i "$G" -lavfi "${BOXF}scale=$S,split[a][b];[a]palettegen=max_colors=$C:stats_mode=single[p];[b][p]paletteuse=dither=$D:new=1" -loop 0 "$OUT" >>"$LOG" 2>&1
 }
 
 # Drive an encoder to hit TARGET. args: KIND SRC OUT BASEFPS(or FR)
@@ -120,7 +166,7 @@ fit() {
   for i in 0 1 2 3 4 5 6; do
     C="${L_COL[$i]}"; D="${L_DIT[$i]}"
     if [ "$KIND" = "video" ]; then
-      F="$(awk -v b="$BASE" -v p="${L_FPS[$i]}" 'BEGIN{f=b*p/100; if(f<8)f=8; printf "%d",(f+0.5)}')"
+      F="$(awk -v b="$BASE" -v p="${L_FPS[$i]}" 'BEGIN{f=b*p/100; m=(b<8)?b:8; if(f<m)f=m; printf "%d",(f+0.5)}')"
       enc_video "$SRC" "$OUT" "$F" "$C" "$D" "iw:ih" || continue
     else
       enc_images "$SRC" "$BASE" "$OUT" "$C" "$D" "iw:ih" || continue
@@ -128,12 +174,17 @@ fit() {
     sz="$(filesize "$OUT")"
     printf '  ladder[%d] colors=%s dither=%s -> %s bytes\n' "$i" "$C" "$D" "$sz" >> "$LOG"
     gt "$sz" "$TARGET" || return 0
+    # Fewer colours never halve a GIF. Still over twice the target once the
+    # ordered dither is on? Skip the rest of the ladder and go to resizing.
+    if [ "$i" -ge 1 ] && gt "$sz" "$((TARGET*2))"; then
+      printf '  over 2x the target: straight to resizing\n' >> "$LOG"; break
+    fi
   done
 
   # Phase 2: still too big -> scale resolution down at the most aggressive params.
   C="${L_COL[6]}"; D="${L_DIT[6]}"
   if [ "$KIND" = "video" ]; then
-    F="$(awk -v b="$BASE" -v p="${L_FPS[6]}" 'BEGIN{f=b*p/100; if(f<8)f=8; printf "%d",(f+0.5)}')"
+    F="$(awk -v b="$BASE" -v p="${L_FPS[6]}" 'BEGIN{f=b*p/100; m=(b<8)?b:8; if(f<m)f=m; printf "%d",(f+0.5)}')"
   fi
   for sc in "${S_SCALE[@]}"; do
     local SEXP="trunc(iw*$sc/2)*2:trunc(ih*$sc/2)*2"
@@ -164,15 +215,33 @@ created=(); errors=0
 
 # -------- videos: one GIF each --------
 for v in "${vids[@]}"; do
-  out="${v%.*}.gif"
-  if fit video "$v" "$out" "$FPS"; then created+=("$out"); else errors=$((errors+1)); fi
+  out="${v%.*}$SUFFIX.gif"
+  vf="$FPS"; TLIM=""
+  if [ "$MAX_FRAMES" -gt 0 ]; then
+    # Keep under the frame cap: lower the frame rate (not below 5 fps), and
+    # only if that is not enough, keep the first MAX_FRAMES/5 seconds.
+    dur="$(duration "$v")"
+    read vf TLIM <<EOF
+$(awk -v d="${dur:-0}" -v f="$FPS" -v m="$MAX_FRAMES" 'BEGIN{
+  if (d<=0 || d*f<=m) { print f, ""; exit }
+  c=int(m/d); if (c>=5) { print c, ""; exit }
+  printf "5 %.3f\n", m/5 }')
+EOF
+    printf '  %s: %ss -> %s fps%s\n' "$v" "$dur" "$vf" "${TLIM:+, first ${TLIM}s}" >> "$LOG"
+  fi
+  if fit video "$v" "$out" "$vf"; then created+=("$out"); else errors=$((errors+1)); fi
 done
+TLIM=""
 
 # -------- images: one unified GIF --------
 if [ "${#imgs[@]}" -gt 0 ]; then
   oldIFS="$IFS"; IFS=$'\n'
   sorted=($(printf '%s\n' "${imgs[@]}" | sort -V))
   IFS="$oldIFS"
+  if [ "$MAX_FRAMES" -gt 0 ] && [ "${#sorted[@]}" -gt "$MAX_FRAMES" ]; then
+    printf '  %d images, over the %d frame cap: keeping the first %d\n' "${#sorted[@]}" "$MAX_FRAMES" "$MAX_FRAMES" >> "$LOG"
+    sorted=("${sorted[@]:0:$MAX_FRAMES}")
+  fi
 
   tmpd="$(mktemp -d /tmp/mp4gif_frames.XXXXXX)"; norm_ok=1
 
@@ -242,6 +311,7 @@ EOF
   [ "$cnt" -gt 4 ] && nm="$nm-and-$((cnt-4))-more"
   base="$(printf '%s' "$nm-animation" | sed 's/-\{2,\}/-/g; s/^-//; s/-$//' | cut -c1-120)"
   [ -z "$base" ] && base="animation"
+  base="$base$SUFFIX"
   out="$outdir/$base.gif"
   n2=1; while [ -e "$out" ]; do out="$outdir/$base-$n2.gif"; n2=$((n2+1)); done
   fr="$(awk -v s="$IMG_SECONDS" 'BEGIN{printf "%.5f", 1.0/s}')"

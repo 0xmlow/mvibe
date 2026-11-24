@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MP4 to GIF | mvibe</title>
-<meta name="description" content="Turn videos into high quality GIFs, or a stack of images into one animated slideshow GIF. Runs in your browser. Nothing is uploaded.">
+<meta name="description" content="Turn videos into GIFs ready to post on X, or full max quality GIFs, or both. A stack of images becomes one animated slideshow. Runs in your browser. Nothing is uploaded.">
 <meta name="mvibe-tool" content="mp4-to-gif">
 <meta name="mvibe-tool-name" content="MP4 to GIF">
 <meta property="og:type" content="website">
 <meta property="og:title" content="MP4 to GIF, a tool by MLow">
-<meta property="og:description" content="Videos to max quality GIFs. Images to one slideshow GIF. Runs in your browser. Nothing is uploaded.">
+<meta property="og:description" content="Videos to GIFs ready for X, or max quality, or both. Images to one slideshow GIF. Runs in your browser. Nothing is uploaded.">
 <meta property="og:url" content="https://0xmlow.github.io/mvibe/tools/mp4-to-gif/">
 <meta property="og:image" content="https://0xmlow.github.io/mvibe/assets/brand/eye.png">
 <meta name="twitter:card" content="summary">
@@ -25,7 +25,7 @@
   <header class="tool-hero">
     <span class="eyebrow">Converter · Motion</span>
     <h1>MP4 to <em>GIF</em></h1>
-    <p>Drop a video and get a max quality GIF at full size. Drop a few images instead and they become one animated slideshow.</p>
+    <p>Drop a video and get a GIF that posts on X, a max quality GIF at full size, or both. Drop a few images instead and they become one animated slideshow.</p>
     <span class="privacy">Runs in your browser. Your files never upload.</span>
   </header>
 
@@ -37,18 +37,31 @@
   </label>
 
   <section class="panel">
-    <div class="row">
+    <div class="opts">
+      <label>Made for
+        <select id="mode">
+          <option value="x" selected>X ready: under 5 MB, posts from phone or web</option>
+          <option value="xweb">X from a computer: under 15 MB, sharper</option>
+          <option value="both">Both: X ready and max quality</option>
+          <option value="max">Max quality: full size, no limit</option>
+        </select>
+      </label>
+      <span class="hint">X versions fit 1280 x 1080 and 350 frames, and are saved as name_X.gif.</span>
+    </div>
+    <div class="row" style="margin-top:16px">
       <label class="check"><input type="checkbox" id="auto" checked> Download each GIF when it is ready</label>
       <button class="btn ghost" id="all" type="button" hidden>Download all</button>
     </div>
     <div class="bar"><i></i></div>
     <div class="status">Waiting for files.</div>
+    <pre class="log"></pre>
   </section>
 
   <section class="results" aria-live="polite"></section>
 
   <p class="note">
-    <b>What happens to your files.</b> Each video becomes its own GIF at its full size and 20 frames per second, with one 256 colour palette built from the whole clip and Sierra Lite dithering.
+    <b>Ready for X.</b> X takes GIFs up to 1280 x 1080 and 350 frames, and up to 5 MB from the phone app or 15 MB from a computer. The X versions fit inside that box, lower the frame rate if a clip has too many frames (never below 5 fps, keeping the opening seconds of very long clips), then use the same steps as <a href="../mp4-to-gif-50mb/">MP4 to GIF (max 50MB)</a> to land under the size. Each card checks the finished file against X's limits.
+    <br><br><b>Max quality.</b> Each video becomes its own GIF at its full size and 20 frames per second, with one 256 colour palette built from the whole clip and Sierra Lite dithering.
     Only the part of each frame that changed is stored again, which keeps files smaller without losing anything.
     Images become one GIF in name order, 0.6 seconds each, cropped to fill the first image's shape (longest side up to 2560 px), with a little extra colour and contrast and a palette of their own per frame.
     Photos are turned upright first. Your browser decodes the video, so iPhone MOV files (HEVC) open in Safari and in Chrome on a Mac, but often not in Firefox or on Windows. Big videos make big GIFs. Need a size limit? Use <a href="../mp4-to-gif-50mb/">MP4 to GIF (max 50MB)</a>.
